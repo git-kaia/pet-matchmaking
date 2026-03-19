@@ -38,6 +38,7 @@ feature/matching-algorithm
 fix/login-validation 
 docs/update-readme 
 refactor/api-structure
+chore/setup
 ```
 
 ---
