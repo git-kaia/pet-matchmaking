@@ -1,6 +1,23 @@
 import { MenuItem } from "@/types/types";
 
 export const leftMenuItems: MenuItem[] = [
+
+  // Routes for dashboards — required for routing to work
+  {
+    id: "adoptant-dashboard",
+    icon: null,
+    label: "Adoptant Dashboard",
+    href: "/adoptant-dashboard",
+    hidden: true, // hides it from sidebar
+  },
+  {
+    id: "org-dashboard",
+    icon: null,
+    label: "Organization Dashboard",
+    href: "/org-dashboard",
+    hidden: true, // hides it from sidebar
+  },
+
   {
     id: "home",
     icon: "NiHome",
