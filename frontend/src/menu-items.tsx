@@ -4,51 +4,59 @@ export const leftMenuItems: MenuItem[] = [
 
   // Routes for dashboards — required for routing to work
   {
-    id: "adoptant-dashboard",
-    icon: null,
+    id: "adoptant/dashboard",
+    icon: "NiUser",
     label: "Adoptant Dashboard",
-    href: "/adoptant-dashboard",
-    hidden: true, // hides it from sidebar
+    href: "/adoptant/dashboard",
+  },
+{
+  id: "adoptant-matches",
+  icon: "NiUser",
+  href: "/adoptant/matches",
+  label: "Adoptant Matches",
+  hidden: true
+},
+{
+  id: "adoptant-profile",
+  icon: "NiUser",
+  href: "/adoptant/profile",
+  label: "Adoptant Profile",
+  hidden: true
+},
+{
+  id: "adoptant/quiz",
+  icon: "NiUser",
+  href: "/adoptant/quiz",
+  label: "Adoptant Quiz",
+  hidden: true,
+},
+  {
+    id: "org/dashboard",
+    icon: "NiBriefcase",
+    label: "Org Dashboard",
+    href: "/org/dashboard",
+    hidden: true,
   },
   {
-    id: "org-dashboard",
-    icon: null,
-    label: "Organization Dashboard",
-    href: "/org-dashboard",
-    hidden: true, // hides it from sidebar
-  },
-
-  {
-    id: "home",
-    icon: "NiHome",
-    label: "menu-home",
-    description: "menu-home-description",
-    color: "text-primary",
-    href: "/home",
-    children: [
-      {
-        id: "home-sub",
-        icon: "NiChartPie",
-        label: "menu-home-sub",
-        href: "/home/sub",
-        description: "menu-home-sub-description",
-      },
-    ],
+    id: "org/animals",
+    icon: "NiBriefcase",
+    href: "/org/animals",
+    label: "Org Animals",
+    hidden: true,
   },
   {
-    id: "single-menu",
-    icon: "NiDocumentFull",
-    label: "menu-single-menu",
-    color: "text-primary",
-    href: "/single-menu",
+    id: "org-matches",
+    icon: "NiBriefcase",
+    href: "/org/matches",
+    label: "Org Matches",
+    hidden: true,
   },
   {
-    id: "external-link",
-    icon: "NiArrowUpRightSquare",
-    label: "menu-external-link",
-    color: "text-primary",
-    href: "https://themeforest.net/item/acorn-vite/22604108",
-    isExternalLink: true,
+    id: "org-info",
+    icon: "NiBriefcase",
+    href: "/org/info",
+    label: "Org Info",
+    hidden: true,
   },
 ];
 

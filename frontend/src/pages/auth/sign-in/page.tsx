@@ -76,14 +76,14 @@ export default function Page() {
       // Check adoptant login
       if (email === adoptant.email && password === adoptant.password) {
         localStorage.setItem("userRole", "adoptant");
-        navigate("/adoptant-dashboard");
+        navigate("/adoptant/dashboard");
         return;
       }
 
       // Check org login
       if (email === org.email && password === org.password) {
         localStorage.setItem("userRole", "org");
-        navigate("/org-dashboard");
+        navigate("/org/dashboard");
         return;
       }
 

@@ -13,7 +13,7 @@ export type ThemeVariant = (typeof THEME_OPTIONS)[keyof typeof THEME_OPTIONS];
 export type ModeVariant = (typeof THEME_MODE_OPTIONS)[number];
 export const THEME_MODE_OPTIONS = ["light", "dark", "system"] as const;
 
-export const MIN_LOGO_CONTAINER_WIDTH = 100;
+export const MIN_LOGO_CONTAINER_WIDTH = 200;
 
 const storagePrefix = import.meta.env.VITE_STORAGE_PREFIX || "";
 export const COOKIE_KEYS = { locale: `${storagePrefix}-locale` };
