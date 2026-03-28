@@ -1,99 +1,112 @@
 import { Link } from "react-router-dom";
-import { Breadcrumbs, Button, Card, CardActionArea, CardContent, Grid, Tooltip, Typography } from "@mui/material";
+import {
+  Breadcrumbs,
+  Button,
+  Card,
+  CardContent,
+  CardActionArea,
+  Grid,
+  Tooltip,
+  Typography,
+  Box,
+} from "@mui/material";
 
-import NiCellsPlus from "@/icons/nexture/ni-cells-plus";
 import NiKnobs from "@/icons/nexture/ni-knobs";
 
 export default function Page() {
+  const matches = [
+    {
+      id: "match-luna-adoptant1",
+      adoptantName: "Ola Normann",
+      adoptantImage: "/images/avatars/avatar-2.jpg",
+      animalName: "Luna",
+      animalImage: "/images/org/animals/luna.jpg",
+      score: 97,
+    },
+    {
+      id: "match-milo-adoptant3",
+      adoptantName: "Ola Normann",
+      adoptantImage: "/images/avatars/avatar-2.jpg",
+      animalName: "Milo",
+      animalImage: "/images/org/animals/milo.jpg",
+      score: 81,
+    },
+  ];
+
   return (
     <Grid container spacing={5}>
-      <Grid container spacing={2.5} className="w-full" size={12}>
-        <Grid size={{ xs: 12, md: "grow" }}>
-          <Typography variant="h1" component="h1" className="mb-0">
-            Matcher
-          </Typography>
+      {/* Header */}
+      <Grid container spacing={2.5} className="w-full">
+        <Grid xs={12} md={"grow"}>
+          <Typography variant="h1">Matcher</Typography>
+
           <Breadcrumbs>
-            <Link color="inherit" to="/org/dashboard">
-              Dashboard
-            </Link>
+            <Link to="/org/dashboard">Dashboard</Link>
             <Typography variant="body2">Matcher</Typography>
           </Breadcrumbs>
         </Grid>
 
-        <Grid size={{ xs: 12, md: "auto" }} className="flex flex-row items-start gap-2">
+        <Grid xs={12} md={"auto"} className="flex flex-row items-start gap-2">
           <Tooltip title="Sorter etter">
             <Button
-              className="icon-only surface-standard flex-none"
-              size="medium"
-              color="grey"
+              className="icon-only surface-standard"
               variant="surface"
+              color="grey"
               startIcon={<NiKnobs size={"medium"} />}
-            />
-          </Tooltip>
-          <Tooltip title="Add Widget">
-            <Button
-              className="icon-only surface-standard flex-none"
-              size="medium"
-              color="grey"
-              variant="surface"
-              startIcon={<NiCellsPlus size={"medium"} />}
             />
           </Tooltip>
         </Grid>
       </Grid>
 
-      <Grid container size={12} spacing={1}>
+      {/* Match cards */}
+      <Grid container spacing={3}>
+        {matches.map((match) => (
+          <Grid key={match.id} xs={12} lg={4}>
+            <Card>
+              <CardActionArea
+                component={Link}
+                to={`/org/matches/${match.id}`}
+              >
+                <Typography variant="h6" className="px-4 pt-4">
+                  {match.adoptantName} ↔ {match.animalName}
+                </Typography>
 
-    
-        <Grid size={{ lg: 4, xs: 12 }}>
-          <Card>
-            <CardActionArea component={Link} to="/org/animals">
-              <Typography variant="h6" className="card-title px-4 pt-4">
-                Match mellom adoptant 4 og dyreprofil 1
-              </Typography>
-              <CardContent>
-                <Typography variant="body2" color="text.secondary">
-                  BILDE av adoptant
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  BILDE av dyret
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                Match score: 99 % match
-                </Typography>
-                <Button variant="text" color="primary" size="small" className="mt-2">
-                  Se match
-                </Button>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        </Grid>
+                <CardContent>
+                  <Box className="flex gap-3 mb-3">
+                    <img
+                      src={match.adoptantImage}
+                      alt={match.adoptantName}
+                      style={{
+                        width: 60,
+                        height: 60,
+                        borderRadius: "50%",
+                        objectFit: "cover",
+                      }}
+                    />
+                    <img
+                      src={match.animalImage}
+                      alt={match.animalName}
+                      style={{
+                        width: 60,
+                        height: 60,
+                        borderRadius: "50%",
+                        objectFit: "cover",
+                      }}
+                    />
+                  </Box>
 
-        <Grid size={{ lg: 4, xs: 12 }}>
-          <Card>
-            <CardActionArea component={Link} to="/org/animals">
-              <Typography variant="h6" className="card-title px-4 pt-4">
-                Match mellom adoptant 2 og dyreprofil 5
-              </Typography>
-              <CardContent>
-                <Typography variant="body2" color="text.secondary">
-                  BILDE av adoptant
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  BILDE av dyret
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                Match score: 78 % match
-                </Typography>
-            
-                <Button variant="text" color="primary" size="small" className="mt-2">
-                  Se match
-                </Button>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        </Grid>
+                  <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                    ❤️ Match score: {match.score}%
+                  </Typography>
 
+                  <Button variant="text" size="small" className="mt-2">
+                    Se match
+                  </Button>
+                </CardContent>
+              </CardActionArea>
+            </Card>
+          </Grid>
+        ))}
       </Grid>
     </Grid>
   );

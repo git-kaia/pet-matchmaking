@@ -79,6 +79,8 @@ export default function Page() {
                     <ProfileField label="E‑post:" value="ola.normann@example.com"/>
                     <ProfileField label="Telefonnummer:" value="+47 99887766"/>
                     <ProfileField label="Fødselsdato:" value="12.03.1998" />
+                    <ProfileField label="Kjønn:" value="Mann" />
+                    <ProfileField label="Adresse:" value="Gjøvikvegen 2, 2815 Gjøvik"/>
                     <ProfileField label="Passord:" value="**********" />
                   </Box>
                 </Grid>

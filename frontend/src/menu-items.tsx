@@ -57,7 +57,26 @@ export const leftMenuItems: MenuItem[] = [
     href: "/org/info",
     label: "Org Info",
     hidden: true,
-  },
+  }, 
+{
+  id: "org-animal-profile",
+  href: "/org/animals/:dyrenavn",
+  label: "Org Animal Profile",
+  hideInMenu: true,
+},
+{
+  id: "adoptant-match-details",
+  href: "/adoptant/matches/:matchid",
+  label: "Match Detaljer",
+  hideInMenu: true
+},
+{
+  id: "org-match-details",
+  href: "/org/matches/:matchid",
+  label: "Match Detaljer",
+  hideInMenu: true
+},
+
 ];
 
 export const leftMenuBottomItems: MenuItem[] = [

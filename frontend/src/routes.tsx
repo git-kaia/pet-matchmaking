@@ -20,7 +20,8 @@ const lazyLoad = (path: string) => {
   } else if (path.startsWith("/auth")) {
     key = `./pages/auth${path.substring(5)}/page.tsx`; // Remove "/auth"
   } else {
-    key = `./pages/app${path}/page.tsx`;
+    const cleanPath = path.replace(/:[^\/]+/g, "[param]");
+    key = `./pages/app${cleanPath}/page.tsx`;
   }
 
   const importer = modules[key];
