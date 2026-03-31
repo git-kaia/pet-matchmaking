@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     /* Project structure */
-    "rootDir": "./src",
+    "rootDir": ".",
     "outDir": "./dist",
 
     /* Environment */
