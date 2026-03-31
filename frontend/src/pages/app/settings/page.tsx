@@ -19,19 +19,10 @@ export default function SingleMenu() {
       </Grid>
 
       <Grid container size={12}>
-        <Grid size={{ lg: 8, xs: 12 }}>
+        <Grid size={{ lg: 8, xs: 8 }}>
           <Card>
             <Typography variant="h6" component="h6" className="card-title px-4 pt-4">
-              Empty Card
-            </Typography>
-            <CardContent></CardContent>
-          </Card>
-        </Grid>
-
-        <Grid size={{ lg: 4, xs: 12 }}>
-          <Card>
-            <Typography variant="h6" component="h6" className="card-title px-4 pt-4">
-              Empty Card
+              Logg ut
             </Typography>
             <CardContent></CardContent>
           </Card>

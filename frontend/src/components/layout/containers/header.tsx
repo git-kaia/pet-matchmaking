@@ -53,7 +53,7 @@ export default function Header() {
         }}
       >
         <Link to={DEFAULTS.appRoot}>
-          <Logo classNameFull="ms-2 hidden md:block" classNameMobile="ms-2 md:hidden" />
+          <Logo classNameFull="ms-2 hidden md:flex whitespace-nowrap" classNameMobile="ms-2 md:hidden" />
         </Link>
       </Box>
 
