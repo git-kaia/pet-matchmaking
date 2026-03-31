@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     /* Project structure */
-    "rootDir": "./src",
+    "rootDir": ".",
     "outDir": "./dist",
 
     /* Environment */
@@ -22,6 +22,6 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src"],
+  "include": ["src", "db/db.ts"],
   "exclude": ["node_modules"]
 }
