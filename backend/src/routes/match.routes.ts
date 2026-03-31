@@ -1,0 +1,1 @@
+// router.post("/match", matchController.getMatches); - EKSEMPEL
