@@ -1,9 +1,12 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import { Pool } from "pg";
 
 export const pool = new Pool({
-  user: "postgres",
-  host: "localhost",
-  database: "pet_matchmaking",
-  password: "password",
-  port: 5432,
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : undefined, // Ensure the port is a number
 });
