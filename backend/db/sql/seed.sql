@@ -1,195 +1,198 @@
 -- ============================================================
---  ORGANIZATION
+-- SPECIES
 -- ============================================================
 
-INSERT INTO organization (id, name)
-VALUES (1, 'Fugleteamet');
-
-
-
--- ============================================================
---  ORG MEMBERS
--- ============================================================
-
-INSERT INTO org_member (id, username, first_name, last_name, email, phone, password, organization_id)
-VALUES
-(1, 'maria.fugle', 'Maria', 'Hansen', 'maria.hansen@example.com', '+4798123456', '*****', 1),
-(2, 'ola.birdman', 'Ola', 'Nilsen', 'ola.nilsen@example.com', '+4798876543', '*****', 1),
-(3, 'katrine.admin', 'Katrine', 'Solberg', 'katrine.solberg@example.com', '+4799345678', '*****', 1);
-
-
-
--- ============================================================
---  ADOPTANTS
--- ============================================================
-
-INSERT INTO adoptant (id, username, first_name, last_name, email, phone, password)
-VALUES
-(1, 'olaN', 'Ola', 'Nordmann', 'ola.n@example.com', '+4794123456', '*****'),
-(2, 'emmaB', 'Emma', 'Brodahl', 'emma.b@example.com', '+4799881723', '*****'),
-(3, 'stianR', 'Stian', 'Røed', 'stian.r@example.com', '+4797788145', '*****'),
-(4, 'ida23', 'Ida', 'Gulliksen', 'ida.g@example.com', '+4799451134', '*****'),
-(5, 'martinS', 'Martin', 'Sundby', 'martin.s@example.com', '+4796677123', '*****'),
-(6, 'sara_h', 'Sara', 'Holmen', 'sara.h@example.com', '+4798852341', '*****'),
-(7, 'eliseW', 'Elise', 'Wangen', 'elise.w@example.com', '+4799824551', '*****'),
-(8, 'johannes88', 'Johannes', 'Berg', 'jo.berg@example.com', '+4790412312', '*****'),
-(9, 'linaS', 'Lina', 'Samuelsen', 'lina.s@example.com', '+4790123499', '*****'),
-(10, 'henrikG', 'Henrik', 'Gran', 'henrik.g@example.com', '+4795559911', '*****');
-
-
-
--- ============================================================
---  GENERAL QUIZ ANSWERS (EXAMPLES)
--- ============================================================
-
-INSERT INTO quiz_general (
-    adoptant_id,
-    household_type,
-    space_level,
-    children_present,
-    children_age,
-    has_current_pets,
-    current_pet_types,
-    noise_level,
-    noise_tolerance,
-    cleaning_tolerance,
-    work_pattern,
-    work_hours,
-    daily_pet_time_minutes,
-    alone_time_level,
-    lifestyle_stability,
-    commitment_horizon_years,
-    rehoming_responsibility,
-    economic_priority,
-    allergy_sensitivity,
-    has_pet_experience,
-    pet_experience_types,
-    years_experience,
-    learning_willingness,
-    desired_sociality,
-    desired_cuddliness,
-    problem_behavior_tolerance
+INSERT INTO species (
+  id, norwegian_name, latin_name,
+  size, noise_level, noise_frequency,
+  activity_level, social_need, mental_stimulation_need, training_need,
+  affection_level, diet_complexity,
+  sleep_need_hours, requires_darkness_level,
+  experience_level, space_requirement,
+  lifespan_years
 )
 VALUES
-(1, 'par', 'middels', false, NULL, true, '{katt}', 'middels', 'middels', 'høy',
- 'fulltid', 'dagtid', 150, 'middels', 'høy', 10, 'middels', 'middels', 'ingen',
- true, '{katt}', 2, 'høy', 'middels', 'middels', 'middels'),
+('budgie', 'Undulat', 'Melopsittacus undulatus',
+ 'small', 'low', 'frequent',
+ 'high', 'high', 'medium', 'low',
+ 'medium', 'low',
+ 12, 'medium',
+ 'beginner', 'small',
+ 10),
 
-(2, 'enslig', 'liten', false, NULL, false, '{}', 'lav', 'lav', 'middels',
- 'deltid', 'dagtid', 60, 'lav', 'middels', 5, 'lav', 'lav', 'mild',
- true, '{fugl}', 1, 'middels', 'høy', 'høy', 'lav'),
+('sun_conure', 'Solparakitt', 'Aratinga solstitialis',
+ 'medium', 'very_high', 'frequent',
+ 'very_high', 'very_high', 'very_high', 'high',
+ 'medium', 'medium',
+ 12, 'high',
+ 'experienced', 'large',
+ 30),
 
-(3, 'familie_med_barn', 'stor', true, 'over_ti', true, '{hund, katt}', 'høy', 'middels', 'lav',
- 'fulltid', 'skiftarbeid', 240, 'høy', 'høy', 15, 'middels', 'middels', 'ingen',
- true, '{hund}', 4, 'høy', 'høy', 'høy', 'middels'),
+('cockatiel', 'Nymfekakadue', 'Nymphicus hollandicus',
+ 'medium', 'medium', 'daily',
+ 'medium', 'high', 'medium', 'medium',
+ 'high', 'low',
+ 12, 'medium',
+ 'beginner', 'medium',
+ 20),
 
-(4, 'kollektiv', 'middels', false, NULL, false, '{}', 'middels', 'lav', 'lav',
- 'ikke_i_arbeid', 'kveldstid', 120, 'lav', 'lav', 5, 'lav', 'lav', 'ingen',
- false, '{}', 0, 'middels', 'lav', 'lav', 'lav'),
-
-(5, 'par', 'liten', false, NULL, true, '{gnager}', 'lav', 'middels', 'middels',
- 'deltid', 'dagtid', 90, 'middels', 'middels', 8, 'middels', 'høy', 'mild',
- true, '{gnager}', 3, 'høy', 'høy', 'middels', 'middels');
-
--- Add answers for 6–10 similarly if needed.
-
+('african_grey', 'Grå jako', 'Psittacus erithacus',
+ 'large', 'high', 'daily',
+ 'medium', 'very_high', 'very_high', 'high',
+ 'medium', 'high',
+ 14, 'high',
+ 'advanced', 'large',
+ 50);
 
 -- ============================================================
---  BIRD-SPECIFIC QUIZ ANSWERS (EXAMPLES)
+-- BIRDS
 -- ============================================================
 
-INSERT INTO quiz_bird (
-    adoptant_id,
-    sleep_environment_tolerance,
-    free_flying_expectation,
-    tolerance_free_roaming,
-    tolerance_mess,
-    tolerance_destruction,
-    desired_human_interaction,
-    desired_attachment_style,
-    acceptance_bird_over_human,
-    tameness_requirement,
-    adoption_complexity_tolerance,
-    want_multiple_birds,
-    current_bird_species,
-    noise_sensitive_time,
-    startle_noise_tolerance,
-    enrichment_engagement,
-    training_interest,
-    diet_complexity_tolerance
+INSERT INTO birds (
+  id, species_id,
+  name, age_years, sex,
+  origin,
+
+  tameness_level, handling_tolerance, human_trust_level,
+  social_with_humans, social_with_birds, bonding_style,
+  activity_level, stress_sensitivity,
+
+  biting_risk, screaming_level, feather_plucking, destructiveness, separation_anxiety,
+
+  desired_contact_level, affection_level, tolerates_children, tolerates_strangers,
+
+  requires_bird_partner, can_live_with_other_birds, compatibility_with_other_species,
+
+  training_level, training_need, mental_stimulation_need,
+
+  noise_level, screaming_time, noise_frequency
 )
 VALUES
-(1, 'middels', 'middels', 'middels', 'lav', 'lav', 'middels', 'flere_personer', 'middels',
- 'middels', 'middels', 'lav', '{}', 'ikke_viktig', 'middels', 'høy', 'middels', 'middels'),
+('bird_1', 'budgie',
+ 'Pip', 2, 'male',
+ 'rehomed',
 
-(2, 'høy', 'lav', 'lav', 'middels', 'lav', 'høy', 'en_person', 'lav',
- 'lav', 'lav', 'middels', '{}', 'morgen', 'lav', 'middels', 'lav', 'lav'),
+ 'medium', 'medium', 'medium',
+ 'high', 'high', 'flock',
+ 'high', 'low',
 
-(3, 'middels', 'høy', 'høy', 'middels', 'middels', 'høy', 'flere_personer', 'høy',
- 'høy', 'høy', 'høy', '{undulat}', 'kveld', 'middels', 'høy', 'høy', 'middels');
+ 'low', 'low', false, 'low', 'low',
 
+ 'medium', 'medium', 'yes', 'yes',
+
+ true, 'good', 'medium',
+
+ 'low', 'low', 'medium',
+
+ 'low', 'daytime', 'frequent'),
+
+('bird_2', 'cockatiel',
+ 'Koko', 3, 'female',
+ 'breeder',
+
+ 'high', 'high', 'high',
+ 'high', 'medium', 'pair',
+ 'medium', 'medium',
+
+ 'low', 'medium', false, 'low', 'low',
+
+ 'high', 'high', 'yes', 'yes',
+
+ false, 'good', 'good',
+
+ 'medium', 'medium', 'medium',
+
+ 'medium', 'morning_evening', 'daily'),
+
+('bird_3', 'african_grey',
+ 'Athena', 8, 'female',
+ 'rehomed',
+
+ 'low', 'low', 'medium',
+ 'very_high', 'low', 'one_person',
+ 'medium', 'high',
+
+ 'high', 'high', true, 'high', 'high',
+
+ 'high', 'medium', 'no', 'no',
+
+ false, 'limited', 'low',
+
+ 'high', 'high', 'very_high',
+
+ 'high', 'daytime', 'daily');
 
 -- ============================================================
---  ANIMAL PROFILES (BIRDS)
---  Using species data from Parametere-adopsjonsapp - Fugler.pdf
+-- ADOPTERS
 -- ============================================================
 
-INSERT INTO animal_profile (
-    id,
-    name,
-    species,
-    species_latin,
-    created_by_org_member_id,
-    size,
-    noise_volume,
-    noise_frequency,
-    activity_level,
-    social_need,
-    mental_stimulation,
-    training_need,
-    mimicry_ability,
-    cuddly,
-    diet_complexity,
-    malnutrition_risk,
-    sleep_hours,
-    calm_dark_requirement,
-    irregular_rhythm_tolerance,
-    experience_required,
-    space_requirement,
-    lifespan_years,
-    description
+INSERT INTO adopters (
+  id,
+  space_level, household_type, kids_age,
+  has_current_pets, type_of_pet,
+  household_noise_level,
+  household_work_pattern, household_work_hours,
+  daily_care_time, alone_time_hours,
+  cleaning_tolerance, noise_tolerance_level,
+  household_allergy_sensitivity,
+  life_stability, commitment_horizon_years,
+  rehome_responsibility_level, financial_priority,
+  has_pet_experience, learning_willingness,
+  pet_experience_type, experience_years_bird,
+  desired_pet_sociability, desired_pet_affection_level, problem_behavior_tolerance,
+
+  sleep_environment_commitment, free_flight_expectation, free_roaming_tolerance,
+  mess_tolerance, destruction_tolerance,
+  desired_human_interaction, desired_bonding_style, bird_over_human_acceptance,
+  tameness_requirement, adoption_complexity_tolerance,
+  willingness_multiple_birds,
+  noise_sensitivity_time, sudden_noise_tolerance,
+  enrichment_commitment, training_interest,
+  diet_complexity_tolerance
 )
 VALUES
-(1, 'Pip', 'Undulat', 'Melopsittacus undulatus', 1, 'liten', 'lav', 'flere_ganger_daglig', 'høyt',
- 'sosial', 'middels', 'lav', 'middels', 'middels', 'lav', 'lav', 12, 'middels', 'delvis', 'nybegynner',
- 'liten', '5-10', 'Sosial og lett for nybegynnere'),
+('adopter_1',
+ 'medium', 'couple', 'none',
+ true, ARRAY['cat'],
+ 'medium',
+ 'full_time', 'daytime',
+ 120, 'medium',
+ 'medium', 'medium',
+ 'none',
+ 'high', 10,
+ 'medium', 'medium',
+ true, 'high',
+ ARRAY['cat'], 2,
+ 'medium', 'medium', 'medium',
 
-(2, 'Sunny', 'Solparakitt', 'Aratinga solstitialis', 2, 'middels', 'ekstremt_høyt', 'flere_ganger_daglig', 'høyt',
- 'svært_sosial', 'svært_høyt', 'høyt', 'høy', 'middels', 'middels', 'middels', 12, 'høyt', 'nei', 'erfaren',
- 'stort', '25-30', 'Meget høylytt og krever mye stimulering'),
+ 'medium', 'medium', 'medium',
+ 'medium', 'medium',
+ 'medium', 'flexible', 'medium',
+ 'medium', 'medium',
+ 'low',
+ 'none', 'medium',
+ 'high', 'medium',
+ 'medium'),
 
-(3, 'Bongo', 'Grønnkinnet konure', 'Pyrrhura molinae', 1, 'liten-middels', 'middels', 'daglig', 'høyt',
- 'svært_sosial', 'høyt', 'middels', 'høy', 'veldig', 'middels', 'middels', 12, 'middels', 'nei', 'noe_erfaring',
- 'middels', '20-30', 'Aktiv og kosete'),
+('adopter_2',
+ 'small', 'single', 'none',
+ false, ARRAY[]::TEXT[],
+ 'low',
+ 'part_time', 'daytime',
+ 60, 'low',
+ 'medium', 'low',
+ 'mild',
+ 'medium', 5,
+ 'low', 'low',
+ true, 'medium',
+ ARRAY['bird'], 1,
+ 'high', 'high', 'low',
 
-(4, 'Koko', 'Nymfekakadue', 'Nymphicus hollandicus', 3, 'middels', 'middels', 'daglig', 'lavt',
- 'sosial', 'middels', 'middels', 'høy', 'veldig', 'middels', 'lav', 12, 'middels', 'delvis', 'nybegynner',
- 'middels', '15-20', 'Rolig og populær art'),
-
-(5, 'Athena', 'Grå jako', 'Psittacus erithacus', 2, 'stor', 'høyt', 'daglig', 'middels',
- 'svært_sosial', 'svært_høyt', 'høyt', 'svært_høy', 'middels', 'høy', 'høy', 14, 'høyt', 'nei', 'erfaren',
- 'stort', '40-60', 'Svært intelligent og krevende'),
-
-(6, 'Rubi', 'Dvergpapegøye (ferskenhodet)', 'Agapornis roseicollis', 3, 'liten', 'middels', 'daglig', 'høyt',
- 'svært_sosial', 'middels', 'middels', 'middels', 'middels', 'lav', 'lav', 12, 'middels', 'nei', 'noe_erfaring',
- 'middels', '10-15', 'Sterk parbinding'),
-
-(7, 'Kiwi', 'Kanari', 'Serinus canaria', 1, 'liten', 'lav', 'daglig', 'middels',
- 'lite_sosial', 'lavt', 'lavt', 'middels', 'lite', 'middels', 'lav', 12, 'lavt', 'ja', 'nybegynner',
- 'middels', '10-15', 'Sangfugl'),
-
-(8, 'Nova', 'Hvitkakadue', 'Cacatua alba', 2, 'stor', 'ekstremt_høyt', 'daglig', 'høyt',
- 'svært_sosial', 'svært_høyt', 'høyt', 'svært_høy', 'veldig', 'høy', 'høy', 14, 'svært_høyt', 'nei', 'svært_erfaren',
- 'svært_stort', '50-70', 'Svært krevende art');
-
--- Add more if needed
+ 'high', 'low', 'low',
+ 'medium', 'low',
+ 'high', 'one_person', 'low',
+ 'low', 'low',
+ 'medium',
+ 'morning', 'low',
+ 'medium', 'low',
+ 'low');
