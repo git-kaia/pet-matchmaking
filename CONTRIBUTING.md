@@ -5,6 +5,13 @@ We aim to keep the codebase clean, consistent, and easy to collaborate on.
 
 ---
 
+## Naming Conventions
+- Folder names use lower-case
+- Frontent file names use lower-case: `menu-items.tsx`
+- Backend file names use camelCase: `testDb.ts`, `hardRule.service.ts`
+
+---
+
 ## Branching Strategy
 
 We use a simple branching model:
