@@ -19,10 +19,11 @@ npm install
 ## Running the backend
 
 1. Start development server:
+
 ```bash
 npm run dev
 ```
-2. The server will run on:
+1. The server will run on:
 - http://localhost:3000
 
 ## Local PostgreSQL database setup
@@ -32,14 +33,16 @@ npm run dev
 
 3. Open PostgreSQL
 
-Open PowerShell (Windows) or Terminal (Mac/Linux).
+- Open PowerShell (Windows) or Terminal (Mac/Linux).
 
 4. Connect as the default postgres user
+```
 psql -U postgres
+```
 
-You may be prompted for a password. If this fails, see troubleshooting below.
+- You may be prompted for a password. If this fails, see troubleshooting below.
 
-5. Create a database user
+1. Create a database user
 
 ```
 CREATE ROLE myadmin WITH LOGIN SUPERUSER PASSWORD 'yourpassword';
@@ -58,6 +61,7 @@ CREATE DATABASE pet_matchmaking OWNER myadmin;
 ```
 
 8. Run schema and seed files
+   
 ```
 psql -U myadmin -d pet_matchmaking -f backend/db/sql/schema.sql
 psql -U myadmin -d pet_matchmaking -f backend/db/sql/seed.sql
