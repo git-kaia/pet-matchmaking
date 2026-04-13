@@ -1,0 +1,1 @@
+export type Pet = any; //placeholder (we are using Bird directly)
