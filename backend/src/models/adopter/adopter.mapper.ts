@@ -1,18 +1,6 @@
-// Handles:
-
-// Parsing quiz answers
-
-// Normalizing into attributes
-
-// Possibly storing adopter profile
-
-// Think: “turn raw quiz → usable data”
-
-
-import { pool } from '../../db/db';
 import { Adopter } from './adopter.model';
 
-const mapAdopter = (row: any): Adopter => ({
+export const mapAdopter = (row: any): Adopter => ({
   id: row.id,
   spaceLevel: row.space_level,
   householdType: row.household_type,
@@ -74,12 +62,3 @@ const mapAdopter = (row: any): Adopter => ({
 
   dietComplexityTolerance: row.diet_complexity_tolerance
 });
-
-export const getAdopterById = async (id: string): Promise<Adopter | null> => {
-  const result = await pool.query(
-    'SELECT * FROM adopters WHERE id = $1',
-    [id]
-  );
-
-  return result.rows[0] ? mapAdopter(result.rows[0]) : null;
-};

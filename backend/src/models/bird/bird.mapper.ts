@@ -1,8 +1,8 @@
 // bird.mapper.ts
 // Converting raw db rows to Bird entities for matching logic and other business logic use
 
-import { BirdEntity } from './bird.entity';
-import { Bird } from '../../services/matching/types/matching.types';
+import { BirdEntity } from './bird.model';
+import { Bird } from '../../services/matching/types';
 
 export const mapBirdToMatching = (bird: BirdEntity): Bird => ({
   id: bird.id,

@@ -2,7 +2,7 @@
 // Handles:
 // Saving match results to the database
 
-import { pool } from '../../db/db';
+import { pool } from '../../../db/db';
 
 export const saveMatch = async (
   adopterId: string,

@@ -1,11 +1,26 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { Breadcrumbs, Button, Card, CardContent, Grid, Tooltip, Typography, Avatar, Box, Divider, } from "@mui/material";
+import { Breadcrumbs, Button, Card, CardContent, Grid, Tooltip, Typography, Avatar, Box, Divider } from "@mui/material";
 
 import NiCellsPlus from "@/icons/nexture/ni-cells-plus";
 import NiKnobs from "@/icons/nexture/ni-knobs";
 
+import { getAdopter } from "@/api/adopter";
+
 export default function Page() {
+  const [adopter, setAdopter] = useState<any>(null);
+
+  useEffect(() => {
+    getAdopter("adopter_1")
+      .then(setAdopter)
+      .catch(console.error);
+  }, []);
+
+  if (!adopter) {
+    return <Typography>Loading profile...</Typography>;
+  }
+
   return (
     <Grid container spacing={5}>
       {/* Header */}
@@ -16,20 +31,15 @@ export default function Page() {
           </Typography>
 
           <Breadcrumbs>
-            <Link color="inherit" to="/adoptant/dashboard">
-              Dashboard
-            </Link>
+            <Link to="/adoptant/dashboard">Dashboard</Link>
             <Typography variant="body2">Profil</Typography>
           </Breadcrumbs>
         </Grid>
 
-        <Grid
-          size={{ xs: 12, md: "auto" }}
-          className="flex flex-row items-start gap-2"
-        >
+        <Grid size={{ xs: 12, md: "auto" }} className="flex gap-2">
           <Tooltip title="Configuration">
             <Button
-              className="icon-only surface-standard flex-none"
+              className="icon-only surface-standard"
               size="medium"
               color="grey"
               variant="surface"
@@ -39,7 +49,7 @@ export default function Page() {
 
           <Tooltip title="Add Widget">
             <Button
-              className="icon-only surface-standard flex-none"
+              className="icon-only surface-standard"
               size="medium"
               color="grey"
               variant="surface"
@@ -56,7 +66,7 @@ export default function Page() {
             <CardContent className="flex flex-col gap-6">
 
               <Grid container spacing={4}>
-                
+                {/* Avatar */}
                 <Grid size={{ xs: 12, sm: 4 }} className="flex justify-center">
                   <Box className="flex flex-col items-center gap-2">
                     <Avatar
@@ -70,39 +80,39 @@ export default function Page() {
                   </Box>
                 </Grid>
 
-                {/* Personlig informasjon */}
+                {/* Dynamic adopter data */}
                 <Grid size={{ xs: 12, sm: 8 }}>
                   <Box className="grid grid-cols-2 gap-4">
-                    <ProfileField label="Brukernavn:" value="olanormann123" />
-                    <ProfileField label="Fornavn:" value="Ola" />
-                    <ProfileField label="Etternavn:" value="Normann" />
-                    <ProfileField label="E‑post:" value="ola.normann@example.com"/>
-                    <ProfileField label="Telefonnummer:" value="+47 99887766"/>
-                    <ProfileField label="Fødselsdato:" value="12.03.1998" />
-                    <ProfileField label="Kjønn:" value="Mann" />
-                    <ProfileField label="Adresse:" value="Gjøvikvegen 2, 2815 Gjøvik"/>
-                    <ProfileField label="Passord:" value="**********" />
+                    <ProfileField label="ID:" value={adopter.id} />
+                    <ProfileField label="Boligtype:" value={adopter.householdType} />
+                    <ProfileField label="Plass:" value={adopter.spaceLevel} />
+                    <ProfileField label="Støynivå:" value={adopter.noiseToleranceLevel} />
+                    <ProfileField label="Omsorgstid:" value={adopter.dailyCareTime?.toString()} />
+                    <ProfileField label="Erfaring med fugl:" value={adopter.experienceYearsBird?.toString()} />
+                    <ProfileField label="Livsstil:" value={adopter.lifeStability} />
+                    <ProfileField label="Forpliktelse:" value={adopter.commitmentHorizonYears?.toString()} />
                   </Box>
                 </Grid>
               </Grid>
 
               <Divider />
 
-              {/* Om meg */}
+              {/* About */}
               <Box>
                 <Typography variant="subtitle1" className="mb-1">
                   Om meg
                 </Typography>
+
                 <Typography variant="body2" color="text.secondary">
-                  Jeg er en dyrekjær person som ønsker å adoptere et dyr som
-                  passer min livsstil og behov.
-                  Jeg har en aktiv hverdag, og trenger et dyr som kan være med på turer og aktiviteter.
+                  Dette er din adopter-profil basert på spørreskjemaet.
+                  Dataene brukes til å finne riktige dyrematcher.
                 </Typography>
               </Box>
 
               <Box className="flex justify-end mt-4">
                 <Button variant="contained">Rediger profil</Button>
               </Box>
+
             </CardContent>
           </Card>
         </Grid>
@@ -111,20 +121,23 @@ export default function Page() {
   );
 }
 
-function ProfileField({ label, value }: { label: string; value: string }) {
+/* Reusable component */
+function ProfileField({
+  label,
+  value,
+}: {
+  label: string;
+  value: string | undefined;
+}) {
   return (
     <Box className="flex flex-col">
       <Typography variant="caption" sx={{ fontWeight: 600, opacity: 0.8 }}>
         {label}
       </Typography>
-      <Typography
-        variant="body2"
-        color="text.primary"
-        sx={{ fontWeight: 600 }}
-      >
+
+      <Typography variant="body2" sx={{ fontWeight: 600 }}>
         {value || "-"}
       </Typography>
     </Box>
   );
 }
-
