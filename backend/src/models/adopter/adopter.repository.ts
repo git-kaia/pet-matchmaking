@@ -1,6 +1,5 @@
-// 
 import { pool } from '../../../db/db';
-import { Bird } from './bird.entity';
+import { Bird } from '../bird/bird.model';
 
 const mapBird = (row: any): Bird => ({
   id: row.id,
