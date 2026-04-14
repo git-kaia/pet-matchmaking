@@ -2,7 +2,7 @@
 // Handles:
 // Weighted scoring aggregator calculating scores (no matching rules here).
 
-import { MatchingContext } from './types';
+import { MatchingContext } from './types/matching.types';
 
 // Aggregator for genrral pet scoring
 export const calculateGeneralScore = (ctx) => {

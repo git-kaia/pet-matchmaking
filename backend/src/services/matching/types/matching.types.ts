@@ -1,6 +1,6 @@
-// Shared types //
-// This file contains shared types for the matching service. These types are used to define the structure of data related to birds, adopters, and match results. 
-// They are essential for ensuring type safety and consistency across the matching logic and any related components.
+// matching.types.ts
+// Types for matching
+// Used by rules, scoring and matching logic
 
 export type Level = 'very_low' | 'low' | 'medium' | 'high' | 'very_high';
 
