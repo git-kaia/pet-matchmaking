@@ -1,4 +1,4 @@
-import { getAdopterById } from '../services/adopter.service';
+import { getAdopterById } from '../models/adopter.repository';
 
 export const getAdopter = async (req, res) => {
   const adopter = await getAdopterById(req.params.id);

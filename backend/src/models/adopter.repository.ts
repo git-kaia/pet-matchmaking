@@ -10,7 +10,7 @@
 
 
 import { pool } from '../../db/db';
-import { Adopter } from '../models/adopter.model';
+import { Adopter } from './adopter.model';
 
 const mapAdopter = (row: any): Adopter => ({
   id: row.id,
