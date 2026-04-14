@@ -1,14 +1,25 @@
+// weightedScoring.service.ts
 // Handles:
-// ALL weighted scoring logic
-// General + bird quiz scoring
-// Returns a score per pet
-// Think: “how good is this match numerically?”
+// Weighted scoring aggregator calculating scores (no matching rules here).
 
-// calculate(user, pet) {
-//   let score = 0;
+import { MatchingContext } from './types';
 
-//   score += evaluateTime(user, pet);
-//   score += evaluateNoise(user, pet);
+// Aggregator for genrral pet scoring
+export const calculateGeneralScore = (ctx) => {
+  let welfare_score = 0;
+  let human_score = 0;
 
-//   return score;
-// }
+  // 
+  for (const rule of rules) {
+    const result = rule(ctx);
+
+    welfare_score += result.welfare || 0;
+    human_score += result.human || 0;
+  }
+
+  return {
+    score: welfare_score + human_score,
+    welfare_score,
+    human_score,
+  };
+};

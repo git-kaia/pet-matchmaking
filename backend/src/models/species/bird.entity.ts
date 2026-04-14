@@ -1,3 +1,6 @@
+// bird.entity.ts
+// Defines types for the bird entity in db
+
 export interface Bird {
   id: string;
   speciesId: string;

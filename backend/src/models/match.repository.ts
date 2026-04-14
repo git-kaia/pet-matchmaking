@@ -1,3 +1,7 @@
+// match.repository.ts
+// Handles:
+// Saving match results to the database
+
 import { pool } from '../../db/db';
 
 export const saveMatch = async (

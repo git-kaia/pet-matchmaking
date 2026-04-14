@@ -6,6 +6,28 @@ export type Level = 'very_low' | 'low' | 'medium' | 'high' | 'very_high';
 
 ///////////////////////////////////////////////////////////////
 
+export type Pet = {
+  id: string;
+
+  size: 'small' | 'medium' | 'large' | 'very_large';
+
+  noise_level: Level;
+  activity_level: Level;
+  social_need: Level;
+  affection_level: Level;
+
+  experience_level: 'beginner' | 'intermediate' | 'experienced' | 'advanced';
+
+  lifespan_years: number;
+
+  // generic needs (used in general logic)
+  care_need?: Level;
+  diet_complexity?: Level;
+  aggression_risk?: 'low' | 'medium' | 'high';
+};
+
+/////////////////////////////////////////////////////////////
+
 export type Bird = {
   id: string;
 
@@ -76,5 +98,5 @@ export type RuleResult = {
 
 export type MatchingContext = {
   adopter: Adopter;
-  bird: Bird;
+  pet: Pet;
 };
