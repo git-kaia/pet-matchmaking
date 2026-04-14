@@ -1,0 +1,4 @@
+export const getBirds = async () => {
+  const res = await fetch('http://localhost:3000/birds');
+  return res.json();
+};

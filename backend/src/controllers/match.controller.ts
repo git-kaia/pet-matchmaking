@@ -1,6 +1,6 @@
-import { getAdopterById } from '../models/adopter.repository';
-import { getAllBirds } from '../models/species/bird.repository';
-import { saveMatch, saveMatchRuleResults } from '../models/match.repository';
+import { getAdopterById } from '../models/adopter/adopter.repository';
+import { getAllBirds } from '../models/bird/bird.repository';
+import { saveMatch, saveMatchRuleResults } from '../models/match/match.repository';
 
 import { matchingEngine } from '../matching/matchingEngine';
 

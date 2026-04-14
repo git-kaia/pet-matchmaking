@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+
 import {
   Breadcrumbs,
   Button,
@@ -12,43 +14,23 @@ import {
 } from "@mui/material";
 
 import NiCellsPlus from "@/icons/nexture/ni-cells-plus";
+import { getBirds } from "@/api/birds";
 
 export default function Page() {
-  // Midlertidige fugle-profiler
-  const animals = [
-    {
-      name: "Luna",
-      image: "/images/org/animals/luna.jpg",
-      klasse: "Fugl",
-      art: "Nymfeparakitt",
-      alder: "1 år",
-      kjonn: "Hunn"
-    },
-    {
-      name: "Milo",
-      image: "/images/org/animals/milo.jpg",
-      klasse: "Fugl",
-      art: "Undulat",
-      alder: "2 år",
-      kjonn: "Hann"
-    },
-    {
-      name: "Kiwi",
-      image: "/images/org/animals/kiwi.jpg",
-      klasse: "Fugl",
-      art: "Papegøye",
-      alder: "4 år",
-      kjonn: "Hunn"
-    },
-    {
-      name: "Sunny",
-      image: "/images/org/animals/sunny.jpg",
-      klasse: "Fugl",
-      art: "Kanarifugl",
-      alder: "3 år",
-      kjonn: "Hann"
-    },
-  ];
+  const [animals, setAnimals] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getBirds()
+      .then((data) => {
+        setAnimals(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
+  }, []);
 
   return (
     <Grid container spacing={5}>
@@ -76,12 +58,22 @@ export default function Page() {
         </Grid>
       </Grid>
 
+      {/* Loading state */}
+      {loading && (
+        <Grid size={12}>
+          <Typography>Laster fugler...</Typography>
+        </Grid>
+      )}
+
       {/* Fuglekort */}
       <Grid container size={12} spacing={3}>
-        {animals.map((animal, i) => (
-          <Grid key={i} size={{ lg: 4, xs: 12 }}>
+        {animals.map((animal) => (
+          <Grid key={animal.id} size={{ lg: 4, xs: 12 }}>
             <Card>
-              <CardActionArea component={Link} to={`/org/animals/${animal.name.toLowerCase()}`}>
+              <CardActionArea
+                component={Link}
+                to={`/org/animals/${animal.id}`}
+              >
                 <Typography variant="h6" className="px-4 pt-4">
                   {animal.name}
                 </Typography>
@@ -89,7 +81,7 @@ export default function Page() {
                 <CardContent>
                   <Box className="w-full mb-3">
                     <img
-                      src={animal.image}
+                      src={`/images/org/animals/${animal.id}.jpg`}
                       alt={animal.name}
                       style={{
                         width: "100%",
@@ -100,15 +92,28 @@ export default function Page() {
                     />
                   </Box>
 
-                  <Typography variant="body2">Klasse: {animal.klasse}</Typography>
-                  <Typography variant="body2">Art: {animal.art}</Typography>
-                  <Typography variant="body2">Alder: {animal.alder}</Typography>
-                  <Typography variant="body2">Kjønn: {animal.kjonn}</Typography>
+                  <Typography variant="body2">
+                    Art: {animal.speciesId}
+                  </Typography>
+
+                  <Typography variant="body2">
+                    Alder: {animal.ageYears} år
+                  </Typography>
+
+                  <Typography variant="body2">
+                    Kjønn: {animal.sex}
+                  </Typography>
 
                   <Box className="flex flex-col mt-2">
-                    <Button variant="text" size="small">Deaktiver</Button>
-                    <Button variant="text" size="small">Aktiver</Button>
-                    <Button variant="text" size="small">Se matcher</Button>
+                    <Button variant="text" size="small">
+                      Deaktiver
+                    </Button>
+                    <Button variant="text" size="small">
+                      Aktiver
+                    </Button>
+                    <Button variant="text" size="small">
+                      Se matcher
+                    </Button>
                   </Box>
                 </CardContent>
               </CardActionArea>
