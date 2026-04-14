@@ -2,7 +2,7 @@
 // Handles:
 // All reject logic for general pet rules
 
-import { MatchingContext } from './types/matching.types';
+import { MatchingContext } from '../../types/matching.types';
 
 export const evaluateHardRules = (ctx: MatchingContext) => {
   const { adopter, pet } = ctx;

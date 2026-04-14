@@ -1,6 +1,6 @@
 // birdHardRules.ts
 
-import { MatchingContext } from '../../types/matching.types';
+import { MatchingContext } from '../../../types/matching.types';
 
 export const isRejected = (ctx: MatchingContext): boolean => {
   const { adopter, bird } = ctx;
