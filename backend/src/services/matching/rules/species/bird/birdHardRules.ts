@@ -24,3 +24,7 @@ export const isRejected = (ctx: MatchingContext): boolean => {
 
   return false;
 };
+
+export const birdHardRules = [
+  isRejected,
+];
