@@ -1,5 +1,16 @@
 // scoring.service.ts
-// Generic scoring engine (aggregates scoring rules only)
+/**
+ * Scoring Engine
+ *
+ * Executes scoring rules and aggregates results.
+ *
+ * Responsibilities:
+ * - Apply all scoring rules to a matching context
+ * - Accumulate welfare and human scores
+ * - Return total score breakdown
+ *
+ * This engine is generic and reusable across species.
+ */
 
 import { MatchingContext } from '../types/matching.types';
 import { ScoringRule } from '../types/scoring.types';

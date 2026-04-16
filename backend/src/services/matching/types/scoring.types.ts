@@ -1,6 +1,13 @@
 // scoring.types.ts
-// Types for scoring
-// Used by scoring logic
+/**
+ * Scoring Rule Types
+ *
+ * Defines the structure of scoring rules and scoring outputs.
+ *
+ * Used by:
+ * - Scoring rule implementations
+ * - Scoring engine
+ */
 
 import { MatchingContext } from './matching.types';
 
