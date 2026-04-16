@@ -8,6 +8,18 @@
  * - Hard rule implementations
  * - Hard rule engine
  */
+
+export type RuleType = "hard_rule" | "welfare" | "human";
+
+export type Rule = {
+  rule_name: string;
+  rule_type: RuleType;
+  value: number;
+  description: string;
+};
+
+////////////////////////////////////////////////////////////
+
 import { MatchingContext, RuleResult } from './matching.types';
 
 export type HardRuleResult = {
@@ -16,3 +28,6 @@ export type HardRuleResult = {
 };
 
 export type HardRule = (ctx: MatchingContext) => HardRuleResult;
+
+////////////////////////////////////////////////////////////
+
