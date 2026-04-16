@@ -1,6 +1,18 @@
-// Shared types //
-// This file contains shared types for the matching service. These types are used to define the structure of data related to birds, adopters, and match results. 
-// They are essential for ensuring type safety and consistency across the matching logic and any related components.
+// matching.types.ts
+/**
+ * Matching Types (Domain Models)
+ *
+ * Defines core domain data structures used in matching.
+ *
+ * Includes:
+ * - Pet (generic)
+ * - Bird (specialized)
+ * - Adopter
+ * - MatchingContext
+ * - MatchResult
+ *
+ * These types represent the domain language of the system.
+ */
 
 export type Level = 'very_low' | 'low' | 'medium' | 'high' | 'very_high';
 
@@ -28,10 +40,12 @@ export type Pet = {
 
 /////////////////////////////////////////////////////////////
 
-export type Bird = {
+export type Bird = Pet & {
   id: string;
 
   size: 'small' | 'medium' | 'large' | 'very_large';
+
+  species: 'bird' | 'dog' | 'cat' | 'rodent' | 'reptile' | 'amphibian' | 'fish';
 
   noise_level: Level;
   activity_level: Level;
@@ -53,6 +67,9 @@ export type Adopter = {
 
   daily_care_time: number;
 
+  household_allergy_sensitivity: 'none' | 'mild' | 'specific_animal_allergy' | 'respiratory_sensitivity';
+  specific_animal_allergies?: ('bird' | 'cat' | 'dog')[];
+
   // keep 3-level (represents time buckets, not intensity)
   alone_time_hours: 'low' | 'medium' | 'high';
 
@@ -63,7 +80,10 @@ export type Adopter = {
   commitment_horizon_years: number;
 
   has_pet_experience: boolean;
-  experience_years_bird: number;
+  experience_years: {
+    bird?: number;
+    dog?: number;
+  }
 
   desired_pet_sociability: Level;
   desired_pet_affection_level: Level;

@@ -1,5 +1,6 @@
 import { Adopter } from './adopter.model';
 
+// mapping between db rows and domain model
 export const mapAdopter = (row: any): Adopter => ({
   id: row.id,
   spaceLevel: row.space_level,
