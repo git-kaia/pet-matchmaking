@@ -1,23 +1,21 @@
 // bird.mapper.ts
-// Converting raw db rows to Bird entities for matching logic and other business logic use
+import { Bird } from '../../services/matching/types/matching.types';
 
-import { BirdEntity } from './bird.model';
-import { Bird } from '../../services/matching/types';
+export const mapBirdFromDB = (row: any): Bird => ({
+  id: row.id,
+  species: 'bird',
 
-export const mapBirdToMatching = (bird: BirdEntity): Bird => ({
-  id: bird.id,
+  size: row.size,
 
-  size: 'medium', // example mapping
+  noiseLevel: row.noise_level,
+  activityLevel: row.activity_level,
 
-  noise_level: mapNoise(bird.noiseLevel),
-  activity_level: mapActivity(bird.activityLevel),
+  socialNeed: row.social_with_humans,
+  affectionLevel: row.affection_level,
 
-  social_need: mapSocial(bird.socialWithHumans),
-  affection_level: mapAffection(bird.affectionLevel),
+  experienceLevel: row.training_level,
 
-  experience_level: mapExperience(bird.trainingLevel),
+  lifespanYears: row.lifespan_years,
 
-  lifespan_years: 20,
-
-  requires_bird_partner: bird.requiresBirdPartner,
+  requiresBirdPartner: row.requires_bird_partner,
 });

@@ -37,7 +37,7 @@ const runTest = async () => {
       console.log({
         bird: bird.id,
         rejected: result.rejected,
-        reason: result.reason || 'OK: passed hard rules',
+        reason: result.rule?.description || 'OK: passed hard rules',
       });
     }
   }

@@ -12,8 +12,8 @@
 export type RuleType = "hard_rule" | "welfare" | "human";
 
 export type Rule = {
-  rule_name: string;
-  rule_type: RuleType;
+  ruleName: string;
+  ruleType: RuleType;
   value: number;
   description: string;
 };

@@ -18,7 +18,7 @@ export const birdCompanionshipRule: HardRule = (ctx) => {
   const { adopter, pet } = ctx;
   const bird = pet as any; // or proper type guard later
 
-  if (bird.requires_bird_partner && adopter.alone_time_hours === 'high') {
+  if (bird.requires_bird_partner && adopter.aloneTimeHours === 'high') {
     return {
       rejected: true,
       reason: 'Bird requires companionship but adopter is often away',

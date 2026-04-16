@@ -7,14 +7,14 @@ export const allergyRule: HardRule = (ctx) => {
   const { adopter, pet } = ctx;
 
   if (
-    adopter.household_allergy_sensitivity === 'specific_animal_allergy' &&
-    adopter.specific_animal_allergies?.includes(pet.species)
+    adopter.householdAllergySensitivity === 'specific_animal_allergy' &&
+    adopter.specificAnimalAllergies?.includes(pet.species)
   ) {
     return {
       rejected: true,
       rule: {
-        rule_name: 'allergy',
-        rule_type: 'hard_rule',
+        ruleName: 'allergy',
+        ruleType: 'hard_rule',
         value: 0,
         description: `Allergic to ${pet.species}`,
       },
@@ -27,12 +27,12 @@ export const allergyRule: HardRule = (ctx) => {
 
 // 2. No time rule
 export const noTimeRule: HardRule = (ctx) => {
-  if (ctx.adopter.daily_care_time === 0) {
+  if (ctx.adopter.dailyCareTime === 0) {
     return {
       rejected: true,
       rule: {
-        rule_name: 'noTime',
-        rule_type: 'hard_rule',
+        ruleName: 'noTime',
+        ruleType: 'hard_rule',
         value: 0,
         description: "User has no time for pet care",
       },
@@ -48,14 +48,14 @@ export const commitmentRule: HardRule = (ctx) => {
   const { adopter, pet } = ctx;
 
   if (
-    adopter.commitment_horizon_years &&
-    pet.lifespan_years > adopter.commitment_horizon_years * 2
+    adopter.commitmentHorizonYears &&
+    pet.lifespanYears > adopter.commitmentHorizonYears * 2
   ) {
     return {
       rejected: true,
       rule: {
-        rule_name: 'commitment',
-        rule_type: 'hard_rule',
+        ruleName: 'commitment',
+        ruleType: 'hard_rule',
         value: 0,
         description: 'Commitment too short for pet lifespan',
       },

@@ -1,17 +1,6 @@
 // matching.types.ts
 /**
  * Matching Types (Domain Models)
- *
- * Defines core domain data structures used in matching.
- *
- * Includes:
- * - Pet (generic)
- * - Bird (specialized)
- * - Adopter
- * - MatchingContext
- * - MatchResult
- *
- * These types represent the domain language of the system.
  */
 
 export type Level = 'very_low' | 'low' | 'medium' | 'high' | 'very_high';
@@ -23,29 +12,28 @@ export type Pet = {
 
   species: Species;
 
-
   size: 'small' | 'medium' | 'large' | 'very_large';
 
-  noise_level: Level;
-  activity_level: Level;
-  social_need: Level;
-  affection_level: Level;
+  noiseLevel: Level;
+  activityLevel: Level;
+  socialNeed: Level;
+  affectionLevel: Level;
 
-  experience_level: 'beginner' | 'intermediate' | 'experienced' | 'advanced';
+  experienceLevel: 'beginner' | 'intermediate' | 'experienced' | 'advanced';
 
-  lifespan_years: number;
+  lifespanYears: number;
 
   // generic needs (used in general logic)
-  care_need?: Level;
-  diet_complexity?: Level;
-  aggression_risk?: 'low' | 'medium' | 'high';
+  careNeed?: Level;
+  dietComplexity?: Level;
+  aggressionRisk?: 'low' | 'medium' | 'high';
 };
 
 /////////////////////////////////////////////////////////////
 
 export type Bird = Pet & {
   species: 'bird';
-  requires_bird_partner: boolean;
+  requiresBirdPartner: boolean;
 };
 
 ////////////////////////////////////////////////////////////
@@ -53,47 +41,53 @@ export type Bird = Pet & {
 export type Adopter = {
   id: string;
 
-  daily_care_time: number;
+  dailyCareTime: number;
 
-  household_allergy_sensitivity: 'none' | 'mild' | 'specific_animal_allergy' | 'respiratory_sensitivity';
-  specific_animal_allergies?: Species[];
-  
+  householdAllergySensitivity:
+    | 'none'
+    | 'mild'
+    | 'specific_animal_allergy'
+    | 'respiratory_sensitivity';
+
+  specificAnimalAllergies?: Species[];
+
   // keep 3-level (represents time buckets, not intensity)
-  alone_time_hours: 'low' | 'medium' | 'high';
+  aloneTimeHours: 'low' | 'medium' | 'high';
 
-  noise_tolerance_level: Level;
-  cleaning_tolerance: 'low' | 'medium' | 'high';
+  noiseToleranceLevel: Level;
+  cleaningTolerance: 'low' | 'medium' | 'high';
 
-  life_stability: 'low' | 'medium' | 'high';
-  commitment_horizon_years: number;
+  lifeStability: 'low' | 'medium' | 'high';
+  commitmentHorizonYears: number;
 
-  has_pet_experience: boolean;
-  experience_years: {
+  hasPetExperience: boolean;
+
+  experienceYears: {
     bird?: number;
     dog?: number;
-  }
+  };
 
-  desired_pet_sociability: Level;
-  desired_pet_affection_level: Level;
+  desiredPetSociability: Level;
+  desiredPetAffectionLevel: Level;
 
-  problem_behavior_tolerance: 'low' | 'medium' | 'high';
+  problemBehaviorTolerance: 'low' | 'medium' | 'high';
 
   // bird-specific preferences
-  desired_human_interaction: Level;
-  willingness_multiple_birds: 'low' | 'medium' | 'high';
+  desiredHumanInteraction: Level;
+  willingnessMultipleBirds: 'low' | 'medium' | 'high';
 };
 
 ////////////////////////////////////////////////////////////
 
 export type MatchResult = {
-  pet_id: string;
+  petId: string;
 
   score: number;
-  welfare_score: number;
-  human_score: number;
+  welfareScore: number;
+  humanScore: number;
 
   rejected: boolean;
-  rejection_reason?: string;
+  rejectionReason?: string;
 
   rules?: RuleResult[];
 };
@@ -101,8 +95,8 @@ export type MatchResult = {
 /////////////////////////////////////////////////////////////
 
 export type RuleResult = {
-  rule_name: string;
-  rule_type: 'hard_rule' | 'welfare' | 'human';
+  ruleName: string;
+  ruleType: 'hard_rule' | 'welfare' | 'human';
 
   value: number;
   description: string;
@@ -114,6 +108,8 @@ export type MatchingContext = {
   adopter: Adopter;
   pet: Pet;
 };
+
+////////////////////////////////////////////////////////////
 
 export type Species =
   | 'bird'

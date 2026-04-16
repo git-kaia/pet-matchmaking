@@ -1,6 +1,8 @@
+// adopter.repository.ts
+
 import { pool } from '../../../db/db';
 import { Adopter } from './adopter.model';
-import { mapAdopter } from './adopter.mapper';
+import { mapAdopterFromDb } from './adopter.mapper';
 
 export const getAdopterById = async (id: string): Promise<Adopter | null> => {
   const result = await pool.query(
@@ -8,7 +10,7 @@ export const getAdopterById = async (id: string): Promise<Adopter | null> => {
     [id]
   );
 
-  return result.rows[0] ? mapAdopter(result.rows[0]) : null;
+  return result.rows[0] ? mapAdopterFromDb(result.rows[0]) : null;
 };
 
 export const saveAdopter = async (adopter: Adopter) => {

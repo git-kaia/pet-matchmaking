@@ -1,7 +1,8 @@
+// adopter.mapper.ts
 import { Adopter } from './adopter.model';
 
 // mapping between db rows and domain model
-export const mapAdopter = (row: any): Adopter => ({
+export const mapAdopterFromDb = (row: any): Adopter => ({
   id: row.id,
   spaceLevel: row.space_level,
   householdType: row.household_type,
@@ -46,13 +47,13 @@ export const mapAdopter = (row: any): Adopter => ({
   messTolerance: row.mess_tolerance,
   destructionTolerance: row.destruction_tolerance,
 
-  desiredHumanInteraction: row.desired_human_interaction,
   desiredBondingStyle: row.desired_bonding_style,
   birdOverHumanAcceptance: row.bird_over_human_acceptance,
 
   tamenessRequirement: row.tameness_requirement,
   adoptionComplexityTolerance: row.adoption_complexity_tolerance,
 
+  desiredHumanInteraction: row.desired_human_interaction,
   willingnessMultipleBirds: row.willingness_multiple_birds,
 
   noiseSensitivityTime: row.noise_sensitivity_time,
@@ -62,4 +63,5 @@ export const mapAdopter = (row: any): Adopter => ({
   trainingInterest: row.training_interest,
 
   dietComplexityTolerance: row.diet_complexity_tolerance
+  
 });

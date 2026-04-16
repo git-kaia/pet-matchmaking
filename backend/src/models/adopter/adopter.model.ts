@@ -1,3 +1,5 @@
+// adopter.model.ts
+
 export interface Adopter {
   id: string;
 
@@ -35,6 +37,7 @@ export interface Adopter {
 
   desiredPetSociability: string;
   desiredPetAffectionLevel: string;
+  desiredHumanInteraction: string;
   problemBehaviorTolerance: string;
 
   sleepEnvironmentCommitment: string;
@@ -44,7 +47,6 @@ export interface Adopter {
   messTolerance: string;
   destructionTolerance: string;
 
-  desiredHumanInteraction: string;
   desiredBondingStyle: string;
   birdOverHumanAcceptance: string;
 
