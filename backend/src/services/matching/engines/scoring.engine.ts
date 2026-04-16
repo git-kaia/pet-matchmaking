@@ -17,16 +17,14 @@ import { ScoringRule } from '../types/scoring.types';
 
 export const calculateScore = (
   ctx: MatchingContext,
-  rules: ScoringRule[]
-) => {
+  rules: ScoringRule[]) => {
   let welfare_score = 0;
   let human_score = 0;
 
+  const ruleResults = [];
+
   for (const rule of rules) {
     const result = rule(ctx);
-
-    // Defensive: skip if rule returns nothing
-    if (!result) continue;
 
     if (result.type === 'welfare') {
       welfare_score += result.value;
@@ -35,11 +33,14 @@ export const calculateScore = (
     if (result.type === 'human') {
       human_score += result.value;
     }
+
+    ruleResults.push(result.rule);
   }
 
   return {
     score: welfare_score + human_score,
     welfare_score,
     human_score,
+    rules: ruleResults,
   };
 };
