@@ -12,7 +12,13 @@
  * This engine does not contain rule logic itself.
  */
 
-export const evaluateHardRules = (ctx, rules) => {
+import { MatchingContext } from '../types/matching.types';
+import { HardRule, HardRuleResult } from '../types/rule.types';
+
+export const evaluateHardRules = (
+  ctx: MatchingContext,
+  rules: HardRule[]
+): HardRuleResult => {
   for (const rule of rules) {
     const result = rule(ctx);
 

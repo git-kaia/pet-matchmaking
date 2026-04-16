@@ -21,6 +21,9 @@ export type Level = 'very_low' | 'low' | 'medium' | 'high' | 'very_high';
 export type Pet = {
   id: string;
 
+  species: Species;
+
+
   size: 'small' | 'medium' | 'large' | 'very_large';
 
   noise_level: Level;
@@ -53,8 +56,8 @@ export type Adopter = {
   daily_care_time: number;
 
   household_allergy_sensitivity: 'none' | 'mild' | 'specific_animal_allergy' | 'respiratory_sensitivity';
-  specific_animal_allergies?: ('bird' | 'cat' | 'dog')[];
-
+  specific_animal_allergies?: Species[];
+  
   // keep 3-level (represents time buckets, not intensity)
   alone_time_hours: 'low' | 'medium' | 'high';
 
@@ -111,3 +114,12 @@ export type MatchingContext = {
   adopter: Adopter;
   pet: Pet;
 };
+
+export type Species =
+  | 'bird'
+  | 'dog'
+  | 'cat'
+  | 'rodent'
+  | 'reptile'
+  | 'amphibian'
+  | 'fish';

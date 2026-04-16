@@ -11,20 +11,21 @@
  * These rules apply to all pet types.
  * No evaluation logic is contained here, only rule definitions.
  */
-
 import { MatchingContext } from '../../../types/matching.types';
+import { HardRule } from '../../../types/rule.types';
 
-export const isRejected = (ctx: MatchingContext): boolean => {
-  const { adopter, bird } = ctx;
+export const birdCompanionshipRule: HardRule = (ctx) => {
+  const { adopter, pet } = ctx;
+  const bird = pet as any; // or proper type guard later
 
-  // Bird needs companion but adopter not willing (simplified)
   if (bird.requires_bird_partner && adopter.alone_time_hours === 'high') {
-    return true;
+    return {
+      rejected: true,
+      reason: 'Bird requires companionship but adopter is often away',
+    };
   }
 
-  return false;
+  return { rejected: false };
 };
 
-export const birdHardRules = [
-  isRejected,
-];
+export const birdHardRules = [birdCompanionshipRule];
