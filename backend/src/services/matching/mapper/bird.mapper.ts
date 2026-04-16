@@ -7,15 +7,16 @@ export const mapBirdFromDB = (birdRow: any, speciesRow: any): Bird => {
     species: 'bird',
 
     size: speciesRow.size,
-    noise_level: speciesRow.noise_level,
-    activity_level: birdRow.activity_level,
 
-    social_need: speciesRow.social_need,
-    affection_level: birdRow.affection_level,
+    noiseLevel: speciesRow.noise_level,
+    activityLevel: speciesRow.activity_level,
 
-    experience_level: speciesRow.experience_level,
-    lifespan_years: speciesRow.lifespan_years,
+    socialNeed: speciesRow.social_need,
+    affectionLevel: birdRow.affection_level,
 
-    requires_bird_partner: birdRow.requires_bird_partner,
+    experienceLevel: speciesRow.experience_level,
+    lifespanYears: speciesRow.lifespan_years,
+
+    requiresBirdPartner: birdRow.requires_bird_partner,
   };
 };
