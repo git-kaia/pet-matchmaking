@@ -1,3 +1,5 @@
+// to run testing script: npx ts-node src/test/matching.integration.test.ts
+
 import { evaluateHardRules } from '../services/matching/engines/hardRule.engine';
 import { generalHardRules } from '../services/matching/rules/general/generalHardRules';
 import { birdHardRules } from '../services/matching/rules/species/bird/birdHardRules';
