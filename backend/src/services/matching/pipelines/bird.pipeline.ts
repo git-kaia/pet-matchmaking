@@ -13,6 +13,11 @@
  * This defines the sequence of evaluation steps for birds.
  */
 
+
+import { generalHardRules } from '../rules/general/generalHardRules';
+import { birdHardRules } from '../rules/species/bird/birdHardRules';
+import { evaluateHardRules } from '../engines/hardRule.engine';
+
 const hardRules = [...generalHardRules, ...birdHardRules];
 const scoringRules = [...generalScoringRules, ...birdScoringRules];
 
