@@ -8,12 +8,11 @@
  * - Hard rule implementations
  * - Hard rule engine
  */
-
-import { MatchingContext } from "./matching.types";
+import { MatchingContext, RuleResult } from './matching.types';
 
 export type HardRuleResult = {
   rejected: boolean;
-  reason?: string;
+  rule?: RuleResult;
 };
 
 export type HardRule = (ctx: MatchingContext) => HardRuleResult;
