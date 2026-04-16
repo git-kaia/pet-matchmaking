@@ -13,7 +13,6 @@
  * This defines the sequence of evaluation steps for birds.
  */
 
-
 import { generalHardRules } from '../rules/general/generalHardRules';
 import { birdHardRules } from '../rules/species/bird/birdHardRules';
 import { evaluateHardRules } from '../engines/hardRule.engine';
@@ -21,30 +20,51 @@ import { evaluateHardRules } from '../engines/hardRule.engine';
 const hardRules = [...generalHardRules, ...birdHardRules];
 const scoringRules = [...generalScoringRules, ...birdScoringRules];
 
-for (const bird of birds) {
-  const ctx = { adopter, pet: bird };
+import { evaluateHardRules } from "../engines/hardRule.engine";
+import { calculateScore } from "../engines/scoring.engine";
 
-  // 1. HARD RULES
-  const rejection = evaluateHardRules(ctx, hardRules);
+import { generalHardRules } from "../rules/general/generalHardRules";
+import { generalScoringRules } from "../rules/general/generalScoringRules";
 
-  if (rejection.rejected) {
+import { birdHardRules } from "../rules/species/bird/birdHardRules";
+import { birdScoringRules } from "../rules/species/bird/birdScoringRules";
+
+export const runBirdPipeline = (
+  adopter: Adopter,
+  pets: Bird[]
+): MatchResult[] => {
+
+  const hardRules = [...generalHardRules, ...birdHardRules];
+  const scoringRules = [...generalScoringRules, ...birdScoringRules];
+
+  const results: MatchResult[] = [];
+
+  for (const pet of pets) {
+    const ctx: MatchingContext = { adopter, pet };
+
+    const rejection = evaluateHardRules(ctx, hardRules);
+
+    if (rejection.rejected) {
+      results.push({
+        pet_id: pet.id,
+        score: 0,
+        welfare_score: 0,
+        human_score: 0,
+        rejected: true,
+        rejection_reason: rejection.rule?.description,
+        rules: rejection.rule ? [rejection.rule] : [],
+      });
+      continue;
+    }
+
+    const score = calculateScore(ctx, scoringRules);
+
     results.push({
-      pet_id: bird.id,
-      score: 0,
-      welfare_score: 0,
-      human_score: 0,
-      rejected: true,
-      rejection_reason: rejection.reason,
+      pet_id: pet.id,
+      ...score,
+      rejected: false,
     });
-    continue;
   }
 
-  // 2. SCORING
-  const score = calculateScore(ctx, scoringRules);
-
-  results.push({
-    pet_id: bird.id,
-    ...score,
-    rejected: false,
-  });
-}
+  return results.sort((a, b) => b.score - a.score);
+};

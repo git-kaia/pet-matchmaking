@@ -9,11 +9,12 @@
  * - Scoring engine
  */
 
-import { MatchingContext } from './matching.types';
+import { MatchingContext, RuleResult } from './matching.types';
 
-export type ScoringResult = {
+export type ScoringRuleResult = {
   type: 'welfare' | 'human';
   value: number;
+  rule: RuleResult;
 };
 
-export type ScoringRule = (ctx: MatchingContext) => ScoringResult;
+export type ScoringRule = (ctx: MatchingContext) => ScoringRuleResult;

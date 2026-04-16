@@ -44,21 +44,7 @@ export type Pet = {
 /////////////////////////////////////////////////////////////
 
 export type Bird = Pet & {
-  id: string;
-
-  size: 'small' | 'medium' | 'large' | 'very_large';
-
-
-  noise_level: Level;
-  activity_level: Level;
-
-  social_need: Level;
-  affection_level: Level;
-
-  experience_level: 'beginner' | 'intermediate' | 'experienced' | 'advanced';
-
-  lifespan_years: number;
-
+  species: 'bird';
   requires_bird_partner: boolean;
 };
 
@@ -91,12 +77,16 @@ export type Adopter = {
   desired_pet_affection_level: Level;
 
   problem_behavior_tolerance: 'low' | 'medium' | 'high';
+
+  // bird-specific preferences
+  desired_human_interaction: Level;
+  willingness_multiple_birds: 'low' | 'medium' | 'high';
 };
 
 ////////////////////////////////////////////////////////////
 
 export type MatchResult = {
-  bird_id: string;
+  pet_id: string;
 
   score: number;
   welfare_score: number;
@@ -104,6 +94,8 @@ export type MatchResult = {
 
   rejected: boolean;
   rejection_reason?: string;
+
+  rules?: RuleResult[];
 };
 
 /////////////////////////////////////////////////////////////
