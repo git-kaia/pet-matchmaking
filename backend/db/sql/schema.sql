@@ -1,3 +1,4 @@
+-- scema.sql
 -------------
 -- SPECIES --
 -------------
@@ -6,9 +7,9 @@ CREATE TABLE species (
   norwegian_name TEXT,
   latin_name TEXT,
 
-  size TEXT, -- small / medium / large / very_large
-  noise_level TEXT, -- low / medium / high / very_high
-  noise_frequency TEXT, -- occasional / daily / frequent
+  size TEXT,
+  noise_level TEXT,
+  noise_frequency TEXT,
 
   activity_level TEXT,
   social_need TEXT,
@@ -18,10 +19,7 @@ CREATE TABLE species (
   affection_level TEXT,
   diet_complexity TEXT,
 
-  sleep_need_hours INT,
-  requires_darkness_level TEXT,
-
-  experience_level TEXT, -- beginner / intermediate / experienced / advanced
+  experience_level TEXT,
   space_requirement TEXT,
 
   lifespan_years INT
@@ -37,8 +35,13 @@ CREATE TABLE birds (
   name TEXT,
   age_years INT,
   sex TEXT,
+  origin TEXT,
 
-  origin TEXT, -- breeder / rehomed / found
+  -- overrides (nullable = fallback to species)
+  noise_level TEXT,
+  activity_level TEXT,
+  social_need TEXT,
+  affection_level TEXT,
 
   -- behavior
   tameness_level TEXT,
@@ -49,51 +52,34 @@ CREATE TABLE birds (
   social_with_birds TEXT,
   bonding_style TEXT,
 
-  activity_level TEXT,
   stress_sensitivity TEXT,
 
-  -- behavioral issues
   biting_risk TEXT,
   screaming_level TEXT,
   feather_plucking BOOLEAN,
   destructiveness TEXT,
   separation_anxiety TEXT,
 
-  -- relationship
-  desired_contact_level TEXT,
-  affection_level TEXT,
-  tolerates_children TEXT,
-  tolerates_strangers TEXT,
-
-  -- flock
   requires_bird_partner BOOLEAN,
-  can_live_with_other_birds TEXT,
-  compatibility_with_other_species TEXT,
 
-  -- stimulation
   training_level TEXT,
   training_need TEXT,
-  mental_stimulation_need TEXT,
-
-  -- noise
-  noise_level TEXT,
-  screaming_time TEXT,
-  noise_frequency TEXT
+  mental_stimulation_need TEXT
 );
-
 ------------------------
 -- HOUSEHOLD PROFILES --
 ------------------------
+-- General quiz
+
 CREATE TABLE adopters (
   id TEXT PRIMARY KEY,
 
-  -- GENERAL QUIZ
   space_level TEXT,
   household_type TEXT,
   kids_age TEXT,
 
   has_current_pets BOOLEAN,
-  type_of_pet TEXT[], -- array
+  current_pet_types TEXT[],
 
   household_noise_level TEXT,
 
@@ -111,36 +97,36 @@ CREATE TABLE adopters (
   life_stability TEXT,
   commitment_horizon_years INT,
 
-  rehome_responsibility_level TEXT,
   financial_priority TEXT,
 
   has_pet_experience BOOLEAN,
+  pet_experience_types TEXT[],
+
   learning_willingness TEXT,
 
-  pet_experience_type TEXT[],
-  experience_years_bird INT,
-
-  -- preferences
   desired_pet_sociability TEXT,
   desired_pet_affection_level TEXT,
-  problem_behavior_tolerance TEXT,
 
-  -- BIRD QUIZ
-  sleep_environment_commitment TEXT,
+  problem_behavior_tolerance TEXT
+);
+
+-- Adopters bird quiz
+CREATE TABLE adopter_bird_preferences (
+  adopter_id TEXT PRIMARY KEY REFERENCES adopters(id),
+
+  desired_human_interaction TEXT,
+  desired_bonding_style TEXT,
+
+  willingness_multiple_birds TEXT,
+
   free_flight_expectation TEXT,
   free_roaming_tolerance TEXT,
 
   mess_tolerance TEXT,
   destruction_tolerance TEXT,
 
-  desired_human_interaction TEXT,
-  desired_bonding_style TEXT,
-  bird_over_human_acceptance TEXT,
-
   tameness_requirement TEXT,
   adoption_complexity_tolerance TEXT,
-
-  willingness_multiple_birds TEXT,
 
   noise_sensitivity_time TEXT,
   sudden_noise_tolerance TEXT,
@@ -180,8 +166,7 @@ CREATE TABLE match_rule_results (
   match_id INT REFERENCES matches(id),
 
   rule_name TEXT,
-  rule_type TEXT, -- welfare / human / hard_rule
-
+  rule_type TEXT,
   value INT,
   description TEXT
 );
