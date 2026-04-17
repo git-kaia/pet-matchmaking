@@ -25,8 +25,10 @@ export type Pet = {
 
   // generic needs (used in general logic)
   careNeed?: Level;
-  dietComplexity?: Level;
+  // dietComplexity?: Level;
   aggressionRisk?: 'low' | 'medium' | 'high';
+  sleepNeed?: Level;
+  flightNeed?: Level;
 };
 
 /////////////////////////////////////////////////////////////
@@ -72,9 +74,17 @@ export type Adopter = {
 
   problemBehaviorTolerance: 'low' | 'medium' | 'high';
 
-  // bird-specific preferences
-  desiredHumanInteraction: Level;
-  willingnessMultipleBirds: 'low' | 'medium' | 'high';
+    householdWorkPattern?: 'full_time' | 'part_time' | 'flexible';
+  hasCurrentPets?: boolean;
+  typeOfPet?: Species[];
+  kidsAge?: 'none' | 'under_ten' | 'over_ten';
+
+  freeFlightExpectation?: Level;
+  sleepEnvironmentCommitment?: Level;
+  willingnessMultipleBirds?: 'low' | 'medium' | 'high';
+  desiredHumanInteraction?: Level;
+  adoptionComplexityTolerance?: 'low' | 'medium' | 'high';
+
 };
 
 ////////////////////////////////////////////////////////////
@@ -96,10 +106,11 @@ export type MatchResult = {
 
 export type RuleResult = {
   ruleName: string;
-  ruleType: 'hard_rule' | 'welfare' | 'human';
+  passed: boolean;
+  reason: string;
 
-  value: number;
-  description: string;
+  adopter: Record<string, any>;
+  pet: Record<string, any>;
 };
 
 ////////////////////////////////////////////////////////////

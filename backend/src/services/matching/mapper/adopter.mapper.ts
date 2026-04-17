@@ -7,8 +7,7 @@ export const mapAdopterFromDB = (row: any): Adopter => {
     dailyCareTime: row.daily_care_time,
 
     householdAllergySensitivity: row.household_allergy_sensitivity,
-
-    specificAnimalAllergies: [], //
+    specificAnimalAllergies: [],
 
     aloneTimeHours: row.alone_time_hours,
 
@@ -29,8 +28,13 @@ export const mapAdopterFromDB = (row: any): Adopter => {
 
     problemBehaviorTolerance: row.problem_behavior_tolerance,
 
-    // bird-specific fields
-    desiredHumanInteraction: row.desired_human_interaction,
-    willingnessMultipleBirds: row.willingness_multiple_birds,
+    householdWorkPattern: row.household_work_pattern,
+    hasCurrentPets: row.has_current_pets,
+    typeOfPet: row.type_of_pet,
+    kidsAge: row.kids_age,
+
+    freeFlightExpectation: row.free_flight_expectation,
+    sleepEnvironmentCommitment: row.sleep_environment_commitment,
+    adoptionComplexityTolerance: row.adoption_complexity_tolerance,
   };
 };

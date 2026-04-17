@@ -26,11 +26,15 @@ import { birdScoringRules } from "../rules/species/bird/birdScoringRules";
 
 export const runBirdPipeline = (
   adopter: Adopter,
-  pets: Bird[]
+  pets: Bird[],
+  deps?: {
+    hardRules: any[];
+    scoringRules: any[];
+  }
 ): MatchResult[] => {
 
-  const hardRules = [...generalHardRules, ...birdHardRules];
-  const scoringRules = [...generalScoringRules, ...birdScoringRules];
+const hardRules = deps?.hardRules ?? [...generalHardRules, ...birdHardRules];
+const scoringRules = deps?.scoringRules ?? [...generalScoringRules, ...birdScoringRules];
 
   const results: MatchResult[] = [];
 
