@@ -1,198 +1,282 @@
+-- seed.sql
 -- ============================================================
--- SPECIES
+-- RESET TABLES (FOR CLEAN RE-RUNS)
 -- ============================================================
 
-INSERT INTO species (
-  id, norwegian_name, latin_name,
-  size, noise_level, noise_frequency,
-  activity_level, social_need, mental_stimulation_need, training_need,
-  affection_level, diet_complexity,
-  sleep_need_hours, requires_darkness_level,
-  experience_level, space_requirement,
-  lifespan_years
-)
-VALUES
+TRUNCATE match_rule_results RESTART IDENTITY CASCADE;
+TRUNCATE matches RESTART IDENTITY CASCADE;
+TRUNCATE adopter_bird_preferences CASCADE;
+TRUNCATE adopters CASCADE;
+TRUNCATE birds CASCADE;
+TRUNCATE species CASCADE;
+
+
+-- ============================================================
+-- SPECIES (BASELINE TRAITS)
+-- These represent "typical" characteristics of a species
+-- Used as defaults in matching logic
+-- ============================================================
+
+INSERT INTO species VALUES
+
+-- Beginner, low noise, social
 ('budgie', 'Undulat', 'Melopsittacus undulatus',
- 'small', 'low', 'frequent',
- 'high', 'high', 'medium', 'low',
- 'medium', 'low',
- 12, 'medium',
- 'beginner', 'small',
+ 'small','low','frequent',
+ 'high','high','medium','low',
+ 'medium','low',
+ 'beginner','small',
  10),
 
-('sun_conure', 'Solparakitt', 'Aratinga solstitialis',
- 'medium', 'very_high', 'frequent',
- 'very_high', 'very_high', 'very_high', 'high',
- 'medium', 'medium',
- 12, 'high',
- 'experienced', 'large',
- 30),
-
-('cockatiel', 'Nymfekakadue', 'Nymphicus hollandicus',
- 'medium', 'medium', 'daily',
- 'medium', 'high', 'medium', 'medium',
- 'high', 'low',
- 12, 'medium',
- 'beginner', 'medium',
+-- Calm, friendly, beginner-friendly
+('cockatiel','Nymfekakadue','Nymphicus hollandicus',
+ 'medium','medium','daily',
+ 'medium','high','medium','medium',
+ 'high','low',
+ 'beginner','medium',
  20),
 
-('african_grey', 'Grå jako', 'Psittacus erithacus',
- 'large', 'high', 'daily',
- 'medium', 'very_high', 'very_high', 'high',
- 'medium', 'high',
- 14, 'high',
- 'advanced', 'large',
- 50);
+-- Intelligent, demanding, long lifespan
+('african_grey','Grå jako','Psittacus erithacus',
+ 'large','high','daily',
+ 'medium','very_high','very_high','high',
+ 'medium','high',
+ 'advanced','large',
+ 50),
+
+-- Very loud, very social, high energy
+('sun_conure','Solparakitt','Aratinga solstitialis',
+ 'medium','very_high','frequent',
+ 'very_high','very_high','very_high','high',
+ 'medium','medium',
+ 'experienced','large',
+ 30),
+
+-- Very easy, quiet, low interaction
+('canary','Kanari','Serinus canaria',
+ 'small','low','daily',
+ 'low','low','low','low',
+ 'low','low',
+ 'beginner','small',
+ 10);
+
 
 -- ============================================================
--- BIRDS
+-- BIRDS (INDIVIDUAL ANIMALS)
+-- These may override species traits (NULL = inherit)
+-- Used to simulate real-world variation
 -- ============================================================
 
-INSERT INTO birds (
-  id, species_id,
-  name, age_years, sex,
-  origin,
+INSERT INTO birds VALUES
 
-  tameness_level, handling_tolerance, human_trust_level,
-  social_with_humans, social_with_birds, bonding_style,
-  activity_level, stress_sensitivity,
+-- EASY / BEGINNER BIRDS
+('b1','budgie','Pip',2,'male','rehomed',
+ NULL,NULL,NULL,NULL,
+ 'medium','medium','medium',
+ 'high','high','flock','low',
+ 'low','low',false,'low','low',
+ true,
+ 'low','low','medium'),
 
-  biting_risk, screaming_level, feather_plucking, destructiveness, separation_anxiety,
+('b2','canary','Sunny',1,'female','breeder',
+ NULL,NULL,NULL,NULL,
+ 'low','low','low',
+ 'low','low','independent','low',
+ 'low','low',false,'low','low',
+ false,
+ 'low','low','low'),
 
-  desired_contact_level, affection_level, tolerates_children, tolerates_strangers,
+-- SOCIAL & FRIENDLY
+('b3','cockatiel','Koko',3,'female','breeder',
+ NULL,NULL,NULL,NULL,
+ 'high','high','high',
+ 'high','medium','pair','medium',
+ 'low','medium',false,'low','low',
+ false,
+ 'medium','medium','medium'),
 
-  requires_bird_partner, can_live_with_other_birds, compatibility_with_other_species,
+-- VERY DEMANDING (HIGH RISK MATCH)
+('b4','african_grey','Athena',8,'female','rehomed',
+ NULL,NULL,NULL,NULL,
+ 'low','low','medium',
+ 'very_high','low','one_person','high',
+ 'high','high',true,'high','high',
+ false,
+ 'high','high','very_high'),
 
-  training_level, training_need, mental_stimulation_need,
+-- EXTREME NOISE BIRD
+('b5','sun_conure','Rio',4,'male','rehomed',
+ NULL,NULL,NULL,NULL,
+ 'medium','medium','medium',
+ 'very_high','medium','pair','medium',
+ 'medium','very_high',false,'medium','medium',
+ true,
+ 'high','high','high'),
 
-  noise_level, screaming_time, noise_frequency
-)
-VALUES
-('bird_1', 'budgie',
- 'Pip', 2, 'male',
- 'rehomed',
+-- EDGE CASES (CHALLENGING)
+('b6','budgie','Ghost',5,'male','rehomed',
+ NULL,NULL,NULL,NULL,
+ 'low','low','low',
+ 'low','low','independent','high',
+ 'high','low',true,'high','high',
+ false,
+ 'low','low','low'),
 
- 'medium', 'medium', 'medium',
- 'high', 'high', 'flock',
- 'high', 'low',
+('b7','cockatiel','Luna',2,'female','breeder',
+ NULL,NULL,NULL,NULL,
+ 'medium','medium','medium',
+ 'medium','medium','pair','low',
+ 'low','medium',false,'low','low',
+ false,
+ 'medium','medium','medium'),
 
- 'low', 'low', false, 'low', 'low',
+-- HIGH INTELLIGENCE / DEMANDING
+('b8','african_grey','Einstein',12,'male','rehomed',
+ NULL,NULL,NULL,NULL,
+ 'high','high','high',
+ 'very_high','low','one_person','high',
+ 'high','high',true,'high','high',
+ false,
+ 'high','high','very_high'),
 
- 'medium', 'medium', 'yes', 'yes',
+-- CHAOTIC / VERY SOCIAL
+('b9','sun_conure','Chaos',3,'male','rehomed',
+ NULL,NULL,NULL,NULL,
+ 'medium','medium','medium',
+ 'very_high','high','flock','high',
+ 'high','very_high',true,'high','high',
+ true,
+ 'high','high','high'),
 
- true, 'good', 'medium',
+-- VERY LOW NEED (CONTROL CASE)
+('b10','canary','Whisper',1,'female','breeder',
+ NULL,NULL,NULL,NULL,
+ 'low','low','low',
+ 'low','low','independent','low',
+ 'low','low',false,'low','low',
+ false,
+ 'low','low','low');
 
- 'low', 'low', 'medium',
-
- 'low', 'daytime', 'frequent'),
-
-('bird_2', 'cockatiel',
- 'Koko', 3, 'female',
- 'breeder',
-
- 'high', 'high', 'high',
- 'high', 'medium', 'pair',
- 'medium', 'medium',
-
- 'low', 'medium', false, 'low', 'low',
-
- 'high', 'high', 'yes', 'yes',
-
- false, 'good', 'good',
-
- 'medium', 'medium', 'medium',
-
- 'medium', 'morning_evening', 'daily'),
-
-('bird_3', 'african_grey',
- 'Athena', 8, 'female',
- 'rehomed',
-
- 'low', 'low', 'medium',
- 'very_high', 'low', 'one_person',
- 'medium', 'high',
-
- 'high', 'high', true, 'high', 'high',
-
- 'high', 'medium', 'no', 'no',
-
- false, 'limited', 'low',
-
- 'high', 'high', 'very_high',
-
- 'high', 'daytime', 'daily');
 
 -- ============================================================
--- ADOPTERS
+-- ADOPTERS (GENERAL QUIZ DATA)
+-- Represents household + lifestyle
+-- Used in ALL matching
 -- ============================================================
 
-INSERT INTO adopters (
-  id,
-  space_level, household_type, kids_age,
-  has_current_pets, type_of_pet,
-  household_noise_level,
-  household_work_pattern, household_work_hours,
-  daily_care_time, alone_time_hours,
-  cleaning_tolerance, noise_tolerance_level,
-  household_allergy_sensitivity,
-  life_stability, commitment_horizon_years,
-  rehome_responsibility_level, financial_priority,
-  has_pet_experience, learning_willingness,
-  pet_experience_type, experience_years_bird,
-  desired_pet_sociability, desired_pet_affection_level, problem_behavior_tolerance,
+INSERT INTO adopters VALUES
 
-  sleep_environment_commitment, free_flight_expectation, free_roaming_tolerance,
-  mess_tolerance, destruction_tolerance,
-  desired_human_interaction, desired_bonding_style, bird_over_human_acceptance,
-  tameness_requirement, adoption_complexity_tolerance,
-  willingness_multiple_birds,
-  noise_sensitivity_time, sudden_noise_tolerance,
-  enrichment_commitment, training_interest,
-  diet_complexity_tolerance
-)
-VALUES
-('adopter_1',
- 'medium', 'couple', 'none',
+-- BAD MATCH (low time + cat)
+('busy_cat_owner',
+ 'medium','couple','none',
  true, ARRAY['cat'],
  'medium',
- 'full_time', 'daytime',
- 120, 'medium',
- 'medium', 'medium',
+ 'full_time','day_shift',
+ 60,'high',
+ 'low','low',
  'none',
- 'high', 10,
- 'medium', 'medium',
- true, 'high',
- ARRAY['cat'], 2,
- 'medium', 'medium', 'medium',
-
- 'medium', 'medium', 'medium',
- 'medium', 'medium',
- 'medium', 'flexible', 'medium',
- 'medium', 'medium',
+ 'low',5,
  'low',
- 'none', 'medium',
- 'high', 'medium',
- 'medium'),
-
-('adopter_2',
- 'small', 'single', 'none',
- false, ARRAY[]::TEXT[],
+ true,ARRAY['cat'],
  'low',
- 'part_time', 'daytime',
- 60, 'low',
- 'medium', 'low',
- 'mild',
- 'medium', 5,
- 'low', 'low',
- true, 'medium',
- ARRAY['bird'], 1,
- 'high', 'high', 'low',
+ 'low','low',
+ 'low'),
 
- 'high', 'low', 'low',
- 'medium', 'low',
- 'high', 'one_person', 'low',
- 'low', 'low',
+-- IDEAL MATCH (high resources)
+('experienced_bird_keeper',
+ 'large','single','none',
+ false,ARRAY[]::TEXT[],
+ 'low',
+ 'part_time','day_shift',
+ 240,'low',
+ 'high','high',
+ 'none',
+ 'high',30,
+ 'high',
+ true,ARRAY['bird'],
+ 'high',
+ 'high','high',
+ 'high'),
+
+-- SHOULD BE REJECTED (no time)
+('no_time_user',
+ 'small','single','none',
+ false,ARRAY[]::TEXT[],
+ 'low',
+ 'full_time','day_shift',
+ 0,'high',
+ 'low','low',
+ 'none',
+ 'low',2,
+ 'low',
+ false,ARRAY[]::TEXT[],
+ 'low',
+ 'low','low',
+ 'low'),
+
+-- LOW NOISE TOLERANCE USER
+('noise_sensitive_user',
+ 'small','single','none',
+ false,ARRAY[]::TEXT[],
+ 'low',
+ 'part_time','day_shift',
+ 120,'medium',
+ 'medium','low',
+ 'none',
+ 'medium',10,
  'medium',
- 'morning', 'low',
- 'medium', 'low',
- 'low');
+ true,ARRAY['bird'],
+ 'medium',
+ 'medium','medium',
+ 'medium');
+
+
+-- ============================================================
+-- ADOPTER BIRD PREFERENCES (BIRD QUIZ)
+-- Only used for bird-specific rules
+-- ============================================================
+
+INSERT INTO adopter_bird_preferences VALUES
+
+-- LOW ENGAGEMENT USER
+('busy_cat_owner',
+ 'low','independent',
+ 'low',
+ 'low','low',
+ 'low','low',
+ 'low','low',
+ 'none','low',
+ 'low','low',
+ 'low'),
+
+-- IDEAL USER
+('experienced_bird_keeper',
+ 'high','one_person',
+ 'high',
+ 'high','high',
+ 'high','high',
+ 'high','high',
+ 'none','high',
+ 'high','high',
+ 'high'),
+
+-- LOW COMMITMENT USER
+('no_time_user',
+ 'low','independent',
+ 'low',
+ 'low','low',
+ 'low','low',
+ 'low','low',
+ 'none','low',
+ 'low','low',
+ 'low'),
+
+-- NOISE SENSITIVE USER
+('noise_sensitive_user',
+ 'medium','independent',
+ 'low',
+ 'medium','medium',
+ 'medium','medium',
+ 'medium','medium',
+ 'morning','low',
+ 'medium','medium',
+ 'medium');
