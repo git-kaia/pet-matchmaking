@@ -41,13 +41,21 @@ export const runBirdPipeline = (
 
     if (rejection.rejected) {
       results.push({
-        pet_id: pet.id,
+        petId: pet.id,
         score: 0,
-        welfare_score: 0,
-        human_score: 0,
+        welfareScore: 0,
+        humanScore: 0,
         rejected: true,
-        rejection_reason: rejection.rule?.description,
-        rules: rejection.rule ? [rejection.rule] : [],
+        rejectionReason: rejection.rule?.description,
+
+        rules: rejection.rule
+          ? [{
+              ruleName: rejection.rule.rule_name ?? rejection.rule.ruleName,
+              ruleType: rejection.rule.rule_type ?? rejection.rule.ruleType,
+              value: rejection.rule.value,
+              description: rejection.rule.description,
+            }]
+          : [],
       });
       continue;
     }
@@ -55,9 +63,12 @@ export const runBirdPipeline = (
     const score = calculateScore(ctx, scoringRules);
 
     results.push({
-      pet_id: pet.id,
-      ...score,
+      petId: pet.id,
+      score: score.score,
+      welfareScore: score.welfareScore,
+      humanScore: score.humanScore,
       rejected: false,
+      rules: [],
     });
   }
 
