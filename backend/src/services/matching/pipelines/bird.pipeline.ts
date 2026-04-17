@@ -50,8 +50,8 @@ export const runBirdPipeline = (
 
         rules: rejection.rule
           ? [{
-              ruleName: rejection.rule.rule_name ?? rejection.rule.ruleName,
-              ruleType: rejection.rule.rule_type ?? rejection.rule.ruleType,
+              ruleName: rejection.rule.ruleName ?? rejection.rule.ruleName,
+              ruleType: rejection.rule.ruleType ?? rejection.rule.ruleType,
               value: rejection.rule.value,
               description: rejection.rule.description,
             }]
