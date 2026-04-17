@@ -9,7 +9,7 @@
  * while keeping matching logic modular and extensible.
  */
 
-getMatchingService(petType: string) {
+/*getMatchingService(petType: string) {
   switch (petType) {
     case "bird":
       return birdMatchingService;
@@ -28,4 +28,27 @@ getMatchingService(petType: string) {
     default:
       return genericMatchingService;
   }
-}
+}*/
+
+import { runBirdPipeline } from './pipelines/bird.pipeline';
+
+export const getMatchingService = (petType: string) => {
+  switch (petType) {
+    case 'bird':
+      return {
+        execute: runBirdPipeline,
+      };
+
+    // placeholders for future pipelines
+    case 'dog':
+    case 'cat':
+    case 'rodent':
+    case 'reptile':
+    case 'amphibian':
+    case 'fish':
+    default:
+      return {
+        execute: () => [],
+      };
+  }
+};

@@ -24,7 +24,11 @@ import { MatchingContext, RuleResult } from './matching.types';
 
 export type HardRuleResult = {
   rejected: boolean;
-  rule?: RuleResult;
+  ruleName: string;
+  reason?: string;
+
+  adopterSnapshot?: Record<string, any>;
+  petSnapshot?: Record<string, any>;
 };
 
 export type HardRule = (ctx: MatchingContext) => HardRuleResult;

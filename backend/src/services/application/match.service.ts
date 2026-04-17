@@ -13,3 +13,16 @@
  * This service does NOT implement matching logic itself.
  * It delegates all evaluation to the matching domain layer.
  */
+
+import { getMatchingService } from '../matching/matchingEngine';
+
+export const matchAdopterWithPets = async (
+  adopter: any,
+  pets: any[],
+  petType: string
+) => {
+  const matchingService = getMatchingService(petType);
+
+  return matchingService.execute(adopter, pets);
+};
+
