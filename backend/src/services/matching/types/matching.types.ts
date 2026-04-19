@@ -14,6 +14,8 @@ export type Pet = {
 
   size: 'small' | 'medium' | 'large' | 'very_large';
 
+  timeRequired: number; // minutes per day
+
   noiseLevel: Level;
   activityLevel: Level;
   socialNeed: Level;
@@ -25,17 +27,21 @@ export type Pet = {
 
   // generic needs (used in general logic)
   careNeed?: Level;
-  // dietComplexity?: Level;
+ 
   aggressionRisk?: 'low' | 'medium' | 'high';
-  sleepNeed?: Level;
-  flightNeed?: Level;
+
+  messLevel: 'low' | 'medium' | 'high';
+  
 };
 
 /////////////////////////////////////////////////////////////
 
 export type Bird = Pet & {
   species: 'bird';
+  sleepNeed?: Level;
+  flightNeed?: Level;
   requiresBirdPartner: boolean;
+  dietComplexity?: Level;
 };
 
 ////////////////////////////////////////////////////////////
@@ -63,6 +69,7 @@ export type Adopter = {
   commitmentHorizonYears: number;
 
   hasPetExperience: boolean;
+  learningWillingness: 'low' | 'medium' | 'high';
 
   experienceYears: {
     bird?: number;
@@ -74,7 +81,7 @@ export type Adopter = {
 
   problemBehaviorTolerance: 'low' | 'medium' | 'high';
 
-    householdWorkPattern?: 'full_time' | 'part_time' | 'flexible';
+  householdWorkPattern?: 'full_time' | 'part_time' | 'flexible';
   hasCurrentPets?: boolean;
   typeOfPet?: Species[];
   kidsAge?: 'none' | 'under_ten' | 'over_ten';
@@ -104,13 +111,12 @@ export type MatchResult = {
 
 /////////////////////////////////////////////////////////////
 
-export type RuleResult = {
+// Used for explaining match
+export type RuleResult = { 
   ruleName: string;
-  passed: boolean;
-  reason: string;
-
-  adopter: Record<string, any>;
-  pet: Record<string, any>;
+  ruleType: 'hard_rule' | 'scoring_rule' | 'welfare' | 'human';
+  value: number;
+  description: string;
 };
 
 ////////////////////////////////////////////////////////////

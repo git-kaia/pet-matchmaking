@@ -11,8 +11,9 @@
 
 import { MatchingContext, RuleResult } from './matching.types';
 
+// Used for result execution
 export type ScoringRuleResult = {
-  type: 'welfare' | 'human';
+  scoreType: 'welfare' | 'human';
   value: number;
   rule: RuleResult;
 };

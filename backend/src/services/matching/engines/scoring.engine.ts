@@ -26,11 +26,11 @@ export const calculateScore = (
   for (const rule of rules) {
     const result = rule(ctx);
 
-    if (result.type === 'welfare') {
+    if (result.scoreType === 'welfare') {
       welfareScore += result.value;
     }
 
-    if (result.type === 'human') {
+    if (result.scoreType === 'human') {
       humanScore += result.value;
     }
 
