@@ -1,9 +1,16 @@
 // matching.types.ts
 /**
- * Matching Types (Domain Models)
+ * Matching Types
+ * Used for matching logic
  */
 
-export type Level = 'very_low' | 'low' | 'medium' | 'high' | 'very_high';
+// Import from global (domain) types
+import {
+  Level,
+  Species,
+  ExperienceLevel,
+  AllergySensitivity
+} from '../../../domain/types/common.types';
 
 ///////////////////////////////////////////////////////////////
 
@@ -74,7 +81,7 @@ export type Adopter = {
 
   problemBehaviorTolerance: 'low' | 'medium' | 'high';
 
-    householdWorkPattern?: 'full_time' | 'part_time' | 'flexible';
+  householdWorkPattern?: 'full_time' | 'part_time' | 'flexible';
   hasCurrentPets?: boolean;
   typeOfPet?: Species[];
   kidsAge?: 'none' | 'under_ten' | 'over_ten';
@@ -87,7 +94,10 @@ export type Adopter = {
 
 };
 
-////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////
+// Types for matching context and result //
+///////////////////////////////////////////
 
 export type MatchResult = {
   petId: string;
@@ -102,8 +112,6 @@ export type MatchResult = {
   rules?: RuleResult[];
 };
 
-/////////////////////////////////////////////////////////////
-
 export type RuleResult = {
   ruleName: string;
   passed: boolean;
@@ -113,20 +121,7 @@ export type RuleResult = {
   pet: Record<string, any>;
 };
 
-////////////////////////////////////////////////////////////
-
 export type MatchingContext = {
   adopter: Adopter;
   pet: Pet;
 };
-
-////////////////////////////////////////////////////////////
-
-export type Species =
-  | 'bird'
-  | 'dog'
-  | 'cat'
-  | 'rodent'
-  | 'reptile'
-  | 'amphibian'
-  | 'fish';

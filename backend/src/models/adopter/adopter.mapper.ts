@@ -34,7 +34,9 @@ export const mapAdopterFromDb = (row: any): Adopter => ({
   learningWillingness: row.learning_willingness,
 
   petExperienceType: row.pet_experience_type,
-  experienceYearsBird: row.experience_years_bird,
+  experienceYears: {
+    bird: row.experience_years_bird,
+  },
 
   desiredPetSociability: row.desired_pet_sociability,
   desiredPetAffectionLevel: row.desired_pet_affection_level,
@@ -63,5 +65,5 @@ export const mapAdopterFromDb = (row: any): Adopter => ({
   trainingInterest: row.training_interest,
 
   dietComplexityTolerance: row.diet_complexity_tolerance
-  
+
 });

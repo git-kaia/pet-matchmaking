@@ -21,8 +21,8 @@ import { calculateScore } from "../engines/scoring.engine";
 import { generalHardRules } from "../rules/general/generalHardRules";
 import { generalScoringRules } from "../rules/general/generalScoringRules";
 
-import { birdHardRules } from "../rules/species/bird/birdHardRules";
-import { birdScoringRules } from "../rules/species/bird/birdScoringRules";
+import { birdHardRules } from "../rules/animal/bird/birdHardRules";
+import { birdScoringRules } from "../rules/animal/bird/birdScoringRules";
 
 export const runBirdPipeline = (
   adopter: Adopter,

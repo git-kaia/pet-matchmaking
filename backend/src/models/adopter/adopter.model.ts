@@ -33,7 +33,9 @@ export interface Adopter {
   learningWillingness: string;
 
   petExperienceType: string[];
-  experienceYearsBird: number;
+  experienceYears: {
+    bird?: number;
+  };
 
   desiredPetSociability: string;
   desiredPetAffectionLevel: string;

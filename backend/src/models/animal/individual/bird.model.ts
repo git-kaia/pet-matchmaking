@@ -1,4 +1,4 @@
-// bird.entity.ts
+// bird.model.ts
 // Defines types for the bird entity in db
 
 export interface Bird {

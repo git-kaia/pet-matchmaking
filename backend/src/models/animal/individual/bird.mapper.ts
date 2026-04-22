@@ -1,5 +1,5 @@
 // bird.mapper.ts
-import { Bird } from '../../services/matching/types/matching.types';
+import { Bird } from './bird.model';
 
 export const mapBirdFromDB = (row: any): Bird => ({
   id: row.id,
