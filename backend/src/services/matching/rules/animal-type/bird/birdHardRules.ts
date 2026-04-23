@@ -14,6 +14,10 @@
 import { MatchingContext } from '../../../types/matching.types';
 import { HardRule } from '../../../types/rule.types';
 
+// How to implement bird specific type:
+// if (ctx.pet.animalType !== 'bird') return;
+// const bird = ctx.pet;
+
 // 1. Bird companionship rule
 export const birdCompanionshipRule: HardRule = (ctx) => {
   const { adopter, pet } = ctx;

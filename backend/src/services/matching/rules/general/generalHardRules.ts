@@ -1,5 +1,7 @@
-import { MatchingContext } from '../../types/matching.types';
+import { Adopter } from '../../../../domain/entities/adopter';
+import { Pet } from  '../../../../domain/entities/pet';
 import { HardRule } from '../../types/rule.types';
+import { MatchingContext } from '../../types/matching.types';
 
 // 1. Allergy rule
 export const allergyRule: HardRule = (ctx) => {

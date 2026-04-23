@@ -1,8 +1,8 @@
 // to run testing script: npx ts-node src/test/matching.integration.test.ts
 
 // Mapper imports
-import { mapBirdFromDB } from '../models/animal/individual/bird.mapper';
-import { mapBirdToPet } from '../models/animal/individual/birdToPet.mapper';
+import { mapBirdFromDB } from '../models/pet/individual/bird.mapper';
+import { mapBirdToPet } from '../models/pet/individual/birdToPet.mapper';
 import { mapAdopterFromDb } from '../models/adopter/adopter.mapper';
 
 // Engine imports
@@ -11,7 +11,7 @@ import { evaluateHardRulesDetailed } from '../services/matching/engines/hardRule
 
 // Rule imports
 import { generalHardRules } from '../services/matching/rules/general/generalHardRules';
-import { birdHardRules } from '../services/matching/rules/animal/bird/birdHardRules';
+import { birdHardRules } from '../services/matching/rules/animal-type/bird/birdHardRules';
 
 import { pool } from '../../db/db';
 
