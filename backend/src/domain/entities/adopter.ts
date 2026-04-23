@@ -1,41 +1,81 @@
 // domain/entities/adopter.ts
-
-import { AllergySensitivity, AnimalType, Level, StabilityLevel, TimeLevel, ToleranceLevel } from "../types/common.types";
+import {
+  AnimalType,
+  Level,
+  Level3,
+  TimeLevel,
+  ToleranceLevel,
+  StabilityLevel,
+  AllergySensitivity,
+  HouseholdWorkPattern,
+  KidsAge,
+  BondingStyle,
+  InteractionLevel,
+} from '../types/common.types';
 
 export interface Adopter {
   id: string;
 
+  // Household basics
+  spaceLevel: Level3;
+  householdType: string;
+  kidsAge: KidsAge;
+
+  hasCurrentPets: boolean;
+  typeOfPet: AnimalType[];
+
+  householdNoiseLevel: Level;
+
+  householdWorkPattern: HouseholdWorkPattern;
+  householdWorkHours: string;
+
+  // Core matching inputs
   dailyCareTime: number;
   aloneTimeHours: TimeLevel;
 
-  noiseToleranceLevel: Level;
   cleaningTolerance: ToleranceLevel;
+  noiseToleranceLevel: Level;
+
+  householdAllergySensitivity: AllergySensitivity;
 
   lifeStability: StabilityLevel;
   commitmentHorizonYears: number;
 
-  hasPetExperience: boolean;
-  experienceYears: {
-    bird?: number;
-    dog?: number;
-  };
+  rehomeResponsibilityLevel: Level3;
+  financialPriority: Level3;
 
-  learningWillingness?: 'low' | 'medium' | 'high';
+  hasPetExperience: boolean;
+  learningWillingness: Level3;
+
+  experienceYears: Partial<Record<AnimalType, number>>;
 
   desiredPetSociability: Level;
   desiredPetAffectionLevel: Level;
+  desiredHumanInteraction: InteractionLevel;
 
-  problemBehaviorTolerance?: 'low' | 'medium' | 'high';
+  problemBehaviorTolerance: Level3;
 
-  householdAllergySensitivity: AllergySensitivity;
+  // Bird-related preferences (optional but included for now)
+  sleepEnvironmentCommitment: Level3;
+  freeFlightExpectation: Level;
+  freeRoamingTolerance: Level3;
 
-  // household context
-  hasCurrentPets?: boolean;
-  typeOfPet?: AnimalType[];
-  kidsAge?: 'none' | 'under_ten' | 'over_ten';
+  messTolerance: Level3;
+  destructionTolerance: Level3;
 
-  // bird-specific preferences
-  desiredHumanInteraction?: Level;
-  willingnessMultipleBirds?: 'low' | 'medium' | 'high';
-  adoptionComplexityTolerance?: 'low' | 'medium' | 'high';
+  desiredBondingStyle: BondingStyle;
+  birdOverHumanAcceptance: Level3;
+
+  tamenessRequirement: Level3;
+  adoptionComplexityTolerance: Level3;
+
+  willingnessMultipleBirds: Level3;
+
+  noiseSensitivityTime: Level3;
+  suddenNoiseTolerance: Level3;
+
+  enrichmentCommitment: Level3;
+  trainingInterest: Level3;
+
+  dietComplexityTolerance: Level3;
 }

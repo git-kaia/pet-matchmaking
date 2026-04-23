@@ -1,4 +1,4 @@
-import { pool } from '../../db/db';
+import { pool } from '../infrastructure/db/db';
 
 async function testDb() {
   const res = await pool.query('SELECT * FROM species');

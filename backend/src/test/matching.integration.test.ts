@@ -3,7 +3,7 @@
 // Mapper imports
 import { mapBirdFromDB } from '../models/pet/individual/bird.mapper';
 import { mapBirdToPet } from '../models/pet/individual/birdToPet.mapper';
-import { mapAdopterFromDb } from '../models/adopter/adopter.mapper';
+import { mapAdopterFromDb } from '../infrastructure/mappers/adopter.mapper';
 
 // Engine imports
 import { evaluateHardRules } from '../services/matching/engines/hardRule.engine';
@@ -13,7 +13,7 @@ import { evaluateHardRulesDetailed } from '../services/matching/engines/hardRule
 import { generalHardRules } from '../services/matching/rules/general/generalHardRules';
 import { birdHardRules } from '../services/matching/rules/animal-type/bird/birdHardRules';
 
-import { pool } from '../../db/db';
+import { pool } from '../infrastructure/db/db';
 
 const runTest = async () => {
   const birdsRaw = await pool.query(`

@@ -1,5 +1,5 @@
 import { Adopter } from '../../../../domain/entities/adopter';
-import { Pet } from  '../../../../domain/entities/pet';
+import { Pet } from  '../../../../domain/types/pet.types';
 import { HardRule } from '../../types/rule.types';
 import { MatchingContext } from '../../types/matching.types';
 

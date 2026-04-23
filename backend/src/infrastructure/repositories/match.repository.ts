@@ -2,18 +2,18 @@
 // Handles:
 // Saving match results to the database
 
-import { pool } from '../../../db/db';
+import { pool } from '../db/db';
 
 export const saveMatch = async (
   adopterId: string,
-  birdId: string,
+  petId: string,
   score: number
 ) => {
   const result = await pool.query(
-    `INSERT INTO matches (adopter_id, bird_id, score)
+    `INSERT INTO matches (adopter_id, pet_id, score)
      VALUES ($1, $2, $3)
      RETURNING id`,
-    [adopterId, birdId, score]
+    [adopterId, petId, score]
   );
 
   return result.rows[0].id;
@@ -21,13 +21,17 @@ export const saveMatch = async (
 
 export const saveMatchRuleResults = async (
   matchId: string,
-  rules: { rule: string; result: string }[]
+  rules: { ruleName: string; passed: boolean }[]
 ) => {
   for (const r of rules) {
     await pool.query(
       `INSERT INTO match_rule_results (match_id, rule_name, result)
        VALUES ($1, $2, $3)`,
-      [matchId, r.rule, r.result]
+      [
+        matchId,
+        r.ruleName,
+        r.passed ? 'passed' : 'failed'
+      ]
     );
   }
 };

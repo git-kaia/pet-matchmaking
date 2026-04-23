@@ -1,6 +1,6 @@
 // domain/entities/pet.ts
 
-import { AnimalType, ExperienceLevel, Level } from "../types/common.types";
+import { AnimalType, ExperienceLevel, Level } from "../../domain/types/common.types";
 
 export interface Pet {
   id: string;
@@ -18,8 +18,4 @@ export interface Pet {
   lifespanYears: number;
 
   timeRequired: number;
-
-  // optional generic traits
-  aggressionRisk?: 'low' | 'medium' | 'high';
-  careNeed?: Level;
 }
