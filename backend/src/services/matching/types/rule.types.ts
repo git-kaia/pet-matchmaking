@@ -22,13 +22,20 @@ export type Rule = {
 
 import { MatchingContext, RuleResult } from './matching.types';
 
+// For use in hardRules
 export type HardRuleResult = {
-  rejected: boolean;
   ruleName: string;
+  rejected: boolean;
   reason?: string;
 
   adopterSnapshot?: Record<string, any>;
   petSnapshot?: Record<string, any>;
+};
+
+// For use in hardRule.engine
+export type HardRuleEngineResult = {
+  rejected: boolean;
+  reason?: string;
 };
 
 export type HardRule = (ctx: MatchingContext) => HardRuleResult;

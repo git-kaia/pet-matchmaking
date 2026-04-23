@@ -1,8 +1,8 @@
-import { getAdopterById } from '../models/adopter/adopter.repository';
-import { getAllBirds } from '../models/bird/bird.repository';
-import { saveMatch, saveMatchRuleResults } from '../models/match/match.repository';
+import { getAdopterById } from '../infrastructure/repositories/adopter.repository';
+import { getAllBirds } from '../infrastructure/repositories/bird.repository';
+import { saveMatch, saveMatchRuleResults } from '../infrastructure/repositories/match.repository';
 
-import { matchingEngine } from '../matching/matchingEngine';
+import { matchingEngine } from '../services/matching/matchingEngine';
 
 export const getMatches = async (req, res) => {
   const adopter = await getAdopterById(req.params.id);

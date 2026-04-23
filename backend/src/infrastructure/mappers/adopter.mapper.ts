@@ -1,5 +1,5 @@
 // adopter.mapper.ts
-import { Adopter } from './adopter.model';
+import { Adopter } from '../../domain/entities/adopter';
 
 // mapping between db rows and domain model
 export const mapAdopterFromDb = (row: any): Adopter => ({
@@ -33,13 +33,15 @@ export const mapAdopterFromDb = (row: any): Adopter => ({
   hasPetExperience: row.has_pet_experience,
   learningWillingness: row.learning_willingness,
 
-  petExperienceType: row.pet_experience_type,
-  experienceYearsBird: row.experience_years_bird,
+  experienceYears: {
+    bird: row.experience_years_bird,
+  },
 
   desiredPetSociability: row.desired_pet_sociability,
   desiredPetAffectionLevel: row.desired_pet_affection_level,
   problemBehaviorTolerance: row.problem_behavior_tolerance,
 
+  // Bird related
   sleepEnvironmentCommitment: row.sleep_environment_commitment,
   freeFlightExpectation: row.free_flight_expectation,
   freeRoamingTolerance: row.free_roaming_tolerance,
@@ -63,5 +65,5 @@ export const mapAdopterFromDb = (row: any): Adopter => ({
   trainingInterest: row.training_interest,
 
   dietComplexityTolerance: row.diet_complexity_tolerance
-  
+
 });
