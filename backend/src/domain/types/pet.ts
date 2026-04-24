@@ -36,4 +36,6 @@ export interface Pet {
 
   // move this to bird?
   flightNeed: Level;
+  requiredCare: Level;
+  requiresBirdPartner?: boolean;
 }

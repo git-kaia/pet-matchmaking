@@ -47,5 +47,7 @@ export const mapBirdToPet = (
   careNeed: bird.activityLevel, 
   aggressionRisk: bird.bitingRisk,
   sleepNeed: bird.sleepNeed,
-  flightNeed: bird.flightNeed,
+  flightNeed: bird.freeFlightExpectation,
+  requiredCare: bird.careNeed,
+  requiresBirdPartner: bird.requiresBirdPartner,
 });

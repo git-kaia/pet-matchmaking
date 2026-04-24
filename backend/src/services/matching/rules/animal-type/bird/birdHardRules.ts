@@ -137,7 +137,7 @@ export const humanInteractionRule: HardRule = (ctx) => {
 
   const interaction = adopter.desiredHumanInteraction;
   const socialNeed = pet.socialNeed;
-  const requiresPartner = (pet as any).requiresBirdPartner;
+  const requiresPartner = pet.requiresBirdPartner;
 
   if (interaction === 'low' && socialNeed === 'very_high' && !requiresPartner) {
     return {

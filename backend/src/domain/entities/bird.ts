@@ -47,5 +47,6 @@ export interface Bird {
   noiseLevel: Level;
   affectionLevel: Level;
   sleepNeed: Level;
-  flightNeed: Level;
+  freeFlightExpectation: Level;
+  careNeed: Level;
 }

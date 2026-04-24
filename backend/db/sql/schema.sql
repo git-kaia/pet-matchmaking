@@ -22,7 +22,11 @@ CREATE TABLE species (
   experience_level TEXT,
   space_requirement TEXT,
 
-  lifespan_years INT
+  lifespan_years INT,
+
+  requires_bird_partner BOOLEAN,
+  free_flight_expectation TEXT,
+  sleep_need TEXT
 );
 
 ----------------------
@@ -64,7 +68,12 @@ CREATE TABLE birds (
 
   training_level TEXT,
   training_need TEXT,
-  mental_stimulation_need TEXT
+  mental_stimulation_need TEXT,
+
+  free_flight_expectation TEXT,
+  sleep_need TEXT,
+  social_isolation_risk TEXT
+
 );
 ------------------------
 -- HOUSEHOLD PROFILES --
@@ -107,7 +116,13 @@ CREATE TABLE adopters (
   desired_pet_sociability TEXT,
   desired_pet_affection_level TEXT,
 
-  problem_behavior_tolerance TEXT
+  problem_behavior_tolerance TEXT,
+
+  willingness_multiple_birds TEXT,
+  free_flight_expectation TEXT,
+  sleep_environment_commitment TEXT,
+  desired_human_interaction TEXT,
+  adoption_complexity_tolerance TEXT
 );
 
 -- Adopters bird quiz
