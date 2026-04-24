@@ -1,4 +1,20 @@
 // adopter.mapper.ts
+/**
+ * Adopter Mapper
+ *
+ * Transforms database rows into Adopter domain entities.
+ *
+ * Responsibilities:
+ * - Convert raw SQL results into structured domain objects
+ * - Map snake_case database fields to camelCase properties
+ * - Shape flat database data into nested domain structures
+ *
+ * This mapper ensures the domain layer remains independent of
+ * database-specific naming and structure.
+ *
+ * Does NOT contain business logic.
+ */
+
 import { Adopter } from '../../domain/entities/adopter';
 
 // mapping between db rows and domain model

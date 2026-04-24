@@ -1,4 +1,17 @@
 // bird.repository.ts
+/**
+ * Bird Repository
+ *
+ * Handles persistence and retrieval of bird data.
+ *
+ * Responsibilities:
+ * - Execute queries against the birds table
+ * - Retrieve bird records from the database
+ * - Use mapper to convert DB rows into Bird domain entities
+ *
+ * This repository may be extended to include joins with species data.
+ * It does NOT contain matching logic or transformations.
+ */
 
 import { pool } from '../db/db';
 import { Bird } from '../../domain/entities/bird';

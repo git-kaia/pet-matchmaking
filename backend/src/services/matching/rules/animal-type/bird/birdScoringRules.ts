@@ -13,7 +13,7 @@
  */
 
 import { ScoringRule } from '../../../types/scoring.types';
-import { Pet } from '../../../../../domain/types/pet.types';
+import { Pet } from '../../../../../domain/types/pet.';
 
 // How to implement bird specific type:
 // if (ctx.pet.animalType !== 'bird') return;
