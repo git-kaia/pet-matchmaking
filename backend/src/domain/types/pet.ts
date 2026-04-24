@@ -29,4 +29,6 @@ export interface Pet {
   lifespanYears: number;
 
   timeRequired: number;
+  messLevel: Level;
+  financialBurden: Level;
 }
