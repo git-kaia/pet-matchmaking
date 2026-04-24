@@ -1,8 +1,8 @@
 // to run testing script: npx ts-node src/test/matching.integration.test.ts
 
 // Mapper imports
-import { mapBirdFromDB } from '../models/pet/individual/bird.mapper';
-import { mapBirdToPet } from '../models/pet/individual/birdToPet.mapper';
+import { mapBirdFromDb } from '../infrastructure/mappers/bird.mapper';
+import { mapBirdToPet } from '../infrastructure/mappers/birdToPet.mapper';
 import { mapAdopterFromDb } from '../infrastructure/mappers/adopter.mapper';
 
 // Engine imports
@@ -33,7 +33,7 @@ const runTest = async () => {
     console.log('ADOPTER:', adopter.id);
 
     for (const row of birdsRaw.rows) {
-      const bird = mapBirdFromDB(row);          // DB to Bird
+      const bird = mapBirdFromDb(row);          // DB to Bird
       const pet = mapBirdToPet(bird, row);      // Bird + species to Pet
 
       const ctx = { adopter, pet }; // Uses pet mapper

@@ -31,4 +31,15 @@ export interface Pet {
   timeRequired: number;
   messLevel: Level;
   financialBurden: Level;
+
+  careNeed: Level; 
+  aggressionRisk: Level;
+  sleepNeed: Level;
+
+  // move this to bird?
+  flightNeed: Level;
+  requiredCare: Level;
+  requiresBirdPartner?: boolean;
+  mentalStimulationNeed?: Level;
+  
 }

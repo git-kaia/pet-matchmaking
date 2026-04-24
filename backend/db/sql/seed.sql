@@ -25,7 +25,8 @@ INSERT INTO species VALUES
  'high','high','medium','low',
  'medium','low',
  'beginner','small',
- 10),
+ 10,
+ true,'high','medium'),
 
 -- Calm, friendly, beginner-friendly
 ('cockatiel','Nymfekakadue','Nymphicus hollandicus',
@@ -33,7 +34,8 @@ INSERT INTO species VALUES
  'medium','high','medium','medium',
  'high','low',
  'beginner','medium',
- 20),
+ 20,
+ false,'medium','medium'),
 
 -- Intelligent, demanding, long lifespan
 ('african_grey','Grå jako','Psittacus erithacus',
@@ -41,7 +43,8 @@ INSERT INTO species VALUES
  'medium','very_high','very_high','high',
  'medium','high',
  'advanced','large',
- 50),
+ 50,
+ false,'high','high'),
 
 -- Very loud, very social, high energy
 ('sun_conure','Solparakitt','Aratinga solstitialis',
@@ -49,7 +52,8 @@ INSERT INTO species VALUES
  'very_high','very_high','very_high','high',
  'medium','medium',
  'experienced','large',
- 30),
+ 30,
+ true,'very_high','medium'),
 
 -- Very easy, quiet, low interaction
 ('canary','Kanari','Serinus canaria',
@@ -57,7 +61,8 @@ INSERT INTO species VALUES
  'low','low','low','low',
  'low','low',
  'beginner','small',
- 10);
+ 10,
+ false,'low','low');
 
 
 -- ============================================================
@@ -75,14 +80,17 @@ INSERT INTO birds VALUES
  'high','high','flock','low',
  'low','low',false,'low','low',
  true,
- 'low','low','medium'),
+ 'low','low','medium',
+ 'high','medium','high'),
 
+-- LOW BEED / INDEPENDENT
 ('b2','canary','Sunny',1,'female','breeder',
  NULL,NULL,NULL,NULL,
  'low','low','low',
  'low','low','independent','low',
  'low','low',false,'low','low',
  false,
+ 'low','low','low',
  'low','low','low'),
 
 -- SOCIAL & FRIENDLY
@@ -92,6 +100,7 @@ INSERT INTO birds VALUES
  'high','medium','pair','medium',
  'low','medium',false,'low','low',
  false,
+ 'medium','medium','medium',
  'medium','medium','medium'),
 
 -- VERY DEMANDING (HIGH RISK MATCH)
@@ -101,6 +110,7 @@ INSERT INTO birds VALUES
  'very_high','low','one_person','high',
  'high','high',true,'high','high',
  false,
+ 'high','high','very_high',
  'high','high','very_high'),
 
 -- EXTREME NOISE BIRD
@@ -110,7 +120,8 @@ INSERT INTO birds VALUES
  'very_high','medium','pair','medium',
  'medium','very_high',false,'medium','medium',
  true,
- 'high','high','high'),
+ 'high','high','high',
+ 'very_high','medium','very_high'),
 
 -- EDGE CASES (CHALLENGING)
 ('b6','budgie','Ghost',5,'male','rehomed',
@@ -119,14 +130,17 @@ INSERT INTO birds VALUES
  'low','low','independent','high',
  'high','low',true,'high','high',
  false,
- 'low','low','low'),
+ 'low','low','low',
+ 'low','high','high'),
 
+-- BALANCED
 ('b7','cockatiel','Luna',2,'female','breeder',
  NULL,NULL,NULL,NULL,
  'medium','medium','medium',
  'medium','medium','pair','low',
  'low','medium',false,'low','low',
  false,
+ 'medium','medium','medium',
  'medium','medium','medium'),
 
 -- HIGH INTELLIGENCE / DEMANDING
@@ -136,6 +150,7 @@ INSERT INTO birds VALUES
  'very_high','low','one_person','high',
  'high','high',true,'high','high',
  false,
+ 'high','high','very_high',
  'high','high','very_high'),
 
 -- CHAOTIC / VERY SOCIAL
@@ -145,7 +160,8 @@ INSERT INTO birds VALUES
  'very_high','high','flock','high',
  'high','very_high',true,'high','high',
  true,
- 'high','high','high'),
+ 'high','high','high',
+ 'very_high','medium','very_high'),
 
 -- VERY LOW NEED (CONTROL CASE)
 ('b10','canary','Whisper',1,'female','breeder',
@@ -154,7 +170,9 @@ INSERT INTO birds VALUES
  'low','low','independent','low',
  'low','low',false,'low','low',
  false,
+ 'low','low','low',
  'low','low','low');
+
 
 
 -- ============================================================
@@ -179,7 +197,9 @@ INSERT INTO adopters VALUES
  true,ARRAY['cat'],
  'low',
  'low','low',
- 'low'),
+ 'low',
+
+ 'low','low','low','low','low'),
 
 -- IDEAL MATCH (high resources)
 ('experienced_bird_keeper',
@@ -195,7 +215,9 @@ INSERT INTO adopters VALUES
  true,ARRAY['bird'],
  'high',
  'high','high',
- 'high'),
+ 'high',
+
+ 'high','high','high','high','high'),
 
 -- SHOULD BE REJECTED (no time)
 ('no_time_user',
@@ -211,7 +233,9 @@ INSERT INTO adopters VALUES
  false,ARRAY[]::TEXT[],
  'low',
  'low','low',
- 'low'),
+ 'low',
+
+ 'low','low','low','low','low'),
 
 -- LOW NOISE TOLERANCE USER
 ('noise_sensitive_user',
@@ -227,7 +251,27 @@ INSERT INTO adopters VALUES
  true,ARRAY['bird'],
  'medium',
  'medium','medium',
- 'medium');
+ 'medium',
+
+ 'low','medium','medium','medium','medium'),
+
+-- HIGH TIME BUT LOW TOLERANCE (edge case)
+('overconfident_beginner',
+ 'large','family','kids',
+ false,ARRAY[]::TEXT[],
+ 'high',
+ 'part_time','day_shift',
+ 180,'low',
+ 'low','low',
+ 'none',
+ 'medium',10,
+ 'medium',
+ false,ARRAY[]::TEXT[],
+ 'low',
+ 'medium','low',
+ 'low',
+
+ 'low','high','low','low','low');
 
 
 -- ============================================================

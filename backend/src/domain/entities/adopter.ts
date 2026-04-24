@@ -91,4 +91,6 @@ export interface Adopter {
   trainingInterest: Level3;
 
   dietComplexityTolerance: Level3;
+
+  specificAnimalAllergies: AnimalType[];
 }

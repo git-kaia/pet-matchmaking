@@ -43,4 +43,11 @@ export const mapBirdToPet = (
 
   lifespanYears: species.lifespanYears,
   timeRequired: species.timeRequired,
+
+  careNeed: bird.activityLevel, 
+  aggressionRisk: bird.bitingRisk,
+  sleepNeed: bird.sleepNeed,
+  flightNeed: bird.freeFlightExpectation,
+  requiredCare: bird.careNeed,
+  requiresBirdPartner: bird.requiresBirdPartner,
 });
