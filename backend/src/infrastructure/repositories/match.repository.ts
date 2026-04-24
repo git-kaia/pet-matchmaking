@@ -1,6 +1,16 @@
 // match.repository.ts
-// Handles:
-// Saving match results to the database
+/**
+ * Match Repository
+ *
+ * Handles persistence of matching results.
+ *
+ * Responsibilities:
+ * - Store match scores between adopters and pets
+ * - Persist rule evaluation outcomes for debugging and analysis
+ *
+ * This repository is write-focused and does not map data into domain entities.
+ * It operates directly on database structures.
+ */
 
 import { pool } from '../db/db';
 

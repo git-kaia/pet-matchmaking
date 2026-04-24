@@ -1,4 +1,17 @@
 // adopter.repository.ts
+/**
+ * Adopter Repository
+ *
+ * Handles persistence and retrieval of adopter data.
+ *
+ * Responsibilities:
+ * - Execute queries against the adopters table
+ * - Retrieve adopter records from the database
+ * - Use mapper to convert DB rows into domain entities
+ *
+ * This repository abstracts database access from the rest of the system.
+ * It does NOT contain business or matching logic.
+ */
 
 import { pool } from '../../infrastructure/db/db';
 import { Adopter } from '../../domain/entities/adopter';

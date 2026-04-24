@@ -1,4 +1,16 @@
 // domain/entities/bird.ts
+/**
+ * Bird Entity
+ *
+ * Represents an individual bird with behavioral and environmental traits.
+ *
+ * Responsibilities:
+ * - Capture animal-specific attributes (behavior, needs, risks)
+ * - Serve as the source data for matching
+ *
+ * This entity does not contain matching logic and is not normalized.
+ * It is later transformed into a Pet model for matching.
+ */
 
 import { Level, Level3, BondingStyle, ExperienceLevel } from '../types/common.types';
 
@@ -35,5 +47,5 @@ export interface Bird {
   noiseLevel: Level;
   affectionLevel: Level;
   sleepNeed: Level;
-  flightNeed: Level; 
+  flightNeed: Level;
 }

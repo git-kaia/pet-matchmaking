@@ -1,4 +1,18 @@
 // bird.mapper.ts
+/**
+ * Bird Mapper
+ *
+ * Transforms database rows into Bird domain entities.
+ *
+ * Responsibilities:
+ * - Convert raw SQL rows into Bird objects
+ * - Map database field names to domain properties
+ * - Ensure type-safe data entering the domain layer
+ *
+ * This mapper only reflects the structure of stored bird data.
+ * It does NOT perform any matching-related transformations.
+ */
+
 import { Bird } from '../../domain/entities/bird';
 
 export const mapBirdFromDb = (row: any): Bird => ({

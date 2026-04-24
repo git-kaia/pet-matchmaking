@@ -1,4 +1,17 @@
 // domain/entities/adopter.ts
+/**
+ * Adopter Entity
+ *
+ * Represents a user looking to adopt a pet.
+ *
+ * Responsibilities:
+ * - Store adopter preferences, constraints, and lifestyle factors
+ * - Provide input data for the matching engine
+ *
+ * This entity reflects real-world adopter characteristics and is used
+ * directly in matching logic.
+ */
+
 import {
   AnimalType,
   Level,

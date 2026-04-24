@@ -1,17 +1,15 @@
 // common.types.ts
 /**
- * Global Domain Types
- * Used for all parts of the backend
- */
-
-/**
- * Global Domain Types
- * Shared vocabulary across the system
- */
-
-/**
- * Global Domain Types
- * Shared vocabulary across the system
+ * Common Domain Types
+ *
+ * Defines shared value types used across the entire system.
+ *
+ * Responsibilities:
+ * - Provide a consistent vocabulary (e.g. Level, AnimalType)
+ * - Ensure type safety across domain, services, and infrastructure
+ * - Avoid duplication of common enums and value sets
+ *
+ * These types should be reusable and independent of any specific feature.
  */
 
 /////////////////////////////

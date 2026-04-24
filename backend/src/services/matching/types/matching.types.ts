@@ -5,7 +5,7 @@
  */
 
 // Import from global (domain) types
-import { Pet } from '../../../domain/types/pet.types';
+import { Pet } from '../../../domain/types/pet';
 import { Adopter } from '../../../domain/entities/adopter';
 
 
