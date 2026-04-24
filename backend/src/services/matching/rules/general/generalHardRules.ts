@@ -46,7 +46,9 @@ export const allergyRule: HardRule = (ctx) => {
 
 // 2. No time rule
 export const noTimeRule: HardRule = (ctx) => {
-  const time = ctx.adopter.dailyCareTime;
+  const { adopter, pet } = ctx;
+
+  const time = adopter.dailyCareTime;
 
   if (time === 0) {
     return {
@@ -59,7 +61,7 @@ export const noTimeRule: HardRule = (ctx) => {
       },
 
       petSnapshot: {
-        requiredCare: 'unknown', // placeholder
+        requiredCare: pet.careNeed ?? pet.mentalStimulationNeed ?? 'unknown',
       },
     };
   }
@@ -73,7 +75,7 @@ export const noTimeRule: HardRule = (ctx) => {
     },
 
     petSnapshot: {
-      requiredCare: 'unknown', // placeholder
+      requiredCare: pet.careNeed ?? pet.mentalStimulationNeed ?? 'unknown',
     },
   };
 };

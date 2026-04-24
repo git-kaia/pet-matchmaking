@@ -38,4 +38,6 @@ export interface Pet {
   flightNeed: Level;
   requiredCare: Level;
   requiresBirdPartner?: boolean;
+  mentalStimulationNeed?: Level;
+  
 }
