@@ -17,7 +17,7 @@
 
 import { Bird } from '../../domain/entities/bird';
 import { BirdSpecies } from '../../domain/entities/birdSpecies';
-import { Pet } from '../../domain/types/pet.';
+import { Pet } from '../../domain/types/pet';
 
 export const mapBirdToPet = (
   bird: Bird,
