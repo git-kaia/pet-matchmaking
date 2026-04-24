@@ -27,4 +27,6 @@ export const mapBirdFromDb = (row: any): Bird => ({
   activityLevel: row.activity_level,
   noiseLevel: row.noise_level,
   affectionLevel: row.affection_level,
+  sleepNeed: row.sleep_need,
+  flightNeed: row.flight_need,
 });

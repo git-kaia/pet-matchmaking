@@ -11,12 +11,12 @@ export const allergyRule: HardRule = (ctx) => {
 
   if (
     adopter.householdAllergySensitivity === 'specific_animal_allergy' &&
-    allergies.includes(pet.species)
+    allergies.includes(pet.animalType)
   ) {
     return {
       rejected: true,
       ruleName: 'allergyRule',
-      reason: `Allergic to ${pet.species}`,
+      reason: `Allergic to ${pet.animalType}`,
 
       adopterSnapshot: {
         allergySensitivity: adopter.householdAllergySensitivity,
@@ -24,7 +24,7 @@ export const allergyRule: HardRule = (ctx) => {
       },
 
       petSnapshot: {
-        species: pet.species,
+        species: pet.animalType,
       },
     };
   }
@@ -39,7 +39,7 @@ export const allergyRule: HardRule = (ctx) => {
     },
 
     petSnapshot: {
-      species: pet.species,
+      species: pet.animalType,
     },
   };
 };

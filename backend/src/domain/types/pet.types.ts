@@ -17,5 +17,11 @@ export interface Pet {
   experienceLevel: ExperienceLevel;
   lifespanYears: number;
 
+  careNeed: Level;
+  aggressionRisk: Level;
+
   timeRequired: number;
+
+  sleepNeed: Level;
+  flightNeed: Level;
 }

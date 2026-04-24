@@ -64,6 +64,8 @@ export const mapAdopterFromDb = (row: any): Adopter => ({
   enrichmentCommitment: row.enrichment_commitment,
   trainingInterest: row.training_interest,
 
-  dietComplexityTolerance: row.diet_complexity_tolerance
+  dietComplexityTolerance: row.diet_complexity_tolerance,
+
+  specificAnimalAllergies: row.specific_animal_allergies,
 
 });
