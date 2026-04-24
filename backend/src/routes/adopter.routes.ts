@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAdopter, createAdopter } from '../controllers/adopter.controller';
+import { getAdopter } from '../controllers/adopter.controller';
 
 const router = express.Router();
 

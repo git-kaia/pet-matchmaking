@@ -488,7 +488,7 @@ export const behaviorToleranceRule: ScoringRule = (ctx) => {
 };
 
 ///////////////////////
-// Rule exports     //
+// Rule exports      //
 ///////////////////////
 
 export const generalScoringRules = [

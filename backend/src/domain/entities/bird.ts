@@ -49,4 +49,7 @@ export interface Bird {
   sleepNeed: Level;
   freeFlightExpectation: Level;
   careNeed: Level;
+
+  flightNeed: Level;
+  requiredCare: Level;
 }
