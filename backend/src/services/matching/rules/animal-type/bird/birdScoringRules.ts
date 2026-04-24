@@ -13,7 +13,11 @@
  */
 
 import { ScoringRule } from '../../../types/scoring.types';
-import { Bird } from '../../../types/matching.types';
+import { Pet } from '../../../../../domain/types/pet';
+
+// How to implement bird specific type:
+// if (ctx.pet.animalType !== 'bird') return;
+// const bird = ctx.pet;
 
 // 01. Social Needs Rule (Bird-specific)
 export const birdSocialNeedsRule: ScoringRule = (ctx) => {

@@ -1,8 +1,21 @@
 // adopter.repository.ts
+/**
+ * Adopter Repository
+ *
+ * Handles persistence and retrieval of adopter data.
+ *
+ * Responsibilities:
+ * - Execute queries against the adopters table
+ * - Retrieve adopter records from the database
+ * - Use mapper to convert DB rows into domain entities
+ *
+ * This repository abstracts database access from the rest of the system.
+ * It does NOT contain business or matching logic.
+ */
 
-import { pool } from '../../../db/db';
-import { Adopter } from './adopter.model';
-import { mapAdopterFromDb } from './adopter.mapper';
+import { pool } from '../../infrastructure/db/db';
+import { Adopter } from '../../domain/entities/adopter';
+import { mapAdopterFromDb } from '../../infrastructure/mappers/adopter.mapper';
 
 export const getAdopterById = async (id: string): Promise<Adopter | null> => {
   const result = await pool.query(
@@ -63,8 +76,7 @@ export const saveAdopter = async (adopter: Adopter) => {
       adopter.financialPriority,
       adopter.hasPetExperience,
       adopter.learningWillingness,
-      adopter.petExperienceType,
-      adopter.experienceYearsBird,
+      adopter.experienceYears?.bird ?? null,
       adopter.desiredPetSociability,
       adopter.desiredPetAffectionLevel,
       adopter.problemBehaviorTolerance,

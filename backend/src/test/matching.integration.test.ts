@@ -1,14 +1,19 @@
 // to run testing script: npx ts-node src/test/matching.integration.test.ts
 
+// Mapper imports
+import { mapBirdFromDB } from '../models/pet/individual/bird.mapper';
+import { mapBirdToPet } from '../models/pet/individual/birdToPet.mapper';
+import { mapAdopterFromDb } from '../infrastructure/mappers/adopter.mapper';
+
+// Engine imports
 import { evaluateHardRules } from '../services/matching/engines/hardRule.engine';
 import { evaluateHardRulesDetailed } from '../services/matching/engines/hardRule.debug.engine';
+
+// Rule imports
 import { generalHardRules } from '../services/matching/rules/general/generalHardRules';
-import { birdHardRules } from '../services/matching/rules/species/bird/birdHardRules';
+import { birdHardRules } from '../services/matching/rules/animal-type/bird/birdHardRules';
 
-import { mapBirdFromDB } from '../services/matching/mapper/bird.mapper';
-import { mapAdopterFromDB } from '../services/matching/mapper/adopter.mapper';
-
-import { pool } from '../../db/db';
+import { pool } from '../infrastructure/db/db';
 
 const runTest = async () => {
   const birdsRaw = await pool.query(`
@@ -22,15 +27,16 @@ const runTest = async () => {
   const rules = [...generalHardRules, ...birdHardRules];
 
   for (const adopterRow of adoptersRaw.rows) {
-    const adopter = mapAdopterFromDB(adopterRow);
+    const adopter = mapAdopterFromDb(adopterRow);
 
     console.log('\n - - - - - - - ');
     console.log('ADOPTER:', adopter.id);
 
     for (const row of birdsRaw.rows) {
-      const bird = mapBirdFromDB(row, row);
+      const bird = mapBirdFromDB(row);          // DB to Bird
+      const pet = mapBirdToPet(bird, row);      // Bird + species to Pet
 
-      const ctx = { adopter, pet: bird };
+      const ctx = { adopter, pet }; // Uses pet mapper
 
       const result = evaluateHardRulesDetailed(ctx, rules);
 
@@ -45,7 +51,7 @@ const runTest = async () => {
       });
 
       console.log('Bird:', {
-        lifespan: bird.lifespanYears,
+        lifespan: pet.lifespanYears,
         requiresPartner: bird.requiresBirdPartner,
       });
 

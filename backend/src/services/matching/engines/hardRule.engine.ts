@@ -13,12 +13,12 @@
  */
 
 import { MatchingContext } from '../types/matching.types';
-import { HardRule, HardRuleResult } from '../types/rule.types';
+import { HardRule, HardRuleEngineResult } from '../types/rule.types';
 
 export const evaluateHardRules = (
   ctx: MatchingContext,
   rules: HardRule[]
-): HardRuleResult => {
+): HardRuleEngineResult => {
   for (const rule of rules) {
     const result = rule(ctx);
 
