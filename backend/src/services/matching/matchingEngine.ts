@@ -13,7 +13,7 @@ import { runBirdPipeline } from './pipelines/bird.pipeline';
 import { Pet } from '../../domain/entities/pet';
 import { Bird } from '../../domain/entities/bird';
 import { Adopter } from '../../domain/entities/adopter';
-import { typeGuard } from './utils/typeGuard'
+import { typeGuard } from './utils/typeGuard.utils'
 
 export const getMatchingService = (pet: Pet) => {
   switch (pet.animalType) {
