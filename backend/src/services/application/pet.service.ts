@@ -12,3 +12,12 @@
  * This service does not contain matching logic or rules.
  * It strictly handles data access coordination.
  */
+import { getAllBirds } from '../../infrastructure/repositories/bird.repository';
+import { Pet } from '../../domain/entities/pet';
+
+export const getAllPets = async (): Promise<Pet[]> => {
+    const birds = await getAllBirds();
+
+    // since Bird extends Pet → no mapping needed
+    return birds;
+};

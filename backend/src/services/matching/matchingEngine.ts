@@ -9,34 +9,18 @@
  * while keeping matching logic modular and extensible.
  */
 
-/*getMatchingService(petType: string) {
-  switch (petType) {
-    case "bird":
-      return birdMatchingService;
-    case "dog":
-      return dogMatchingService;
-    case "cat":
-        return catMatchingService;
-    case "rodent":
-      return rodentMatchingService;
-    case "reptile":
-      return reptileMatchingService;
-    case "amphibian":
-      return amphibianMatchingService;
-    case "fish":
-      return fishMatchingService;
-    default:
-      return genericMatchingService;
-  }
-}*/
-
 import { runBirdPipeline } from './pipelines/bird.pipeline';
+import { Pet } from '../../domain/entities/pet';
+import { Bird } from '../../domain/entities/bird';
+import { Adopter } from '../../domain/entities/adopter';
+import { typeGuard } from './utils/typeGuard'
 
-export const getMatchingService = (petType: string) => {
-  switch (petType) {
+export const getMatchingService = (pet: Pet) => {
+  switch (pet.animalType) {
     case 'bird':
       return {
-        execute: runBirdPipeline,
+        execute: (adopter: Adopter) =>
+          runBirdPipeline(adopter, pet as Bird),
       };
 
     // placeholders for future pipelines
@@ -48,7 +32,10 @@ export const getMatchingService = (petType: string) => {
     case 'fish':
     default:
       return {
-        execute: () => [],
+        execute: () => ({
+          rejected: false,
+          reason: 'No matching pipeline for pet type',
+        }),
       };
   }
 };

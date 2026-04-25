@@ -26,55 +26,47 @@ import { birdScoringRules } from "../rules/animal-type/bird/birdScoringRules";
 
 export const runBirdPipeline = (
   adopter: Adopter,
-  pets: Bird[],
+  pet: Bird,
   deps?: {
     hardRules: any[];
     scoringRules: any[];
   }
-): MatchResult[] => {
+): MatchResult => {
 
-const hardRules = deps?.hardRules ?? [...generalHardRules, ...birdHardRules];
-const scoringRules = deps?.scoringRules ?? [...generalScoringRules, ...birdScoringRules];
+  const hardRules = deps?.hardRules ?? [...generalHardRules, ...birdHardRules];
+  const scoringRules = deps?.scoringRules ?? [...generalScoringRules, ...birdScoringRules];
 
-  const results: MatchResult[] = [];
+  const ctx: MatchingContext = { adopter, pet };
 
-  for (const pet of pets) {
-    const ctx: MatchingContext = { adopter, pet };
+  const rejection = evaluateHardRules(ctx, hardRules);
 
-    const rejection = evaluateHardRules(ctx, hardRules);
-
-    if (rejection.rejected) {
-      results.push({
-        petId: pet.id,
-        score: 0,
-        welfareScore: 0,
-        humanScore: 0,
-        rejected: true,
-        rejectionReason: rejection.rule?.description,
-
-        rules: rejection.rule
-          ? [{
-              ruleName: rejection.rule.ruleName ?? rejection.rule.ruleName,
-              ruleType: rejection.rule.ruleType ?? rejection.rule.ruleType,
-              value: rejection.rule.value,
-              description: rejection.rule.description,
-            }]
-          : [],
-      });
-      continue;
-    }
-
-    const score = calculateScore(ctx, scoringRules);
-
-    results.push({
+  if (rejection.rejected) {
+    return {
       petId: pet.id,
-      score: score.score,
-      welfareScore: score.welfareScore,
-      humanScore: score.humanScore,
-      rejected: false,
-      rules: [],
-    });
+      score: 0,
+      welfareScore: 0,
+      humanScore: 0,
+      rejected: true,
+      rejectionReason: rejection.rule?.description,
+      rules: rejection.rule
+        ? [{
+            ruleName: rejection.rule.ruleName,
+            ruleType: rejection.rule.ruleType,
+            value: rejection.rule.value,
+            description: rejection.rule.description,
+          }]
+        : [],
+    };
   }
 
-  return results.sort((a, b) => b.score - a.score);
+  const score = calculateScore(ctx, scoringRules);
+
+  return {
+    petId: pet.id,
+    score: score.score,
+    welfareScore: score.welfareScore,
+    humanScore: score.humanScore,
+    rejected: false,
+    rules: [],
+  };
 };

@@ -34,13 +34,3 @@ export const getBirdById = async (id: string): Promise<Bird | null> => {
 
   return result.rows[0] ? mapBirdFromDb(result.rows[0]) : null;
 };
-
-export const getAllBirdsWithSpecies = async () => {
-  const result = await pool.query(`
-    SELECT b.*, s.*
-    FROM birds b
-    JOIN bird_species s ON b.species_id = s.id
-  `);
-
-  return result.rows;
-};
