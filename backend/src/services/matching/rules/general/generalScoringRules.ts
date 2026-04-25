@@ -16,51 +16,12 @@
 // IMPORTS           //
 ///////////////////////
 
+// Types
 import { ScoringRule } from '../../types/scoring.types';
-import { Level } from '../../../../domain/types/common.types';
 
-///////////////////////
-// UTILS             //
-///////////////////////
-
-// Utility to convert levels to numeric values for distance calculation
-const levelMap = {
-  very_low: 0,
-  low: 1,
-  medium: 2,
-  high: 3,
-  very_high: 4,
-};
-
-// Helper for levelMap comparisons
-const distance = (a: Level, b: Level) => {
-  return Math.abs(levelMap[a] - levelMap[b]);
-};
-
-// Helper stating high side of the level spectrum
-const isHigh = (level: Level) =>
-  level === 'high' || level === 'very_high';
-
-// Helper to create score (to avoid duplicate code for each rule)
-const createScore = (
-  scoreType: 'welfare' | 'human',
-  value: number,
-  ruleName: string,
-  description: string
-) => ({
-  scoreType,
-  value,
-  rule: { ruleName, description }
-});
-
-// Helper for score values
-const SCORE = {
-  HIGH: 10,
-  MEDIUM: 5,
-  LOW: 0,
-  NEGATIVE: -5,
-  CRITICAL: -10
-};
+// Utils
+import { isHigh } from '../../utils/level.utils';
+import { SCORE, createScore, createDistanceScore } from '../../utils/scoring.utils';
 
 ///////////////////////
 // RULES             //
@@ -106,40 +67,14 @@ export const timeAvailabilityRule: ScoringRule = (ctx) => {
 };
 
 // 02. Noise Tolerance Rule
-export const noiseToleranceRule: ScoringRule = (ctx) => {
-  const d = distance(
-    ctx.adopter.noiseToleranceLevel,
-    ctx.pet.noiseLevel
-  );
-
-  const scoreType = 'human' as const;
-  const ruleName = 'noiseTolerance' as const;
-
-  if (d === 2) {
-    return createScore(
-      scoreType,
-      SCORE.CRITICAL,
-      ruleName,
-      'High mismatch in noise tolerance',
-    );
-  }
-
-  if (d === 1) {
-    return createScore(
-      scoreType,
-      SCORE.NEGATIVE,
-      ruleName,
-      'Moderate mismatch in noise tolerance',
-    );
-  }
-
-  return createScore(
-    scoreType,
-    SCORE.LOW,
-    ruleName,
-    'Good noise compatibility',
-  )
-};
+export const noiseToleranceRule: ScoringRule = (ctx) =>
+  createDistanceScore({
+    scoreType: 'human',
+    ruleName: 'noiseTolerance',
+    label: 'noise tolerance',
+    a: ctx.adopter.noiseToleranceLevel,
+    b: ctx.pet.noiseLevel,
+  });
 
 // 03. Alone Time Risk
 export const aloneTimeRiskRule: ScoringRule = (ctx) => {
@@ -421,71 +356,45 @@ export const childrenCompatibilityRule: ScoringRule = (ctx) => {
   return createScore(scoreType, SCORE.LOW, ruleName, 'Children compatibility acceptable');
 };
 
-// 11. Desired Socialbilty 
-export const desiredSociabilityRule: ScoringRule = (ctx) => {
-  const scoreType = 'human';
-  const ruleName = 'desiredSociability';
+// 11. Desired Sociability
+export const desiredSociabilityRule: ScoringRule = (ctx) =>
+  createDistanceScore({
+    scoreType: 'human',
+    ruleName: 'desiredSociability',
+    label: 'sociability',
+    a: ctx.adopter.desiredPetSociability,
+    b: ctx.pet.socialNeed,
 
-  const d = distance(
-    ctx.adopter.desiredPetSociability,
-    ctx.pet.socialNeed
-  );
+    valueFn: (d) =>
+      d >= 2 ? -8 :
+        d === 1 ? -4 :
+          4,
+  });
 
-  if (d === 2) {
-    return createScore(scoreType, -8, ruleName, 'High mismatch in sociability');
-  }
+// 12. Affection expectation
+export const affectionExpectationRule: ScoringRule = (ctx) =>
+  createDistanceScore({
+    scoreType: 'human',
+    ruleName: 'affectionExpectation',
+    label: 'affection',
+    a: ctx.adopter.desiredPetAffectionLevel,
+    b: ctx.pet.affectionLevel,
 
-  if (d === 1) {
-    return createScore(scoreType, -4, ruleName, 'Moderate mismatch in sociability');
-  }
+    valueFn: (d) =>
+      d >= 2 ? -6 :
+        d === 1 ? -3 :
+          3,
+  });
 
-  return createScore(scoreType, 4, ruleName, 'Good sociability match');
-};
-
-// 12. Affection Expectation
-export const affectionExpectationRule: ScoringRule = (ctx) => {
-  const scoreType = 'human';
-  const ruleName = 'affectionExpectation';
-
-  const d = distance(
-    ctx.adopter.desiredPetAffectionLevel,
-    ctx.pet.affectionLevel
-  );
-
-  if (d === 2) {
-    return createScore(scoreType, -6, ruleName, 'High mismatch in affection');
-  }
-
-  if (d === 1) {
-    return createScore(scoreType, -3, ruleName, 'Moderate mismatch in affection');
-  }
-
-  return createScore(scoreType, 3, ruleName, 'Good affection match');
-};
-
-export const behaviorToleranceRule: ScoringRule = (ctx) => {
-  const scoreType = 'human';
-  const ruleName = 'behaviorTolerance';
-
-  const { problemBehaviorTolerance } = ctx.adopter;
-  const { experienceLevel } = ctx.pet;
-
-  if (
-    problemBehaviorTolerance === 'low' &&
-    (experienceLevel === 'experienced' || experienceLevel === 'advanced')
-  ) {
-    return createScore(scoreType, SCORE.CRITICAL, ruleName, 'Low tolerance for complex pet');
-  }
-
-  if (
-    problemBehaviorTolerance === 'medium' &&
-    experienceLevel === 'advanced'
-  ) {
-    return createScore(scoreType, SCORE.NEGATIVE, ruleName, 'Moderate tolerance mismatch');
-  }
-
-  return createScore(scoreType, SCORE.LOW, ruleName, 'Behavior tolerance acceptable');
-};
+// 13. Behaviour tolerance
+export const behaviorToleranceRule: ScoringRule = (ctx) =>
+  createDistanceScore({
+    scoreType: 'human',
+    ruleName: 'behaviorTolerance',
+    label: 'behavior tolerance',
+    a: ctx.adopter.problemBehaviorTolerance,
+    b: ctx.pet.behaviourIssues,
+  });
 
 ///////////////////////
 // Rule exports      //

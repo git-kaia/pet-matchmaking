@@ -34,4 +34,5 @@ export interface Pet {
 
   careNeed: Level; 
   aggressionRisk: Level;
+  behaviourIssues: Level;
 }

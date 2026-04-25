@@ -14,7 +14,7 @@
  */
 
 import { HardRule } from '../../../types/rule.types';
-import { isBird } from '../../../utils/typeGuard';
+import { isBird } from '../../../utils/typeGuard.utils';
 
 ///////////////////////
 // Helper           //

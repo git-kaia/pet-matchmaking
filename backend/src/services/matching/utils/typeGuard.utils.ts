@@ -1,4 +1,4 @@
-// typeGuard.ts
+// typeGuard.utils.ts
 import { Pet } from '../../../domain/entities/pet';
 import { Bird } from '../../../domain/entities/bird';
 
