@@ -18,7 +18,7 @@ export interface Pet {
 
   animalType: AnimalType;
 
-  size: 'small' | 'medium' | 'large' | 'very_large';
+  size: 'veryy_small' | 'small' | 'medium' | 'large' | 'very_large';
 
   noiseLevel: Level;
   activityLevel: Level;

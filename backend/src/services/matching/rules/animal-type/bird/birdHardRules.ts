@@ -1,4 +1,5 @@
 // birdHardRules.ts
+
 /**
  * Bird Hard Rules
  *
@@ -8,21 +9,33 @@
  * - Define conditions under which a bird match is invalid
  * - Ensure basic welfare and feasibility constraints
  *
- * These rules apply to all pet types.
- * No evaluation logic is contained here, only rule definitions.
+ * These rules only apply when the pet is a bird.
+ * Non-bird pets automatically pass these rules.
  */
-import { MatchingContext } from '../../../types/matching.types';
-import { HardRule } from '../../../types/rule.types';
 
-// How to implement bird specific type:
-// if (ctx.pet.animalType !== 'bird') return;
-// const bird = ctx.pet;
+import { HardRule } from '../../../types/rule.types';
+import { isBird } from '../../../utils/typeGuard';
+
+///////////////////////
+// Helper           //
+///////////////////////
+
+const pass = (ruleName: string) => ({
+  rejected: false,
+  ruleName,
+});
+
+///////////////////////
+// RULES             //
+///////////////////////
 
 // 1. Bird companionship rule
 export const birdCompanionshipRule: HardRule = (ctx) => {
   const { adopter, pet } = ctx;
 
-  const requiresPartner = (pet as any).requiresBirdPartner;
+  if (!isBird(pet)) return pass('birdCompanionshipRule');
+
+  const requiresPartner = pet.requiresBirdPartner;
   const aloneTime = adopter.aloneTimeHours;
 
   if (requiresPartner && aloneTime === 'high') {
@@ -31,10 +44,7 @@ export const birdCompanionshipRule: HardRule = (ctx) => {
       ruleName: 'birdCompanionshipRule',
       reason: 'Bird requires companionship but adopter is often away',
 
-      adopterSnapshot: {
-        aloneTimeHours: aloneTime,
-      },
-
+      adopterSnapshot: { aloneTimeHours: aloneTime },
       petSnapshot: {
         requiresBirdPartner: requiresPartner,
         idealAloneTime: 'low',
@@ -45,14 +55,8 @@ export const birdCompanionshipRule: HardRule = (ctx) => {
   return {
     rejected: false,
     ruleName: 'birdCompanionshipRule',
-
-    adopterSnapshot: {
-      aloneTimeHours: aloneTime,
-    },
-
-    petSnapshot: {
-      requiresBirdPartner: requiresPartner,
-    },
+    adopterSnapshot: { aloneTimeHours: aloneTime },
+    petSnapshot: { requiresBirdPartner: requiresPartner },
   };
 };
 
@@ -60,10 +64,15 @@ export const birdCompanionshipRule: HardRule = (ctx) => {
 export const freeFlightRule: HardRule = (ctx) => {
   const { adopter, pet } = ctx;
 
+  if (!isBird(pet)) return pass('freeFlightRule');
+
   const flightNeed = pet.flightNeed;
   const expectation = adopter.freeFlightExpectation;
 
-  if (expectation === 'very_low' && (flightNeed === 'high' || flightNeed === 'very_high')) {
+  if (
+    expectation === 'very_low' &&
+    (flightNeed === 'high' || flightNeed === 'very_high')
+  ) {
     return {
       rejected: true,
       ruleName: 'freeFlightRule',
@@ -84,6 +93,8 @@ export const freeFlightRule: HardRule = (ctx) => {
 // 3. Sleep rule
 export const sleepRule: HardRule = (ctx) => {
   const { adopter, pet } = ctx;
+
+  if (!isBird(pet)) return pass('sleepRule');
 
   const sleepCommitment = adopter.sleepEnvironmentCommitment;
   const sleepNeed = pet.sleepNeed;
@@ -110,7 +121,9 @@ export const sleepRule: HardRule = (ctx) => {
 export const socialIsolationRule: HardRule = (ctx) => {
   const { adopter, pet } = ctx;
 
-  const requiresPartner = (pet as any).requiresBirdPartner;
+  if (!isBird(pet)) return pass('socialIsolationRule');
+
+  const requiresPartner = pet.requiresBirdPartner;
   const willingness = adopter.willingnessMultipleBirds;
 
   if (requiresPartner && willingness === 'low') {
@@ -119,7 +132,7 @@ export const socialIsolationRule: HardRule = (ctx) => {
       ruleName: 'socialIsolationRule',
       reason: 'Bird requires partner but adopter unwilling',
       adopterSnapshot: { willingness },
-      petSnapshot: { requiresPartner },
+      petSnapshot: { requiresBirdPartner: requiresPartner },
     };
   }
 
@@ -127,7 +140,7 @@ export const socialIsolationRule: HardRule = (ctx) => {
     rejected: false,
     ruleName: 'socialIsolationRule',
     adopterSnapshot: { willingness },
-    petSnapshot: { requiresPartner },
+    petSnapshot: { requiresBirdPartner: requiresPartner },
   };
 };
 
@@ -135,17 +148,23 @@ export const socialIsolationRule: HardRule = (ctx) => {
 export const humanInteractionRule: HardRule = (ctx) => {
   const { adopter, pet } = ctx;
 
+  if (!isBird(pet)) return pass('humanInteractionRule');
+
   const interaction = adopter.desiredHumanInteraction;
   const socialNeed = pet.socialNeed;
   const requiresPartner = pet.requiresBirdPartner;
 
-  if (interaction === 'low' && socialNeed === 'very_high' && !requiresPartner) {
+  if (
+    interaction === 'low' &&
+    socialNeed === 'very_high' &&
+    !requiresPartner
+  ) {
     return {
       rejected: true,
       ruleName: 'humanInteractionRule',
       reason: 'High social bird with low human interaction',
       adopterSnapshot: { interaction },
-      petSnapshot: { socialNeed, requiresPartner },
+      petSnapshot: { socialNeed, requiresBirdPartner: requiresPartner },
     };
   }
 
@@ -153,14 +172,15 @@ export const humanInteractionRule: HardRule = (ctx) => {
     rejected: false,
     ruleName: 'humanInteractionRule',
     adopterSnapshot: { interaction },
-    petSnapshot: { socialNeed, requiresPartner },
+    petSnapshot: { socialNeed, requiresBirdPartner: requiresPartner },
   };
 };
-
 
 // 6. Behavior intolerance rule
 export const behaviorToleranceRule: HardRule = (ctx) => {
   const { adopter, pet } = ctx;
+
+  if (!isBird(pet)) return pass('behaviorToleranceRule');
 
   const tolerance = adopter.adoptionComplexityTolerance;
   const aggression = pet.aggressionRisk;
@@ -183,7 +203,10 @@ export const behaviorToleranceRule: HardRule = (ctx) => {
   };
 };
 
-// Export
+///////////////////////
+// Export            //
+///////////////////////
+
 export const birdHardRules: HardRule[] = [
   birdCompanionshipRule,
   freeFlightRule,

@@ -61,7 +61,7 @@ export const noTimeRule: HardRule = (ctx) => {
       },
 
       petSnapshot: {
-        requiredCare: pet.careNeed ?? pet.mentalStimulationNeed ?? 'unknown',
+        requiredCare: pet.careNeed ?? 'unknown'
       },
     };
   }
@@ -75,7 +75,7 @@ export const noTimeRule: HardRule = (ctx) => {
     },
 
     petSnapshot: {
-      requiredCare: pet.careNeed ?? pet.mentalStimulationNeed ?? 'unknown',
+      requiredCare: pet.careNeed ?? 'unknown',
     },
   };
 };

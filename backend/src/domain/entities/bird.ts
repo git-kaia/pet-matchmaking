@@ -13,15 +13,16 @@
  */
 
 import { Level, Level3, BondingStyle, ExperienceLevel } from '../types/common.types';
+import { Pet } from './pet';
 
-export interface Bird {
+export interface Bird extends Pet{
   id: string;
   speciesId: string;
+  animalType: 'bird';
 
-  // Core behavioral traits
+  // Social behavioral traits
   socialWithHumans: Level;
   socialWithBirds: Level;
-
   bondingStyle: BondingStyle;
 
   // Risk & behavior
@@ -42,14 +43,7 @@ export interface Bird {
   trainingLevel: ExperienceLevel;
   mentalStimulationNeed: Level;
 
-  // Additional traits used for mapping
-  activityLevel: Level;
-  noiseLevel: Level;
-  affectionLevel: Level;
+  // activity
   sleepNeed: Level;
-  freeFlightExpectation: Level;
-  careNeed: Level;
-
   flightNeed: Level;
-  requiredCare: Level;
 }

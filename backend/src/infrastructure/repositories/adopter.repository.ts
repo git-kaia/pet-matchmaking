@@ -26,6 +26,15 @@ export const getAdopterById = async (id: string): Promise<Adopter | null> => {
   return result.rows[0] ? mapAdopterFromDb(result.rows[0]) : null;
 };
 
+export const getAllAdopters = async (): Promise<Adopter[]> => {
+  const result = await pool.query(`
+    SELECT *
+    FROM adopters
+  `);
+
+  return result.rows.map(mapAdopterFromDb);
+};
+
 export const saveAdopter = async (adopter: Adopter) => {
   await pool.query(
     `INSERT INTO adopters (
