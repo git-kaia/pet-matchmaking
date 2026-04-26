@@ -11,14 +11,14 @@
  * This file complements common.types with domain-specific typing.
  */
 
-import { AnimalType, ExperienceLevel, Level } from "../types/common.types";
+import { AnimalType, ExperienceLevel, Level, Level3 } from "../types/common.types";
 
 export interface Pet {
   id: string;
 
   animalType: AnimalType;
 
-  size: 'veryy_small' | 'small' | 'medium' | 'large' | 'very_large';
+  size: 'very_small' | 'small' | 'medium' | 'large' | 'very_large';
 
   noiseLevel: Level;
   activityLevel: Level;
@@ -33,6 +33,6 @@ export interface Pet {
   financialBurden: Level;
 
   careNeed: Level; 
-  aggressionRisk: Level;
+  aggressionRisk: Level3;
   behaviourIssues: Level;
 }

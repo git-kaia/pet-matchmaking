@@ -20,8 +20,8 @@
 import { ScoringRule } from '../../types/scoring.types';
 
 // Utils
-import { isHigh } from '../../utils/level.utils';
-import { SCORE, createScore, createDistanceScore } from '../../utils/scoring.utils';
+import { levelMap, isHigh, distanceMixed } from '../../utils/level.utils';
+import { SCORE, createScore } from '../../utils/scoring.utils';
 
 ///////////////////////
 // RULES             //
@@ -67,14 +67,43 @@ export const timeAvailabilityRule: ScoringRule = (ctx) => {
 };
 
 // 02. Noise Tolerance Rule
-export const noiseToleranceRule: ScoringRule = (ctx) =>
-  createDistanceScore({
-    scoreType: 'human',
-    ruleName: 'noiseTolerance',
-    label: 'noise tolerance',
-    a: ctx.adopter.noiseToleranceLevel,
-    b: ctx.pet.noiseLevel,
-  });
+
+export const noiseToleranceRule: ScoringRule = (ctx) => {
+  const scoreType = 'human';
+  const ruleName = 'noiseTolerance';
+
+  const adopterTolerance = levelMap[ctx.adopter.noiseToleranceLevel];
+  const petNoise = levelMap[ctx.pet.noiseLevel];
+
+  // If adopter can tolerate equal or more → always fine
+  if (petNoise <= adopterTolerance) {
+    return createScore(
+      scoreType,
+      SCORE.MEDIUM,
+      ruleName,
+      'Noise level within tolerance'
+    );
+  }
+
+  const diff = petNoise - adopterTolerance;
+
+  // Pet is louder than tolerance
+  if (diff >= 2) {
+    return createScore(
+      scoreType,
+      SCORE.NEGATIVE,
+      ruleName,
+      'Pet noise exceeds tolerance significantly'
+    );
+  }
+
+  return createScore(
+    scoreType,
+    SCORE.LOW,
+    ruleName,
+    'Pet noise slightly above tolerance'
+  );
+};
 
 // 03. Alone Time Risk
 export const aloneTimeRiskRule: ScoringRule = (ctx) => {
@@ -155,7 +184,7 @@ export const commitmentRule: ScoringRule = (ctx) => {
   if (commitmentHorizonYears < lifespanYears * 0.5) {
     return createScore(
       scoreType,
-      SCORE.CRITICAL,
+      SCORE.NEGATIVE,
       ruleName,
       'Very low commitment vs lifespan',
     );
@@ -164,7 +193,7 @@ export const commitmentRule: ScoringRule = (ctx) => {
   if (commitmentHorizonYears < lifespanYears) {
     return createScore(
       scoreType,
-      SCORE.NEGATIVE,
+      SCORE.LOW,
       ruleName,
       'Moderate commitment mismatch',
     )
@@ -172,7 +201,7 @@ export const commitmentRule: ScoringRule = (ctx) => {
 
   return createScore(
     scoreType,
-    SCORE.LOW,
+    SCORE.MEDIUM,
     ruleName,
     'Commitment sufficient',
   );
@@ -231,6 +260,16 @@ export const experienceMatchRule: ScoringRule = (ctx) => {
     );
   }
 
+  // Baseline
+  if (gap === 0) {
+    return createScore(
+      scoreType,
+      SCORE.LOW,
+      ruleName,
+      'Adopter experience adequate',
+    );
+  }
+
   // Good match or overqualified
   return createScore(
     scoreType,
@@ -250,7 +289,7 @@ export const learningWillingnessRule: ScoringRule = (ctx) => {
   if (!hasPetExperience && learningWillingness === 'high') {
     return createScore(
       scoreType,
-      SCORE.HIGH,
+      SCORE.MEDIUM, // Medium to not score higher than experience
       ruleName,
       'High willingness to learn',
     );
@@ -259,7 +298,7 @@ export const learningWillingnessRule: ScoringRule = (ctx) => {
   if (!hasPetExperience && learningWillingness === 'medium') {
     return createScore(
       scoreType,
-      SCORE.MEDIUM,
+      SCORE.LOW, // No points, but reflects default human behaviour
       ruleName,
       'Moderate willingness to learn',
     );
@@ -320,11 +359,11 @@ export const financialPriorityRule: ScoringRule = (ctx) => {
   }
 
   if (financialPriority === 'low' && isHigh(financialBurden)) {
-    return createScore(scoreType, SCORE.CRITICAL, ruleName, 'Low budget for high-cost pet');
+    return createScore(scoreType, SCORE.NEGATIVE, ruleName, 'Low budget for high-cost pet');
   }
 
   if (financialPriority === 'medium' && isHigh(financialBurden)) {
-    return createScore(scoreType, SCORE.NEGATIVE, ruleName, 'Moderate budget mismatch');
+    return createScore(scoreType, SCORE.LOW, ruleName, 'Moderate budget mismatch');
   }
 
   return createScore(scoreType, SCORE.LOW, ruleName, 'Financial capacity acceptable');
@@ -336,65 +375,116 @@ export const childrenCompatibilityRule: ScoringRule = (ctx) => {
   const ruleName = 'childrenCompatibility';
 
   const { kidsAge } = ctx.adopter;
-  const { size, affectionLevel, socialNeed } = ctx.pet;
+  const { affectionLevel, socialNeed } = ctx.pet;
 
   if (kidsAge !== 'under_ten') {
-    return createScore(scoreType, SCORE.LOW, ruleName, 'No young children');
+    return createScore(
+      scoreType,
+      SCORE.LOW,
+      ruleName,
+      'No young children'
+    );
   }
 
-  if (
-    (size === 'large' || size === 'very_large') &&
-    ['medium', 'high', 'very_high'].includes(affectionLevel)
-  ) {
-    return createScore(scoreType, SCORE.CRITICAL, ruleName, 'Large affectionate pet with young children');
+  if (isHigh(socialNeed) && isHigh(affectionLevel)) {
+    return createScore(
+      scoreType,
+      SCORE.NEGATIVE,
+      ruleName,
+      'High attention needs may be difficult to meet with young children'
+    );
   }
 
-  if (isHigh(socialNeed)) {
-    return createScore(scoreType, SCORE.NEGATIVE, ruleName, 'Highly social pet with young children');
+  if (isHigh(socialNeed) || isHigh(affectionLevel)) {
+    return createScore(
+      scoreType,
+      SCORE.LOW,
+      ruleName,
+      'Moderate attention demands in household with young children'
+    );
   }
 
-  return createScore(scoreType, SCORE.LOW, ruleName, 'Children compatibility acceptable');
+  return createScore(
+    scoreType,
+    SCORE.LOW,
+    ruleName,
+    'Children compatibility acceptable'
+  );
 };
 
 // 11. Desired Sociability
-export const desiredSociabilityRule: ScoringRule = (ctx) =>
-  createDistanceScore({
-    scoreType: 'human',
-    ruleName: 'desiredSociability',
-    label: 'sociability',
-    a: ctx.adopter.desiredPetSociability,
-    b: ctx.pet.socialNeed,
+export const desiredSociabilityRule: ScoringRule = (ctx) => {
+  const d = distanceMixed(
+    ctx.adopter.desiredPetSociability,
+    ctx.pet.socialNeed
+  );
 
-    valueFn: (d) =>
-      d >= 2 ? -8 :
-        d === 1 ? -4 :
-          4,
-  });
+  if (d >= 2) {
+    return createScore('human', SCORE.NEGATIVE, 'desiredSociability', 'High mismatch in sociability');
+  }
+
+  if (d === 1) {
+    return createScore('human', SCORE.LOW, 'desiredSociability', 'Moderate mismatch in sociability');
+  }
+
+  return createScore('human', SCORE.MEDIUM, 'desiredSociability', 'Good sociability match');
+};
 
 // 12. Affection expectation
-export const affectionExpectationRule: ScoringRule = (ctx) =>
-  createDistanceScore({
-    scoreType: 'human',
-    ruleName: 'affectionExpectation',
-    label: 'affection',
-    a: ctx.adopter.desiredPetAffectionLevel,
-    b: ctx.pet.affectionLevel,
+export const affectionExpectationRule: ScoringRule = (ctx) => {
+  const d = distanceMixed(
+    ctx.adopter.desiredPetAffectionLevel,
+    ctx.pet.affectionLevel
+  );
 
-    valueFn: (d) =>
-      d >= 2 ? -6 :
-        d === 1 ? -3 :
-          3,
-  });
+  if (d >= 2) {
+    return createScore('human', SCORE.NEGATIVE, 'affectionExpectation', 'High mismatch in affection');
+  }
+
+  if (d === 1) {
+    return createScore('human', SCORE.LOW, 'affectionExpectation', 'Moderate mismatch in affection');
+  }
+
+  return createScore('human', SCORE.MEDIUM, 'affectionExpectation', 'Good affection match');
+};
 
 // 13. Behaviour tolerance
-export const behaviorToleranceRule: ScoringRule = (ctx) =>
-  createDistanceScore({
-    scoreType: 'human',
-    ruleName: 'behaviorTolerance',
-    label: 'behavior tolerance',
-    a: ctx.adopter.problemBehaviorTolerance,
-    b: ctx.pet.behaviourIssues,
-  });
+export const behaviorToleranceRule: ScoringRule = (ctx) => {
+  const scoreType = 'human';
+  const ruleName = 'behaviorTolerance';
+
+  const adopterTolerance = levelMap[ctx.adopter.problemBehaviorTolerance];
+  const petIssues = levelMap[ctx.pet.behaviourIssues];
+
+  // If adopter can tolerate equal or more
+  if (petIssues <= adopterTolerance) {
+    return createScore(
+      scoreType,
+      SCORE.MEDIUM,
+      ruleName,
+      'Behavior issues within tolerance'
+    );
+  }
+
+  const diff = petIssues - adopterTolerance;
+
+  // Pet having more issues than adopter tolerates
+  if (diff >= 2) {
+    return createScore(
+      scoreType,
+      SCORE.NEGATIVE,
+      ruleName,
+      'Behavior issues exceed tolerance significantly'
+    );
+  }
+
+  return createScore(
+    scoreType,
+    SCORE.LOW,
+    ruleName,
+    'Behavior issues slightly exceed tolerance'
+  );
+};
 
 ///////////////////////
 // Rule exports      //
