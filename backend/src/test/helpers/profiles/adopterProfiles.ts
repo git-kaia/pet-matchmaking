@@ -24,7 +24,7 @@ export const lowCommitmentLowToleranceAdopter: Adopter = createTestAdopter({
   noiseToleranceLevel: 'low',
 
   lifeStability: 'low',
-  commitmentHorizonYears: 5,
+  commitmentHorizonYears: 10,
 
   rehomeResponsibilityLevel: 'low',
   financialPriority: 'low',
