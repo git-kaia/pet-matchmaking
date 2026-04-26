@@ -1,5 +1,5 @@
-// hardRules.debug.test.ts
-// to run testing script: npx ts-node src/test/matching.integration.test.ts
+// hardRules.scenario.test.ts
+// to run testing script: npx ts-node src/test/scenario/matching.integration.test.ts
 
 /**
  * Hard Rules Scenario Test
@@ -27,10 +27,15 @@ import { evaluateHardRulesDetailed } from '../../services/matching/debug/hardRul
 import { generalHardRules } from '../../services/matching/rules/general/generalHardRules';
 import { birdHardRules } from '../../services/matching/rules/animal-type/bird/birdHardRules';
 
+import { birdProfiles } from '../helpers/profiles/birdProfiles';
+import { adopterProfiles } from '../helpers/profiles/adopterProfiles';
+
+
+
 const runTest = async () => {
   // Få fra hard codede profiler ....
-  const pets = await getAllPets();  
-  const adopters = await getAllAdopters();
+    const pets = birdProfiles;
+    const adopters = adopterProfiles;
 
   for (const adopter of adopters) {
 
@@ -56,6 +61,7 @@ const runTest = async () => {
       console.log('--------------------------------');
 
       console.log('Adopter:', {
+        adopter: adopter.id,
         dailyCareTime: adopter.dailyCareTime,
         commitment: adopter.commitmentHorizonYears,
         aloneTime: adopter.aloneTimeHours,
@@ -63,7 +69,6 @@ const runTest = async () => {
 
       console.log('Bird:', {
         lifespan: pet.lifespanYears,
-        requiresPartner: pet.requiresBirdPartner,
       });
 
       console.table(
