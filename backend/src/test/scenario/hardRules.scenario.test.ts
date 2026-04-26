@@ -57,17 +57,18 @@ const runTest = async () => {
       const result = evaluateHardRulesDetailed(ctx, rules);
 
       console.log('\n--------------------------------');
-      console.log(`BIRD: ${bird.id}`);
+      console.log(`MATCH: ${bird.id} & ${adopter.id}`);
       console.log('--------------------------------');
 
       console.log('Adopter:', {
         adopter: adopter.id,
         dailyCareTime: adopter.dailyCareTime,
-        commitment: adopter.commitmentHorizonYears,
-        aloneTime: adopter.aloneTimeHours,
+        commitmentYears: adopter.commitmentHorizonYears,
       });
 
       console.log('Bird:', {
+        bird: bird.id,
+        birdtype: pet.speciesId,
         lifespan: pet.lifespanYears,
       });
 
