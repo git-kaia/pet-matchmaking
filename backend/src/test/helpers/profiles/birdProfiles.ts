@@ -40,7 +40,7 @@ export const socialBeginnerFriendlyBird: Bird = createTestBird({
  * Very demanding, high-maintenance, high-risk bird
  */
 export const highMaintenanceDemandingBird: Bird = createTestBird({
-  id: 'b4',
+  id: 'b2',
   speciesId: 'african_grey',
 
   // ---- Pet base fields ----
@@ -87,7 +87,7 @@ export const highMaintenanceDemandingBird: Bird = createTestBird({
  * Low-maintenance, independent, low interaction bird
  */
 export const lowMaintenanceIndependentBird: Bird = createTestBird({
-  id: 'b2',
+  id: 'b3',
   speciesId: 'canary',
 
   // ---- Pet base fields ----

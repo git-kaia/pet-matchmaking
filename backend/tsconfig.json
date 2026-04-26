@@ -3,6 +3,7 @@
     /* Project structure */
     "rootDir": ".",
     "outDir": "./dist",
+    "isolatedModules": true,
 
     /* Environment */
     "target": "ES2020",
