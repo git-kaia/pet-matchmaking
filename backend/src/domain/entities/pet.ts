@@ -11,7 +11,7 @@
  * This file complements common.types with domain-specific typing.
  */
 
-import { AnimalType, ExperienceLevel, Level } from "../types/common.types";
+import { AnimalType, ExperienceLevel, Level, Level3 } from "../types/common.types";
 
 export interface Pet {
   id: string;
@@ -33,6 +33,6 @@ export interface Pet {
   financialBurden: Level;
 
   careNeed: Level; 
-  aggressionRisk: Level;
+  aggressionRisk: Level3;
   behaviourIssues: Level;
 }

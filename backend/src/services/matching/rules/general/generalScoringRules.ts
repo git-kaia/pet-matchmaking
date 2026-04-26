@@ -74,6 +74,11 @@ export const noiseToleranceRule: ScoringRule = (ctx) =>
     label: 'noise tolerance',
     a: ctx.adopter.noiseToleranceLevel,
     b: ctx.pet.noiseLevel,
+
+    valueFn: (d) =>
+      d >= 2 ? SCORE.NEGATIVE :   // max penalty
+        d === 1 ? SCORE.LOW :       // mild mismatch = neutral
+          SCORE.LOW,
   });
 
 // 03. Alone Time Risk
@@ -155,7 +160,7 @@ export const commitmentRule: ScoringRule = (ctx) => {
   if (commitmentHorizonYears < lifespanYears * 0.5) {
     return createScore(
       scoreType,
-      SCORE.CRITICAL,
+      SCORE.NEGATIVE,
       ruleName,
       'Very low commitment vs lifespan',
     );
@@ -164,7 +169,7 @@ export const commitmentRule: ScoringRule = (ctx) => {
   if (commitmentHorizonYears < lifespanYears) {
     return createScore(
       scoreType,
-      SCORE.NEGATIVE,
+      SCORE.LOW,
       ruleName,
       'Moderate commitment mismatch',
     )
@@ -172,7 +177,7 @@ export const commitmentRule: ScoringRule = (ctx) => {
 
   return createScore(
     scoreType,
-    SCORE.LOW,
+    SCORE.MEDIUM,
     ruleName,
     'Commitment sufficient',
   );
@@ -231,6 +236,16 @@ export const experienceMatchRule: ScoringRule = (ctx) => {
     );
   }
 
+  // Baseline
+  if (gap === 0) {
+    return createScore(
+      scoreType,
+      SCORE.LOW,
+      ruleName,
+      'Adopter experience adequate',
+    );
+  }
+
   // Good match or overqualified
   return createScore(
     scoreType,
@@ -250,7 +265,7 @@ export const learningWillingnessRule: ScoringRule = (ctx) => {
   if (!hasPetExperience && learningWillingness === 'high') {
     return createScore(
       scoreType,
-      SCORE.HIGH,
+      SCORE.MEDIUM, // Medium to not score higher than experience
       ruleName,
       'High willingness to learn',
     );
@@ -259,7 +274,7 @@ export const learningWillingnessRule: ScoringRule = (ctx) => {
   if (!hasPetExperience && learningWillingness === 'medium') {
     return createScore(
       scoreType,
-      SCORE.MEDIUM,
+      SCORE.LOW, // No points, but reflects default human behaviour
       ruleName,
       'Moderate willingness to learn',
     );
@@ -320,11 +335,11 @@ export const financialPriorityRule: ScoringRule = (ctx) => {
   }
 
   if (financialPriority === 'low' && isHigh(financialBurden)) {
-    return createScore(scoreType, SCORE.CRITICAL, ruleName, 'Low budget for high-cost pet');
+    return createScore(scoreType, SCORE.NEGATIVE, ruleName, 'Low budget for high-cost pet');
   }
 
   if (financialPriority === 'medium' && isHigh(financialBurden)) {
-    return createScore(scoreType, SCORE.NEGATIVE, ruleName, 'Moderate budget mismatch');
+    return createScore(scoreType, SCORE.LOW, ruleName, 'Moderate budget mismatch');
   }
 
   return createScore(scoreType, SCORE.LOW, ruleName, 'Financial capacity acceptable');
@@ -336,24 +351,41 @@ export const childrenCompatibilityRule: ScoringRule = (ctx) => {
   const ruleName = 'childrenCompatibility';
 
   const { kidsAge } = ctx.adopter;
-  const { size, affectionLevel, socialNeed } = ctx.pet;
+  const { affectionLevel, socialNeed } = ctx.pet;
 
   if (kidsAge !== 'under_ten') {
-    return createScore(scoreType, SCORE.LOW, ruleName, 'No young children');
+    return createScore(
+      scoreType,
+      SCORE.LOW,
+      ruleName,
+      'No young children'
+    );
   }
 
-  if (
-    (size === 'large' || size === 'very_large') &&
-    ['medium', 'high', 'very_high'].includes(affectionLevel)
-  ) {
-    return createScore(scoreType, SCORE.CRITICAL, ruleName, 'Large affectionate pet with young children');
+  if (isHigh(socialNeed) && isHigh(affectionLevel)) {
+    return createScore(
+      scoreType,
+      SCORE.NEGATIVE,
+      ruleName,
+      'High attention needs may be difficult to meet with young children'
+    );
   }
 
-  if (isHigh(socialNeed)) {
-    return createScore(scoreType, SCORE.NEGATIVE, ruleName, 'Highly social pet with young children');
+  if (isHigh(socialNeed) || isHigh(affectionLevel)) {
+    return createScore(
+      scoreType,
+      SCORE.LOW,
+      ruleName,
+      'Moderate attention demands in household with young children'
+    );
   }
 
-  return createScore(scoreType, SCORE.LOW, ruleName, 'Children compatibility acceptable');
+  return createScore(
+    scoreType,
+    SCORE.LOW,
+    ruleName,
+    'Children compatibility acceptable'
+  );
 };
 
 // 11. Desired Sociability
@@ -366,9 +398,9 @@ export const desiredSociabilityRule: ScoringRule = (ctx) =>
     b: ctx.pet.socialNeed,
 
     valueFn: (d) =>
-      d >= 2 ? -8 :
-        d === 1 ? -4 :
-          4,
+      d >= 2 ? SCORE.NEGATIVE :
+        d === 1 ? SCORE.LOW :
+          SCORE.LOW,
   });
 
 // 12. Affection expectation
