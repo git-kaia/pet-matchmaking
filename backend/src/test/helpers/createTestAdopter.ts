@@ -7,6 +7,8 @@ export const createTestAdopter = (
 ): Adopter => ({
   id: 'test-adopter',
 
+  // ---- General pet fields ----
+
   spaceLevel: 'medium',
   householdType: 'apartment',
   kidsAge: 'none',
@@ -43,6 +45,8 @@ export const createTestAdopter = (
   desiredHumanInteraction: 'medium',
 
   problemBehaviorTolerance: 'medium',
+  
+  // ---- Bird-specific fields ----
 
   sleepEnvironmentCommitment: 'medium',
   freeFlightExpectation: 'medium',
