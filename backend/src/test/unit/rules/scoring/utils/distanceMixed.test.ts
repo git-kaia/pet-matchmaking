@@ -1,4 +1,4 @@
-// createDistanceScore.unit.test.ts
+// createDistanceScore.test.ts
 
 import { distanceMixed } from '../../../../../services/matching/utils/level.utils';
 

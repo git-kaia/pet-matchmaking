@@ -1,4 +1,4 @@
-// isHigh.unit.test.ts
+// isHigh.test.ts
 
 import { isHigh } from '../../../../../services/matching/utils/level.utils'
 

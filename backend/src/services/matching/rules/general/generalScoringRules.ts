@@ -20,7 +20,7 @@
 import { ScoringRule } from '../../types/scoring.types';
 
 // Utils
-import { levelMap, isHigh, distanceMixed } from '../../utils/level.utils';
+import { levelMap, isHigh, isLow, distanceMixed } from '../../utils/level.utils';
 import { SCORE, createScore } from '../../utils/scoring.utils';
 
 ///////////////////////
@@ -107,35 +107,64 @@ export const noiseToleranceRule: ScoringRule = (ctx) => {
 
 // 03. Alone Time Risk
 export const aloneTimeRiskRule: ScoringRule = (ctx) => {
-  const scoreType = 'welfare' as const;
-  const ruleName = 'aloneTimeRisk' as const;
+  const scoreType = 'welfare';
+  const ruleName = 'aloneTimeRisk';
 
   const { aloneTimeHours } = ctx.adopter;
   const { socialNeed } = ctx.pet;
 
-  if (aloneTimeHours === 'high' && isHigh(socialNeed)) {
+  // Worst case
+  if (isHigh(aloneTimeHours) && isHigh(socialNeed)) {
     return createScore(
       scoreType,
       SCORE.CRITICAL,
       ruleName,
-      'High alone time with highly social pet',
+      'High alone time with highly social pet'
     );
   }
 
-  if (aloneTimeHours === 'medium' && isHigh(socialNeed)) {
+  // Moderate mismatch
+  if (
+    (aloneTimeHours === 'medium' && isHigh(socialNeed)) ||
+    (isHigh(aloneTimeHours) && socialNeed === 'medium')
+  ) {
     return createScore(
       scoreType,
       SCORE.NEGATIVE,
       ruleName,
-      'Moderate alone time with social pet',
-    )
+      'Some mismatch between social needs and alone time'
+    );
   }
 
+  // Best case: demanding pet well supported
+  if (isLow(aloneTimeHours) && isHigh(socialNeed)) {
+    return createScore(
+      scoreType,
+      SCORE.HIGH,
+      ruleName,
+      'Adopter meets high social needs'
+    );
+  }
+
+  // Good case: independent pet with acceptable availability
+  if (
+    isLow(socialNeed) &&
+    (isLow(aloneTimeHours) || aloneTimeHours === 'medium')
+  ) {
+    return createScore(
+      scoreType,
+      SCORE.MEDIUM,
+      ruleName,
+      'Low social needs with acceptable availability'
+    );
+  }
+
+  // Default acceptable
   return createScore(
     scoreType,
     SCORE.LOW,
     ruleName,
-    'Alone time acceptable',
+    'Alone time acceptable'
   );
 };
 
@@ -212,23 +241,26 @@ export const commitmentRule: ScoringRule = (ctx) => {
 // pets gives the highest points, but if its less then required level for pet user should 
 // be given penalties
 export const experienceMatchRule: ScoringRule = (ctx) => {
-  const scoreType = 'welfare' as const;
-  const ruleName = 'experienceMatch' as const;
+  const scoreType = 'welfare';
+  const ruleName = 'experienceMatch';
 
   const { hasPetExperience, experienceYears } = ctx.adopter;
   const { experienceLevel } = ctx.pet;
 
   const birdExp = experienceYears?.bird || 0;
 
-  // Map adopter experience → level
+  // Map adopter experience → level (now includes advanced)
   const adopterLevel = !hasPetExperience
     ? 0
-    : birdExp >= 5
-      ? 2 // experienced
-      : birdExp >= 2
-        ? 1 // intermediate
-        : 0; // beginner
+    : birdExp >= 10
+      ? 3 // advanced
+      : birdExp >= 5
+        ? 2 // experienced
+        : birdExp >= 2
+          ? 1 // intermediate
+          : 0; // beginner
 
+  // Pet requirement scale
   const experienceMap = {
     beginner: 0,
     intermediate: 1,
@@ -240,42 +272,42 @@ export const experienceMatchRule: ScoringRule = (ctx) => {
 
   const gap = adopterLevel - petLevel;
 
-  // Strong mismatch
+  // Strong underqualification
   if (gap <= -2) {
     return createScore(
       scoreType,
       SCORE.CRITICAL,
       ruleName,
-      'Adopter experience significantly underqualified for pet',
+      'Adopter experience significantly underqualified for pet'
     );
   }
 
-  // Mild mismatch
+  // Slight underqualification
   if (gap === -1) {
     return createScore(
       scoreType,
       SCORE.NEGATIVE,
       ruleName,
-      'Adopter experience slightly underqualified',
+      'Adopter experience slightly underqualified'
     );
   }
 
-  // Baseline
+  // Exact match
   if (gap === 0) {
     return createScore(
       scoreType,
-      SCORE.LOW,
+      SCORE.MEDIUM,
       ruleName,
-      'Adopter experience adequate',
+      'Experience matches requirement'
     );
   }
 
-  // Good match or overqualified
+  // Overqualified (good)
   return createScore(
     scoreType,
-    SCORE.MEDIUM,
+    SCORE.HIGH,
     ruleName,
-    'Experience matches or exceeds requirement',
+    'Adopter is highly experienced for this pet'
   );
 };
 
