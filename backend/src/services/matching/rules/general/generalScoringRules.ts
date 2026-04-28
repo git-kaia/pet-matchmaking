@@ -22,7 +22,7 @@ import { ScoringRule } from '../../types/scoring.types';
 // Utils
 import { levelMap, isHigh, isLow, distanceMixed } from '../../utils/level.utils';
 import { SCORE, createScore } from '../../utils/scoring.utils';
-
+import { getExperienceYears, hasExperienceForPet, getExperienceLevel } from '../../utils/experience.utils';
 ///////////////////////
 // RULES             //
 ///////////////////////
@@ -170,69 +170,117 @@ export const aloneTimeRiskRule: ScoringRule = (ctx) => {
 
 // 04. Life Stability
 export const lifeStabilityRule: ScoringRule = (ctx) => {
-  const scoreType = 'welfare' as const;
-  const ruleName = 'lifeStability' as const;
+  const scoreType = 'welfare';
+  const ruleName = 'lifeStability';
 
   const { lifeStability } = ctx.adopter;
   const { lifespanYears } = ctx.pet;
 
-  if (lifeStability === 'low' && lifespanYears >= 20) {
+  // Map adopter stability → numeric
+  const stabilityMap = {
+    low: 0,
+    medium: 1,
+    high: 2,
+  };
+
+  const adopterLevel = stabilityMap[lifeStability];
+
+  // Lifespan (3-tier model)
+  const requiredLevel =
+    lifespanYears > 15 ? 2 :   // long-lived pets
+      lifespanYears > 5 ? 1 :    // medium-lived pets
+        0;                         // short-lived pets
+
+  const gap = adopterLevel - requiredLevel;
+
+  // Strong mismatch
+  if (gap <= -2) {
+    return createScore(
+      scoreType,
+      SCORE.CRITICAL,
+      ruleName,
+      'Life stability far below requirement'
+    );
+  }
+
+  // Mild mismatch
+  if (gap === -1) {
     return createScore(
       scoreType,
       SCORE.NEGATIVE,
       ruleName,
-      'Low life stability for long-lived pet',
+      'Life stability below requirement'
     );
   }
 
-  if (lifeStability === 'medium' && lifespanYears >= 30) {
+  // Meets requirement
+  if (gap === 0) {
     return createScore(
       scoreType,
-      SCORE.LOW,
+      SCORE.MEDIUM,
       ruleName,
-      'Moderate stability for very long-lived pet',
+      'Life stability sufficient'
     );
   }
 
+  // Exceeds requirement
   return createScore(
     scoreType,
     SCORE.HIGH,
     ruleName,
-    'Life stability sufficient',
+    'High life stability relative to needs'
   );
 };
 
 // 05. Commitment vs Lifespan
 export const commitmentRule: ScoringRule = (ctx) => {
-  const scoreType = 'welfare' as const;
-  const ruleName = 'commitmentVsLifespan' as const;
+  const scoreType = 'welfare';
+  const ruleName = 'commitmentVsLifespan';
 
   const { commitmentHorizonYears } = ctx.adopter;
   const { lifespanYears } = ctx.pet;
 
-  if (commitmentHorizonYears < lifespanYears * 0.5) {
+  // Cap unrealistic expectations (important for parrots etc.)
+  const effectiveLifespan = Math.min(lifespanYears, 30);
+
+  const ratio = commitmentHorizonYears / effectiveLifespan;
+
+  // Very low commitment
+  if (ratio < 0.5) {
+    return createScore(
+      scoreType,
+      SCORE.CRITICAL,
+      ruleName,
+      'Very low commitment relative to expected care duration'
+    );
+  }
+
+  // Slight mismatch
+  if (ratio < 1) {
     return createScore(
       scoreType,
       SCORE.NEGATIVE,
       ruleName,
-      'Very low commitment vs lifespan',
+      'Commitment below expected duration'
     );
   }
 
-  if (commitmentHorizonYears < lifespanYears) {
+  // Meets expectation
+  if (ratio < 1.5) {
     return createScore(
       scoreType,
-      SCORE.LOW,
+      SCORE.MEDIUM,
       ruleName,
-      'Moderate commitment mismatch',
-    )
+      'Commitment meets expected duration'
+    );
   }
 
+  // Strong commitment
   return createScore(
     scoreType,
-    SCORE.MEDIUM,
+    SCORE.HIGH,
     ruleName,
-    'Commitment sufficient',
+    'Strong long-term commitment'
   );
 };
 
@@ -244,95 +292,86 @@ export const experienceMatchRule: ScoringRule = (ctx) => {
   const scoreType = 'welfare';
   const ruleName = 'experienceMatch';
 
-  const { hasPetExperience, experienceYears } = ctx.adopter;
-  const { experienceLevel } = ctx.pet;
+  const petType = ctx.pet.animalType;
 
-  const birdExp = experienceYears?.bird || 0;
+  const years = getExperienceYears(ctx);
+  const adopterLevel = getExperienceLevel(years);
 
-  // Map adopter experience → level (now includes advanced)
-  const adopterLevel = !hasPetExperience
-    ? 0
-    : birdExp >= 10
-      ? 3 // advanced
-      : birdExp >= 5
-        ? 2 // experienced
-        : birdExp >= 2
-          ? 1 // intermediate
-          : 0; // beginner
-
-  // Pet requirement scale
   const experienceMap = {
     beginner: 0,
     intermediate: 1,
     experienced: 2,
     advanced: 3,
-  };
+  } as const;
 
-  const petLevel = experienceMap[experienceLevel];
+  const petLevel = experienceMap[ctx.pet.experienceLevel];
 
   const gap = adopterLevel - petLevel;
 
-  // Strong underqualification
   if (gap <= -2) {
     return createScore(
       scoreType,
       SCORE.CRITICAL,
       ruleName,
-      'Adopter experience significantly underqualified for pet'
+      `Experience far below requirement for ${petType}`
     );
   }
 
-  // Slight underqualification
   if (gap === -1) {
     return createScore(
       scoreType,
-      SCORE.NEGATIVE,
+      SCORE.LOW,
       ruleName,
-      'Adopter experience slightly underqualified'
+      `Experience slightly below requirement for ${petType}`
     );
   }
 
-  // Exact match
   if (gap === 0) {
     return createScore(
       scoreType,
       SCORE.MEDIUM,
       ruleName,
-      'Experience matches requirement'
+      `Experience matches requirement for ${petType}`
     );
   }
 
-  // Overqualified (good)
   return createScore(
     scoreType,
     SCORE.HIGH,
     ruleName,
-    'Adopter is highly experienced for this pet'
+    `Highly experienced for ${petType}`
   );
 };
 
 // 07. Learning Willingness
 export const learningWillingnessRule: ScoringRule = (ctx) => {
-  const scoreType = 'welfare' as const;
-  const ruleName = 'learningWillingness' as const;
+  const scoreType = 'welfare';
+  const ruleName = 'learningWillingness';
 
-  const { hasPetExperience, learningWillingness } = ctx.adopter;
+  const petType = ctx.pet.animalType;
 
-  if (!hasPetExperience && learningWillingness === 'high') {
+  const hasExperience = hasExperienceForPet(ctx);
+  const { learningWillingness } = ctx.adopter;
+
+  if (isHigh(learningWillingness)) {
     return createScore(
       scoreType,
-      SCORE.MEDIUM, // Medium to not score higher than experience
+      hasExperience ? SCORE.MEDIUM : SCORE.HIGH,
       ruleName,
-      'High willingness to learn',
+      hasExperience
+        ? `Experienced with ${petType}, high willingness to improve`
+        : `No ${petType} experience but high willingness to learn`
     );
   }
 
-  if (!hasPetExperience && learningWillingness === 'medium') {
+  if (learningWillingness === 'medium') {
     return createScore(
       scoreType,
-      SCORE.LOW, // No points, but reflects default human behaviour
+      hasExperience ? SCORE.LOW : SCORE.MEDIUM,
       ruleName,
-      'Moderate willingness to learn',
+      hasExperience
+        ? `Experienced with ${petType}, moderate willingness`
+        : `Limited ${petType} experience, moderate willingness to learn`
     );
   }
 
@@ -340,7 +379,7 @@ export const learningWillingnessRule: ScoringRule = (ctx) => {
     scoreType,
     SCORE.LOW,
     ruleName,
-    'No learning bonus',
+    'No learning bonus'
   );
 };
 

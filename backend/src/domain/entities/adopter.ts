@@ -57,7 +57,7 @@ export interface Adopter {
   rehomeResponsibilityLevel: Level3;
   financialPriority: Level3;
 
-  hasPetExperience: boolean;
+  // hasPetExperience: boolean; Possibly not needed
   learningWillingness: Level3;
 
   experienceYears: Partial<Record<AnimalType, number>>;
