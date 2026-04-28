@@ -13,16 +13,18 @@
  * This defines the sequence of evaluation steps for birds.
  */
 
-import { MatchingContext, MatchResult, Adopter, Bird } from "../types/matching.types";
+import { MatchingContext, MatchResult } from '../types/matching.types';
+import { Adopter } from '../../../domain/entities/adopter';
+import { Bird } from '../../../domain/entities/bird';
 
-import { evaluateHardRules } from "../engines/hardRule.engine";
-import { calculateScore } from "../engines/scoring.engine";
+import { evaluateHardRules } from '../engines/hardRule.engine';
+import { calculateScore } from '../engines/scoring.engine';
 
-import { generalHardRules } from "../rules/general/generalHardRules";
-import { generalScoringRules } from "../rules/general/generalScoringRules";
+import { generalHardRules } from '../rules/general/generalHardRules';
+import { generalScoringRules } from '../rules/general/generalScoringRules';
 
-import { birdHardRules } from "../rules/animal-type/bird/birdHardRules";
-import { birdScoringRules } from "../rules/animal-type/bird/birdScoringRules";
+import { birdHardRules } from '../rules/animal-type/bird/birdHardRules';
+import { birdScoringRules } from '../rules/animal-type/bird/birdScoringRules';
 
 export const runBirdPipeline = (
   adopter: Adopter,

@@ -11,31 +11,55 @@
 
 import { runBirdPipeline } from './pipelines/bird.pipeline';
 import { Pet } from '../../domain/entities/pet';
-import { Bird } from '../../domain/entities/bird';
 import { Adopter } from '../../domain/entities/adopter';
-import { typeGuard } from './utils/typeGuard.utils'
+import { isBird } from './utils/typeGuard.utils';
+import { MatchResult } from './types/matching.types';
 
 export const getMatchingService = (pet: Pet) => {
-  switch (pet.animalType) {
-    case 'bird':
-      return {
-        execute: (adopter: Adopter) =>
-          runBirdPipeline(adopter, pet as Bird),
-      };
+  return {
+    execute: (adopter: Adopter): MatchResult => {
 
-    // placeholders for future pipelines
-    case 'dog':
-    case 'cat':
-    case 'rodent':
-    case 'reptile':
-    case 'amphibian':
-    case 'fish':
-    default:
+      if (isBird(pet)) {
+        return runBirdPipeline(adopter, pet);
+      }
+
+      // FUTURE PIPLELINES (not yet implemented)
+      /*
+      if (isDog(pet)) {
+        return runDogPipeline(adopter, pet);
+      }
+
+      if (isCat(pet)) {
+        return runCatPipeline(adopter, pet);
+      }
+
+      if (isRodent(pet)) {
+        return runRodentPipeline(adopter, pet);
+      }
+
+      if (isReptile(pet)) {
+        return runReptilePipeline(adopter, pet);
+      }
+
+      if (isAmphibian(pet)) {
+        return runAmphibianPipeline(adopter, pet);
+      }
+
+      if (isFish(pet)) {
+        return runFishPipeline(adopter, pet);
+      }
+      */
+
+      // fallback for currently unsupported pets
       return {
-        execute: () => ({
-          rejected: false,
-          reason: 'No matching pipeline for pet type',
-        }),
+        petId: pet.id,
+        score: 0,
+        welfareScore: 0,
+        humanScore: 0,
+        rejected: true,
+        rejectionReason: `No matching pipeline for pet type: ${pet.animalType}`,
+        rules: [],
       };
-  }
+    },
+  };
 };
