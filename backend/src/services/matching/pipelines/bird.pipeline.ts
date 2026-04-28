@@ -40,34 +40,29 @@ export const runBirdPipeline = (
 
   const ctx: MatchingContext = { adopter, pet };
 
-  const rejection = evaluateHardRules(ctx, hardRules);
+  // Apply hard rules using engine
+  const hardRuleResult = evaluateHardRules(ctx, hardRules);
 
-  if (rejection.rejected) {
+  if (hardRuleResult.rejected) {
     return {
       petId: pet.id,
       score: 0,
       welfareScore: 0,
       humanScore: 0,
       rejected: true,
-      rejectionReason: rejection.rule?.description,
-      rules: rejection.rule
-        ? [{
-            ruleName: rejection.rule.ruleName,
-            ruleType: rejection.rule.ruleType,
-            value: rejection.rule.value,
-            description: rejection.rule.description,
-          }]
-        : [],
+      rejectionReason: hardRuleResult.reason,
+      rules: [],
     };
   }
 
-  const score = calculateScore(ctx, scoringRules);
+  //  Apply scoring rules using engine
+  const scoringResult = calculateScore(ctx, scoringRules);
 
   return {
     petId: pet.id,
-    score: score.score,
-    welfareScore: score.welfareScore,
-    humanScore: score.humanScore,
+    score: scoringResult.score,
+    welfareScore: scoringResult.welfareScore,
+    humanScore: scoringResult.humanScore,
     rejected: false,
     rules: [],
   };
