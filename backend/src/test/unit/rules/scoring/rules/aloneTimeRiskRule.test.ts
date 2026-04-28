@@ -1,4 +1,4 @@
-// aloneTimeRisk.unit.test.ts
+// aloneTimeRiskRule.unit.test.ts
 
 import { aloneTimeRiskRule } from '../../../../../services/matching/rules/general/generalScoringRules';
 import { createTestAdopter } from '../../../../helpers/createTestAdopter';

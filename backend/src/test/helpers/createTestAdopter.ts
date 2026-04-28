@@ -35,7 +35,7 @@ export const createTestAdopter = (
   rehomeResponsibilityLevel: 'medium',
   financialPriority: 'medium',
 
-  hasPetExperience: false,
+  // hasPetExperience: false,
   learningWillingness: 'medium',
 
   experienceYears: {},

@@ -8,10 +8,17 @@
 import { Pet } from '../../../domain/entities/pet';
 import { Adopter } from '../../../domain/entities/adopter';
 
+import { HardRuleResult } from './rule.types';
+import { ScoringRuleResult } from './scoring.types';
+
 
 ///////////////////////////////////////////
 // Types for matching context and result //
 ///////////////////////////////////////////
+
+type RuleExecutionResult =
+  | ScoringRuleResult
+  | HardRuleResult;
 
 export type MatchResult = {
   petId: string;
@@ -23,17 +30,10 @@ export type MatchResult = {
   rejected: boolean;
   rejectionReason?: string;
 
-  rules?: RuleResult[];
+  rules?: RuleExecutionResult[];
 };
 
-export type RuleResult = {
-  ruleName: string;
-  passed: boolean;
-  reason: string;
 
-  adopter: Record<string, any>;
-  pet: Record<string, any>;
-};
 
 export type MatchingContext = {
   adopter: Adopter;

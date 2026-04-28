@@ -30,7 +30,7 @@ export interface Pet {
 
   timeRequired: number;
   messLevel: Level;
-  financialBurden: Level;
+  financialBurden: Level3;
 
   careNeed: Level; 
   aggressionRisk: Level3;
