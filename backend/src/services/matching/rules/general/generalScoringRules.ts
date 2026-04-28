@@ -400,7 +400,10 @@ export const cleaningToleranceRule: ScoringRule = (ctx) => {
     )
   }
 
-  if (cleaningTolerance === 'medium' && isHigh(messLevel)) {
+  if (
+    (cleaningTolerance === 'medium' && isHigh(messLevel)) ||
+    (cleaningTolerance === 'low' && messLevel === 'medium')
+  ) {
     return createScore(
       scoreType,
       SCORE.LOW,
@@ -429,15 +432,70 @@ export const financialPriorityRule: ScoringRule = (ctx) => {
     return createScore(scoreType, SCORE.LOW, ruleName, 'No cost data');
   }
 
-  if (financialPriority === 'low' && isHigh(financialBurden)) {
-    return createScore(scoreType, SCORE.NEGATIVE, ruleName, 'Low budget for high-cost pet');
+  // Low burden → always acceptable
+  if (financialBurden === 'low') {
+    return createScore(
+      scoreType,
+      SCORE.MEDIUM,
+      ruleName,
+      'Low financial burden'
+    );
   }
 
-  if (financialPriority === 'medium' && isHigh(financialBurden)) {
-    return createScore(scoreType, SCORE.LOW, ruleName, 'Moderate budget mismatch');
+  // High burden cases
+  if (financialBurden === 'high') {
+    if (financialPriority === 'low') {
+      return createScore(
+        scoreType,
+        SCORE.NEGATIVE,
+        ruleName,
+        'Low budget for high-cost pet'
+      );
+    }
+
+    if (financialPriority === 'medium') {
+      return createScore(
+        scoreType,
+        SCORE.LOW,
+        ruleName,
+        'Moderate budget mismatch'
+      );
+    }
+
+    return createScore(
+      scoreType,
+      SCORE.MEDIUM,
+      ruleName,
+      'High financial capacity for high-cost pet'
+    );
   }
 
-  return createScore(scoreType, SCORE.LOW, ruleName, 'Financial capacity acceptable');
+  // Medium burden cases
+  if (financialBurden === 'medium') {
+    if (financialPriority === 'low') {
+      return createScore(
+        scoreType,
+        SCORE.LOW,
+        ruleName,
+        'Moderate budget mismatch'
+      );
+    }
+
+    return createScore(
+      scoreType,
+      SCORE.MEDIUM,
+      ruleName,
+      'Financial capacity acceptable'
+    );
+  }
+
+  // Fallback (should never hit)
+  return createScore(
+    scoreType,
+    SCORE.MEDIUM,
+    ruleName,
+    'Financial capacity acceptable'
+  );
 };
 
 // 10. Children compatibility
