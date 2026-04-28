@@ -506,6 +506,7 @@ export const childrenCompatibilityRule: ScoringRule = (ctx) => {
   const { kidsAge } = ctx.adopter;
   const { affectionLevel, socialNeed } = ctx.pet;
 
+  // No young children = neutral
   if (kidsAge !== 'under_ten') {
     return createScore(
       scoreType,
@@ -515,7 +516,11 @@ export const childrenCompatibilityRule: ScoringRule = (ctx) => {
     );
   }
 
-  if (isHigh(socialNeed) && isHigh(affectionLevel)) {
+  const highSocial = isHigh(socialNeed);
+  const highAffection = isHigh(affectionLevel);
+
+  // Worst case
+  if (highSocial && highAffection) {
     return createScore(
       scoreType,
       SCORE.NEGATIVE,
@@ -524,7 +529,8 @@ export const childrenCompatibilityRule: ScoringRule = (ctx) => {
     );
   }
 
-  if (isHigh(socialNeed) || isHigh(affectionLevel)) {
+  // Moderate mismatch
+  if (highSocial || highAffection) {
     return createScore(
       scoreType,
       SCORE.LOW,
@@ -533,26 +539,27 @@ export const childrenCompatibilityRule: ScoringRule = (ctx) => {
     );
   }
 
+  // Good case
   return createScore(
     scoreType,
-    SCORE.LOW,
+    SCORE.MEDIUM,
     ruleName,
-    'Children compatibility acceptable'
+    'Pet is suitable for household with young children'
   );
 };
 
 // 11. Desired Sociability
 export const desiredSociabilityRule: ScoringRule = (ctx) => {
-  const d = distanceMixed(
+  const distance = distanceMixed(
     ctx.adopter.desiredPetSociability,
     ctx.pet.socialNeed
   );
 
-  if (d >= 2) {
+  if (distance >= 2) {
     return createScore('human', SCORE.NEGATIVE, 'desiredSociability', 'High mismatch in sociability');
   }
 
-  if (d === 1) {
+  if (distance === 1) {
     return createScore('human', SCORE.LOW, 'desiredSociability', 'Moderate mismatch in sociability');
   }
 
@@ -561,16 +568,16 @@ export const desiredSociabilityRule: ScoringRule = (ctx) => {
 
 // 12. Affection expectation
 export const affectionExpectationRule: ScoringRule = (ctx) => {
-  const d = distanceMixed(
+  const distance = distanceMixed(
     ctx.adopter.desiredPetAffectionLevel,
     ctx.pet.affectionLevel
   );
 
-  if (d >= 2) {
+  if (distance >= 2) {
     return createScore('human', SCORE.NEGATIVE, 'affectionExpectation', 'High mismatch in affection');
   }
 
-  if (d === 1) {
+  if (distance === 1) {
     return createScore('human', SCORE.LOW, 'affectionExpectation', 'Moderate mismatch in affection');
   }
 
@@ -583,10 +590,10 @@ export const behaviorToleranceRule: ScoringRule = (ctx) => {
   const ruleName = 'behaviorTolerance';
 
   const adopterTolerance = levelMap[ctx.adopter.problemBehaviorTolerance];
-  const petIssues = levelMap[ctx.pet.behaviourIssues];
+  const behaviourIssues = levelMap[ctx.pet.behaviourIssues];
 
   // If adopter can tolerate equal or more
-  if (petIssues <= adopterTolerance) {
+  if (behaviourIssues <= adopterTolerance) {
     return createScore(
       scoreType,
       SCORE.MEDIUM,
@@ -595,7 +602,7 @@ export const behaviorToleranceRule: ScoringRule = (ctx) => {
     );
   }
 
-  const diff = petIssues - adopterTolerance;
+  const diff = behaviourIssues - adopterTolerance;
 
   // Pet having more issues than adopter tolerates
   if (diff >= 2) {
