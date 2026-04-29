@@ -85,10 +85,10 @@ export const noiseToleranceRule: ScoringRule = (ctx) => {
     );
   }
 
-  const diff = petNoise - adopterTolerance;
+  const difference = petNoise - adopterTolerance;
 
   // Pet is louder than tolerance
-  if (diff >= 2) {
+  if (difference >= 2) {
     return createScore(
       scoreType,
       SCORE.NEGATIVE,
@@ -602,10 +602,10 @@ export const behaviorToleranceRule: ScoringRule = (ctx) => {
     );
   }
 
-  const diff = behaviourIssues - adopterTolerance;
+  const difference = behaviourIssues - adopterTolerance;
 
   // Pet having more issues than adopter tolerates
-  if (diff >= 2) {
+  if (difference >= 2) {
     return createScore(
       scoreType,
       SCORE.NEGATIVE,
