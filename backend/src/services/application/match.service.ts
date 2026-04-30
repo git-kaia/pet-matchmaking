@@ -21,8 +21,8 @@ export const matchAdopterWithPets = async (
   pets: any[],
   petType: string
 ) => {
-  const matchingService = getMatchingService(petType);
+  const matchingService = getMatchingService(animalType);
 
-  return matchingService.execute(adopter, pets);
+  return matchingService.execute(adopter, pet);
 };
 
