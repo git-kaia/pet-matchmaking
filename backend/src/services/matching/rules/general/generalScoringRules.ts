@@ -627,17 +627,17 @@ export const behaviorToleranceRule: ScoringRule = (ctx) => {
 ///////////////////////
 
 export const generalScoringRules = [
-  timeAvailabilityRule,
-  noiseToleranceRule,
-  aloneTimeRiskRule,
-  lifeStabilityRule,
-  commitmentRule,
-  experienceMatchRule,
-  learningWillingnessRule,
-  cleaningToleranceRule,
-  financialPriorityRule,
-  childrenCompatibilityRule,
-  desiredSociabilityRule,
-  affectionExpectationRule,
-  behaviorToleranceRule,
+  timeAvailabilityRule, // 1
+  noiseToleranceRule, // 2
+  aloneTimeRiskRule, // 3
+  lifeStabilityRule, // 4
+  commitmentRule, // 5
+  experienceMatchRule, // 6
+  learningWillingnessRule, // 7
+  cleaningToleranceRule, // 8
+  financialPriorityRule, // 9
+  childrenCompatibilityRule, // 10
+  desiredSociabilityRule, // 11
+  affectionExpectationRule, // 12
+  behaviorToleranceRule, // 13
 ];

@@ -64,6 +64,6 @@ export const runBirdPipeline = (
     welfareScore: scoringResult.welfareScore,
     humanScore: scoringResult.humanScore,
     rejected: false,
-    rules: [],
+    rules: scoringResult.rules,
   };
 };

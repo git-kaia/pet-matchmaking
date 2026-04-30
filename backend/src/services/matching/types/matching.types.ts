@@ -30,7 +30,8 @@ export type MatchResult = {
   rejected: boolean;
   rejectionReason?: string;
 
-  rules?: RuleExecutionResult[];
+  rules: any[];
+  // rules?: RuleExecutionResult[];
 };
 
 

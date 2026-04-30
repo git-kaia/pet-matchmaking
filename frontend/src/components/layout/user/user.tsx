@@ -66,10 +66,10 @@ export default function User() {
           )}
           onClick={handleToggle}
         >
-          <Box>Julian Carter</Box>
+          <Box>Ola Nordmann</Box>
           <Avatar
             alt="avatar"
-            src="/images/avatars/avatar-3.jpg"
+            src="/images/avatars/avatar-2.jpg"
             className={cn(
               "large transition-all group-hover:ms-0.5 group-hover:h-8 group-hover:w-8",
               open && "ms-0.5 h-8! w-8!",
@@ -115,9 +115,9 @@ export default function User() {
                   <CardContent>
                     <Box className="max-w-64 sm:w-72 sm:max-w-none">
                       <Box className="mb-4 flex flex-col items-center">
-                        <Avatar alt="avatar" src="/images/avatars/avatar-3.jpg" className="large mb-2" />
+                        <Avatar alt="avatar" src="/images/avatars/avatar-2.jpg" clasName="large mb-2" />
                         <Typography variant="subtitle2" component="p" className="mb-1">
-                          Julian Carter
+                          Ola Nordmann
                         </Typography>
                         <Typography variant="body2" component="p" className="text-text-secondary -mt-2">
                           julian.carter@acorn.dev
