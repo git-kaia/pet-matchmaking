@@ -109,49 +109,6 @@ export const birdFreeFlightRule: ScoringRule = (ctx) => {
   );
 };
 
-// 02. Free Flight Rule
-
-export const birdFreeFlightRule: ScoringRule = (ctx) => {
-  const scoreType = 'welfare';
-  const ruleName = 'birdFreeFlight';
-
-  const { freeFlightExpectation } = ctx.adopter;
-
-  if (freeFlightExpectation === 'very_low') {
-    return createScore(
-      scoreType,
-      SCORE.CRITICAL,
-      ruleName,
-      'Insufficient out-of-cage time for bird'
-    );
-  }
-
-  if (freeFlightExpectation === 'low') {
-    return createScore(
-      scoreType,
-      SCORE.NEGATIVE,
-      ruleName,
-      'Limited out-of-cage time'
-    );
-  }
-
-  if (freeFlightExpectation === 'medium') {
-    return createScore(
-      scoreType,
-      SCORE.LOW,
-      ruleName,
-      'Moderate out-of-cage time'
-    );
-  }
-
-  return createScore(
-    scoreType,
-    SCORE.MEDIUM,
-    ruleName,
-    'Adequate out-of-cage time'
-  );
-};
-
 // 03. Bird Diet Complexity
 export const birdDietRule: ScoringRule = (ctx) => {
   const scoreType = 'welfare';
