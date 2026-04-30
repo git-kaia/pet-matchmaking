@@ -8,75 +8,290 @@
  * - Evaluate compatibility between adopter and bird
  * - Contribute to welfare and human satisfaction scores
  *
- * These rules apply across all pet types.
  * No evaluation logic is contained here, only rule definitions.
  */
 
+// 01. Bird Mental Stimulation
 import { ScoringRule } from '../../../types/scoring.types';
 import { Pet } from '../../../../../domain/entities/pet';
 
-// How to implement bird specific type:
-// if (ctx.pet.animalType !== 'bird') return;
-// const bird = ctx.pet;
+export const birdMentalStimulationRule: ScoringRule = (ctx) => {
+  const scoreType = 'welfare';
+  const ruleName = 'birdMentalStimulation';
 
-// 01. Social Needs Rule (Bird-specific)
-export const birdSocialNeedsRule: ScoringRule = (ctx) => {
   const bird = ctx.pet as Bird;
 
-  const socialNeed = bird.social_need;
-  const humanInteraction = ctx.adopter.desired_human_interaction;
-  const multipleBirds = ctx.adopter.willingness_multiple_birds;
+  const enrichment = ctx.adopter.enrichmentCommitment;
+  const training = ctx.adopter.trainingInterest;
+  const need = bird.mentalStimulationNeed;
 
-  // Case 1: VERY HIGH NEED + LOW EVERYTHING → BIG PENALTY
-  if (
-    socialNeed === 'very_high' &&
-    humanInteraction === 'low' &&
-    multipleBirds === 'low'
-  ) {
-    return {
-      type: 'welfare',
-      value: -15,
-      rule: {
-        rule_name: 'birdSocialNeeds',
-        rule_type: 'welfare',
-        value: -15,
-        description:
-          'Very social bird but adopter provides low interaction and no flock support',
-      },
-    };
+  // Only critical for high-need birds
+  if (!isHigh(need)) {
+    return createScore(
+      scoreType,
+      SCORE.MEDIUM,
+      ruleName,
+      'Stimulation needs manageable'
+    );
   }
 
-  // Case 2: HIGH NEED + LOW INTERACTION → MEDIUM PENALTY
-  if (
-    socialNeed === 'high' &&
-    humanInteraction === 'low'
-  ) {
-    return {
-      type: 'welfare',
-      value: -10,
-      rule: {
-        rule_name: 'birdSocialNeeds',
-        rule_type: 'welfare',
-        value: -10,
-        description:
-          'Social bird with insufficient human interaction',
-      },
-    };
+  // Worst case: no stimulation at all
+  if (isLow(enrichment) && isLow(training)) {
+    return createScore(
+      scoreType,
+      SCORE.CRITICAL,
+      ruleName,
+      'High stimulation bird with no enrichment or training'
+    );
   }
 
-  // Default → no penalty
-  return {
-    type: 'welfare',
-    value: 0,
-    rule: {
-      rule_name: 'birdSocialNeeds',
-      rule_type: 'welfare',
-      value: 0,
-      description: 'Social needs are adequately supported',
-    },
-  };
+  // Partial support
+  if (
+    (enrichment === 'medium' && isLow(training)) ||
+    (training === 'medium' && isLow(enrichment))
+  ) {
+    return createScore(
+      scoreType,
+      SCORE.NEGATIVE,
+      ruleName,
+      'Limited stimulation for high-need bird'
+    );
+  }
+
+  // Good support
+  return createScore(
+    scoreType,
+    SCORE.MEDIUM,
+    ruleName,
+    'Stimulation needs supported'
+  );
 };
 
-export const birdScoringRules = [
-  birdSocialNeedsRule,
-];
+// 02. Bird Free Flight
+export const birdFreeFlightRule: ScoringRule = (ctx) => {
+  const scoreType = 'welfare';
+  const ruleName = 'birdFreeFlight';
+
+  const { freeFlightExpectation } = ctx.adopter;
+
+  if (freeFlightExpectation === 'very_low') {
+    return createScore(
+      scoreType,
+      SCORE.CRITICAL,
+      ruleName,
+      'Insufficient out-of-cage time for bird'
+    );
+  }
+
+  if (freeFlightExpectation === 'low') {
+    return createScore(
+      scoreType,
+      SCORE.NEGATIVE,
+      ruleName,
+      'Limited out-of-cage time'
+    );
+  }
+
+  if (freeFlightExpectation === 'medium') {
+    return createScore(
+      scoreType,
+      SCORE.LOW,
+      ruleName,
+      'Moderate out-of-cage time'
+    );
+  }
+
+  return createScore(
+    scoreType,
+    SCORE.MEDIUM,
+    ruleName,
+    'Adequate out-of-cage time'
+  );
+};
+
+// 02. Free Flight Rule
+
+export const birdFreeFlightRule: ScoringRule = (ctx) => {
+  const scoreType = 'welfare';
+  const ruleName = 'birdFreeFlight';
+
+  const { freeFlightExpectation } = ctx.adopter;
+
+  if (freeFlightExpectation === 'very_low') {
+    return createScore(
+      scoreType,
+      SCORE.CRITICAL,
+      ruleName,
+      'Insufficient out-of-cage time for bird'
+    );
+  }
+
+  if (freeFlightExpectation === 'low') {
+    return createScore(
+      scoreType,
+      SCORE.NEGATIVE,
+      ruleName,
+      'Limited out-of-cage time'
+    );
+  }
+
+  if (freeFlightExpectation === 'medium') {
+    return createScore(
+      scoreType,
+      SCORE.LOW,
+      ruleName,
+      'Moderate out-of-cage time'
+    );
+  }
+
+  return createScore(
+    scoreType,
+    SCORE.MEDIUM,
+    ruleName,
+    'Adequate out-of-cage time'
+  );
+};
+
+// 03. Bird Diet Complexity
+export const birdDietRule: ScoringRule = (ctx) => {
+  const scoreType = 'welfare';
+  const ruleName = 'birdDiet';
+
+  const bird = ctx.pet as Bird;
+
+  const tolerance = ctx.adopter.dietComplexityTolerance;
+  const complexity = bird.dietComplexity;
+
+  if (isHigh(complexity) && isLow(tolerance)) {
+    return createScore(
+      scoreType,
+      SCORE.NEGATIVE,
+      ruleName,
+      'Low tolerance for complex diet requirements'
+    );
+  }
+
+  if (isHigh(complexity) && tolerance === 'medium') {
+    return createScore(
+      scoreType,
+      SCORE.LOW,
+      ruleName,
+      'Moderate ability to handle complex diet'
+    );
+  }
+
+  return createScore(
+    scoreType,
+    SCORE.MEDIUM,
+    ruleName,
+    'Diet requirements manageable'
+  );
+};
+
+// 04. Bird Sleep 
+export const birdSleepRule: ScoringRule = (ctx) => {
+  const scoreType = 'welfare';
+  const ruleName = 'birdSleepEnvironment';
+
+  const bird = ctx.pet as Bird;
+
+  const commitment = ctx.adopter.sleepEnvironmentCommitment;
+  const need = bird.sleepNeed;
+
+  if (isHigh(need) && isLow(commitment)) {
+    return createScore(
+      scoreType,
+      SCORE.NEGATIVE,
+      ruleName,
+      'Insufficient sleep environment for high-need bird'
+    );
+  }
+
+  if (isHigh(need) && commitment === 'medium') {
+    return createScore(
+      scoreType,
+      SCORE.LOW,
+      ruleName,
+      'Moderate sleep environment for demanding bird'
+    );
+  }
+
+  return createScore(
+    scoreType,
+    SCORE.MEDIUM,
+    ruleName,
+    'Sleep environment adequate'
+  );
+};
+
+// 05. Bird bonding style
+export const birdBondingStyleRule: ScoringRule = (ctx) => {
+  const scoreType = 'human';
+  const ruleName = 'birdBondingStyle';
+
+  const bird = ctx.pet as Bird;
+
+  const desired = ctx.adopter.desiredBondingStyle;
+  const actual = bird.bondingStyle;
+
+  if (desired === actual) {
+    return createScore(
+      scoreType,
+      SCORE.HIGH,
+      ruleName,
+      'Bonding style matches preference'
+    );
+  }
+
+  // Strong mismatch: independent adopter + one-person bird
+  if (desired === 'independent' && actual === 'one_person') {
+    return createScore(
+      scoreType,
+      SCORE.NEGATIVE,
+      ruleName,
+      'Independent preference conflicts with strongly bonding bird'
+    );
+  }
+
+  return createScore(
+    scoreType,
+    SCORE.LOW,
+    ruleName,
+    'Partial mismatch in bonding style'
+  );
+};
+
+// 06. Bird Flock Requirement
+export const birdFlockRequirementRule: ScoringRule = (ctx) => {
+  const scoreType = 'welfare';
+  const ruleName = 'birdFlockRequirement';
+
+  const bird = ctx.pet as Bird;
+
+  const willingness = ctx.adopter.willingnessMultipleBirds;
+
+  if (bird.requiresBirdPartner && isLow(willingness)) {
+    return createScore(
+      scoreType,
+      SCORE.CRITICAL,
+      ruleName,
+      'Species requires bird companionship but adopter unwilling'
+    );
+  }
+
+  if (bird.requiresBirdPartner && willingness === 'medium') {
+    return createScore(
+      scoreType,
+      SCORE.NEGATIVE,
+      ruleName,
+      'Limited willingness to provide required bird companionship'
+    );
+  }
+
+  return createScore(
+    scoreType,
+    SCORE.MEDIUM,
+    ruleName,
+    'Flock needs supported'
+  );
+};
