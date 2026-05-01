@@ -43,7 +43,10 @@ export interface Bird extends Pet{
   trainingLevel: ExperienceLevel;
   mentalStimulationNeed: Level;
 
-  // activity
+  // Environment
   sleepNeed: Level;
   flightNeed: Level;
+
+  // Diet
+  dietComplexity: Level3;
 }

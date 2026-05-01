@@ -10,11 +10,24 @@
  *
  * No evaluation logic is contained here, only rule definitions.
  */
+///////////////////////
+// IMPORTS           //
+///////////////////////
+
+import { Bird } from '../../../../../domain/entities/bird';
+
+// Types
+import { ScoringRule } from '../../../types/scoring.types';
+
+// Utils
+import { levelMap, isHigh, isLow, distanceMixed } from '../../../utils/level.utils';
+import { SCORE, createScore } from '../../../utils/scoring.utils';
+
+///////////////////////
+// RULES             //
+///////////////////////
 
 // 01. Bird Mental Stimulation
-import { ScoringRule } from '../../../types/scoring.types';
-import { Pet } from '../../../../../domain/entities/pet';
-
 export const birdMentalStimulationRule: ScoringRule = (ctx) => {
   const scoreType = 'welfare';
   const ruleName = 'birdMentalStimulation';
@@ -25,45 +38,46 @@ export const birdMentalStimulationRule: ScoringRule = (ctx) => {
   const training = ctx.adopter.trainingInterest;
   const need = bird.mentalStimulationNeed;
 
-  // Only critical for high-need birds
-  if (!isHigh(need)) {
-    return createScore(
-      scoreType,
-      SCORE.MEDIUM,
-      ruleName,
-      'Stimulation needs manageable'
-    );
-  }
+  // Combine effort (take average dimension)
+  const effortScore = Math.round(
+  (levelMap[enrichment] + levelMap[training]) / 2
+);
 
-  // Worst case: no stimulation at all
-  if (isLow(enrichment) && isLow(training)) {
+  const needScore = levelMap[need];
+  const gap = effortScore - needScore;
+
+  if (gap <= -2) {
     return createScore(
       scoreType,
       SCORE.CRITICAL,
       ruleName,
-      'High stimulation bird with no enrichment or training'
+      'Stimulation far below requirement'
     );
   }
 
-  // Partial support
-  if (
-    (enrichment === 'medium' && isLow(training)) ||
-    (training === 'medium' && isLow(enrichment))
-  ) {
+  if (gap === -1) {
     return createScore(
       scoreType,
       SCORE.NEGATIVE,
       ruleName,
-      'Limited stimulation for high-need bird'
+      'Stimulation slightly below requirement'
     );
   }
 
-  // Good support
+  if (gap === 0) {
+    return createScore(
+      scoreType,
+      SCORE.MEDIUM,
+      ruleName,
+      'Stimulation matches requirement'
+    );
+  }
+
   return createScore(
     scoreType,
-    SCORE.MEDIUM,
+    SCORE.HIGH,
     ruleName,
-    'Stimulation needs supported'
+    'High stimulation relative to needs'
   );
 };
 

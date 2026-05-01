@@ -1,9 +1,9 @@
 // timeAvailabilityRule.test.ts
 
-import { timeAvailabilityRule } from '../../../../../services/matching/rules/general/generalScoringRules';
-import { createTestAdopter } from '../../../../helpers/createTestAdopter';
-import { createTestBird } from '../../../../helpers/createTestBird';
-import { SCORE } from '../../../../../services/matching/utils/scoring.utils';
+import { timeAvailabilityRule } from '../../../../../../services/matching/rules/general/generalScoringRules';
+import { createTestAdopter } from '../../../../../helpers/createTestAdopter';
+import { createTestBird } from '../../../../../helpers/createTestBird';
+import { SCORE } from '../../../../../../services/matching/utils/scoring.utils';
 
 describe('timeAvailabilityRule', () => {
   it('returns HIGH when there is plenty of extra time', () => {
