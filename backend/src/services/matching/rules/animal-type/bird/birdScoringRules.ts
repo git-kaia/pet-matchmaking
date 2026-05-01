@@ -40,8 +40,8 @@ export const birdMentalStimulationRule: ScoringRule = (ctx) => {
 
   // Combine effort (take average dimension)
   const effortScore = Math.round(
-  (levelMap[enrichment] + levelMap[training]) / 2
-);
+    (levelMap[enrichment] + levelMap[training]) / 2
+  );
 
   const needScore = levelMap[need];
   const gap = effortScore - needScore;
@@ -86,40 +86,52 @@ export const birdFreeFlightRule: ScoringRule = (ctx) => {
   const scoreType = 'welfare';
   const ruleName = 'birdFreeFlight';
 
-  const { freeFlightExpectation } = ctx.adopter;
+  const bird = ctx.pet as Bird;
 
-  if (freeFlightExpectation === 'very_low') {
+  const expectation = ctx.adopter.freeFlightExpectation;
+  const need = bird.flightNeed;
+
+  const expectationScore = levelMap[expectation];
+  const needScore = levelMap[need];
+
+  const gap = expectationScore - needScore;
+
+  // Strong mismatch (severe under-provision of flight time)
+  if (gap <= -2) {
     return createScore(
       scoreType,
       SCORE.CRITICAL,
       ruleName,
-      'Insufficient out-of-cage time for bird'
+      'Flight time far below requirement'
     );
   }
 
-  if (freeFlightExpectation === 'low') {
+  // Slight mismatch
+  if (gap === -1) {
     return createScore(
       scoreType,
       SCORE.NEGATIVE,
       ruleName,
-      'Limited out-of-cage time'
+      'Flight time slightly below requirement'
     );
   }
 
-  if (freeFlightExpectation === 'medium') {
+  // Match
+  if (gap === 0) {
     return createScore(
       scoreType,
-      SCORE.LOW,
+      SCORE.MEDIUM,
       ruleName,
-      'Moderate out-of-cage time'
+      'Flight time meets requirement'
     );
   }
 
+  // Exceeds requirement
   return createScore(
     scoreType,
-    SCORE.MEDIUM,
+    SCORE.HIGH,
     ruleName,
-    'Adequate out-of-cage time'
+    'Flight time exceeds requirement'
   );
 };
 
@@ -133,31 +145,25 @@ export const birdDietRule: ScoringRule = (ctx) => {
   const tolerance = ctx.adopter.dietComplexityTolerance;
   const complexity = bird.dietComplexity;
 
-  if (isHigh(complexity) && isLow(tolerance)) {
-    return createScore(
-      scoreType,
-      SCORE.NEGATIVE,
-      ruleName,
-      'Low tolerance for complex diet requirements'
-    );
+  const toleranceScore = levelMap[tolerance];
+  const complexityScore = levelMap[complexity];
+
+  const gap = toleranceScore - complexityScore;
+
+  if (gap <= -2) {
+    return createScore(scoreType, SCORE.CRITICAL, ruleName, 'Diet complexity far exceeds tolerance');
   }
 
-  if (isHigh(complexity) && tolerance === 'medium') {
-    return createScore(
-      scoreType,
-      SCORE.LOW,
-      ruleName,
-      'Moderate ability to handle complex diet'
-    );
+  if (gap === -1) {
+    return createScore(scoreType, SCORE.NEGATIVE, ruleName, 'Diet complexity slightly exceeds tolerance');
   }
 
-  return createScore(
-    scoreType,
-    SCORE.MEDIUM,
-    ruleName,
-    'Diet requirements manageable'
-  );
-};
+  if (gap === 0) {
+    return createScore(scoreType, SCORE.MEDIUM, ruleName, 'Diet complexity matches tolerance');
+  }
+
+  return createScore(scoreType, SCORE.HIGH, ruleName, 'High ability to manage diet complexity');
+}
 
 // 04. Bird Sleep 
 export const birdSleepRule: ScoringRule = (ctx) => {
@@ -169,29 +175,43 @@ export const birdSleepRule: ScoringRule = (ctx) => {
   const commitment = ctx.adopter.sleepEnvironmentCommitment;
   const need = bird.sleepNeed;
 
-  if (isHigh(need) && isLow(commitment)) {
+  const commitmentScore = levelMap[commitment];
+  const needScore = levelMap[need];
+
+  const gap = commitmentScore - needScore;
+
+  if (gap <= -2) {
+    return createScore(
+      scoreType,
+      SCORE.CRITICAL,
+      ruleName,
+      'Sleep environment far below requirement'
+    );
+  }
+
+  if (gap === -1) {
     return createScore(
       scoreType,
       SCORE.NEGATIVE,
       ruleName,
-      'Insufficient sleep environment for high-need bird'
+      'Sleep environment slightly below requirement'
     );
   }
 
-  if (isHigh(need) && commitment === 'medium') {
+  if (gap === 0) {
     return createScore(
       scoreType,
-      SCORE.LOW,
+      SCORE.MEDIUM,
       ruleName,
-      'Moderate sleep environment for demanding bird'
+      'Sleep environment meets requirement'
     );
   }
 
   return createScore(
     scoreType,
-    SCORE.MEDIUM,
+    SCORE.HIGH,
     ruleName,
-    'Sleep environment adequate'
+    'Sleep environment exceeds requirement'
   );
 };
 
@@ -205,6 +225,7 @@ export const birdBondingStyleRule: ScoringRule = (ctx) => {
   const desired = ctx.adopter.desiredBondingStyle;
   const actual = bird.bondingStyle;
 
+  // Perfect match
   if (desired === actual) {
     return createScore(
       scoreType,
@@ -214,7 +235,7 @@ export const birdBondingStyleRule: ScoringRule = (ctx) => {
     );
   }
 
-  // Strong mismatch: independent adopter + one-person bird
+  // Strong mismatch (risk)
   if (desired === 'independent' && actual === 'one_person') {
     return createScore(
       scoreType,
@@ -224,33 +245,56 @@ export const birdBondingStyleRule: ScoringRule = (ctx) => {
     );
   }
 
+  // Moderate mismatch
+  if (desired === 'multiple_people' && actual === 'one_person') {
+    return createScore(
+      scoreType,
+      SCORE.LOW,
+      ruleName,
+      'Bird may bond strongly to one person in multi-person household'
+    );
+  }
+
+  // Mild mismatch
+  if (desired === 'one_person' && actual === 'independent') {
+    return createScore(
+      scoreType,
+      SCORE.LOW,
+      ruleName,
+      'Bird may be less affectionate than desired'
+    );
+  }
+
+  // Flexible / acceptable cases
   return createScore(
     scoreType,
-    SCORE.LOW,
+    SCORE.MEDIUM,
     ruleName,
-    'Partial mismatch in bonding style'
+    'Bonding style acceptable'
   );
 };
 
 // 06. Bird Flock Requirement
+// Deals with cases not rejected by hard rule
 export const birdFlockRequirementRule: ScoringRule = (ctx) => {
   const scoreType = 'welfare';
   const ruleName = 'birdFlockRequirement';
 
   const bird = ctx.pet as Bird;
-
   const willingness = ctx.adopter.willingnessMultipleBirds;
 
-  if (bird.requiresBirdPartner && isLow(willingness)) {
+  // No requirement → neutral
+  if (!bird.requiresBirdPartner) {
     return createScore(
       scoreType,
-      SCORE.CRITICAL,
+      SCORE.MEDIUM,
       ruleName,
-      'Species requires bird companionship but adopter unwilling'
+      'No flock requirement'
     );
   }
 
-  if (bird.requiresBirdPartner && willingness === 'medium') {
+  // Medium willingness → some risk
+  if (willingness === 'medium') {
     return createScore(
       scoreType,
       SCORE.NEGATIVE,
@@ -259,6 +303,7 @@ export const birdFlockRequirementRule: ScoringRule = (ctx) => {
     );
   }
 
+  // High willingness → good
   return createScore(
     scoreType,
     SCORE.MEDIUM,
