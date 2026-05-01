@@ -51,5 +51,7 @@ export const createTestBird = (
   sleepNeed: 'medium',
   flightNeed: 'medium',
 
+  dietComplexity: 'medium',
+
   ...overrides,
 });

@@ -1,7 +1,7 @@
-import { cleaningToleranceRule } from '../../../../../services/matching/rules/general/generalScoringRules';
-import { createTestAdopter } from '../../../../helpers/createTestAdopter';
-import { createTestBird } from '../../../../helpers/createTestBird';
-import { SCORE } from '../../../../../services/matching/utils/scoring.utils';
+import { cleaningToleranceRule } from '../../../../../../services/matching/rules/general/generalScoringRules';
+import { createTestAdopter } from '../../../../../helpers/createTestAdopter';
+import { createTestBird } from '../../../../../helpers/createTestBird';
+import { SCORE } from '../../../../../../services/matching/utils/scoring.utils';
 
 describe('cleaningToleranceRule', () => {
 

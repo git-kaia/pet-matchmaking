@@ -23,6 +23,7 @@ import { ScoringRule } from '../../types/scoring.types';
 import { levelMap, isHigh, isLow, distanceMixed } from '../../utils/level.utils';
 import { SCORE, createScore } from '../../utils/scoring.utils';
 import { getExperienceYears, hasExperienceForPet, getExperienceLevel } from '../../utils/experience.utils';
+
 ///////////////////////
 // RULES             //
 ///////////////////////

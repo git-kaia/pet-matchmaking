@@ -1,8 +1,8 @@
 // commitmentRule.test.ts
-import { commitmentRule } from '../../../../../services/matching/rules/general/generalScoringRules';
-import { createTestAdopter } from '../../../../helpers/createTestAdopter';
-import { createTestBird } from '../../../../helpers/createTestBird';
-import { SCORE } from '../../../../../services/matching/utils/scoring.utils';
+import { commitmentRule } from '../../../../../../services/matching/rules/general/generalScoringRules';
+import { createTestAdopter } from '../../../../../helpers/createTestAdopter';
+import { createTestBird } from '../../../../../helpers/createTestBird';
+import { SCORE } from '../../../../../../services/matching/utils/scoring.utils';
 
 describe('commitmentRule', () => {
 
