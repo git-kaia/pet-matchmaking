@@ -7,7 +7,10 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "test": "jest",
-    "test:integration": "jest src/test/integration"
+    "test:integration": "jest src/test/integration",
+    "test:scoringExplainability": "jest src/test/scenario/scoringExplainability.test.ts",
+    "test:matchFeedbackNorwegian": "jest src/test/scenario/matchFeedback.norwegian.test.ts"
+
   },
   "keywords": [],
   "author": "",

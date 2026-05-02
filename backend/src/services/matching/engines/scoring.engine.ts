@@ -21,7 +21,7 @@ export const calculateScore = (
   let welfareScore = 0;
   let humanScore = 0;
 
-  const ruleResults = [];
+  const ruleResults: any[] = [];
 
   for (const rule of rules) {
     const result = rule(ctx);
@@ -34,7 +34,26 @@ export const calculateScore = (
       humanScore += result.value;
     }
 
-    ruleResults.push(result.rule);
+    ruleResults.push({
+        ruleName: typeof result.rule === 'string'
+          ? result.rule
+          : result.rule?.ruleName ?? 'unknown_rule',
+
+        scoreType: result.scoreType,
+        value: result.value,
+      });
+
+      /* Uncomment this for when bird specific rules are added ! And remove the one above
+      if (!result || !result.rule || !result.rule.ruleName) {
+        throw new Error('Invalid scoring rule result detected');
+        }
+
+        ruleResults.push({
+          ruleName: result.rule.ruleName,
+          scoreType: result.scoreType,
+          value: result.value,
+      });*/
+
   }
 
   return {
