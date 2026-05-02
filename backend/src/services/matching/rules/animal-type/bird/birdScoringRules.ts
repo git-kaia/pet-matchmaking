@@ -311,3 +311,12 @@ export const birdFlockRequirementRule: ScoringRule = (ctx) => {
     'Flock needs supported'
   );
 };
+
+export const birdScoringRules = [
+  birdMentalStimulationRule, // 1
+  birdFreeFlightRule, // 2
+  birdDietRule, // 3
+  birdSleepRule, // 4
+  birdBondingStyleRule, // 5
+  birdFlockRequirementRule // 6
+];
