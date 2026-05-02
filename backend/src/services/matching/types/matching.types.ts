@@ -24,6 +24,8 @@ export type MatchResult = {
   petId: string;
 
   score: number;
+  percentage: number;
+
   welfareScore: number;
   humanScore: number;
 

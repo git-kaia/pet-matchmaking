@@ -19,6 +19,7 @@ import { Bird } from '../../../domain/entities/bird';
 
 import { evaluateHardRules } from '../engines/hardRule.engine';
 import { calculateScore } from '../engines/scoring.engine';
+import { normalizeScore } from '../utils/scoreNormalization.utils';
 
 import { generalHardRules } from '../rules/general/generalHardRules';
 import { generalScoringRules } from '../rules/general/generalScoringRules';
@@ -47,6 +48,7 @@ export const runBirdPipeline = (
     return {
       petId: pet.id,
       score: 0,
+      percentage: 0,
       welfareScore: 0,
       humanScore: 0,
       rejected: true,
@@ -58,9 +60,15 @@ export const runBirdPipeline = (
   //  Apply scoring rules using engine
   const scoringResult = calculateScore(ctx, scoringRules);
 
+  const percentage = normalizeScore(
+  scoringResult.score,
+  scoringResult.rules.length
+);
+
   return {
     petId: pet.id,
     score: scoringResult.score,
+    percentage,
     welfareScore: scoringResult.welfareScore,
     humanScore: scoringResult.humanScore,
     rejected: false,

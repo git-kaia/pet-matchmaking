@@ -54,6 +54,7 @@ export const getMatchingService = (pet: Pet) => {
       return {
         petId: pet.id,
         score: 0,
+        percentage: 0,
         welfareScore: 0,
         humanScore: 0,
         rejected: true,
