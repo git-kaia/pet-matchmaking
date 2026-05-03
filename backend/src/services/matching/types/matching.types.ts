@@ -33,6 +33,8 @@ export type MatchResult = {
   adopterId?: string;
 
   score: number;
+  percentage: number;
+
   welfareScore: number;
   humanScore: number;
 

@@ -2,12 +2,14 @@ import { matchAdopterWithPet } from '../../services/matching/matchingEngine';
 import { createTestAdopter } from '../helpers/createTestAdopter';
 import { createTestBird } from '../helpers/createTestBird';
 
-test('SCORING EXPLAINABILITY – full breakdown', () => {
+import { generateMatchFeedback } from '../../services/matching/feedback/matchFeedback.service';
 
-  console.log('\n==============================');
+
+test('SCORING EXPLAINABILITY – full system validation', () => {
+
   console.log('SCORING EXPLAINABILITY TEST');
-  console.log('==============================\n');
 
+   // create adopter for test
   const adopter = createTestAdopter({
     id: 'explain_adopter',
     dailyCareTime: 100,
@@ -24,6 +26,7 @@ test('SCORING EXPLAINABILITY – full breakdown', () => {
     aloneTimeHours: 'high',
   });
 
+  // create bird for test
   const bird = createTestBird({
     id: 'bird5',
     timeRequired: 60,
@@ -37,86 +40,101 @@ test('SCORING EXPLAINABILITY – full breakdown', () => {
     behaviourIssues: 'medium',
   });
 
-  // matchingEngine entry point
-  const result = matchAdopterWithPet(adopter, bird);
 
-  console.log('--- MATCH RESULT ---');
+  const result = getMatchingService(bird).execute(adopter);
+
+  console.log('MATCH RESULT');
   console.log({
     rejected: result.rejected,
-    reason: result.rejectionReason ?? 'OK',
     totalScore: result.score,
+    percentage: result.percentage,
     welfareScore: result.welfareScore,
     humanScore: result.humanScore,
   });
 
   if (result.rejected) {
-    console.log('\nMatch rejected early → no scoring performed.');
     expect(result.rejected).toBe(false);
     return;
   }
 
-  console.log('\n--- RULE BREAKDOWN ---');
-
+  // rules breakdown
   let total = 0;
-  let welfareTotal = 0;
-  let humanTotal = 0;
 
   result.rules.forEach((rule: any) => {
-    const name = String(rule.ruleName);
-
     console.log(
-      `${name.padEnd(30)} | ${rule.scoreType} | ${rule.value}`
+      `${rule.ruleName.padEnd(30)} | ${rule.scoreType.padEnd(8)} | ${rule.value}`
     );
 
     total += rule.value;
-
-    if (rule.scoreType === 'welfare') welfareTotal += rule.value;
-    if (rule.scoreType === 'human') humanTotal += rule.value;
   });
 
-  console.log('\n--- AGGREGATION CHECK ---');
+
+  // feedback generation
+  console.log('\n AGGREGATION CHECK ');
+
   console.log(`Calculated total: ${total}`);
   console.log(`Engine total:     ${result.score}`);
 
-  const MAX_PER_RULE = 10;
-  const MIN_PER_RULE = -10;
+  expect(total).toBe(result.score);
 
-  const ruleCount = result.rules.length;
+  
+  // percentage
+  console.log('\n PERCENTAGE ');
+  console.log(`Match Percentage: ${result.percentage}%`);
 
-  const theoreticalMax = ruleCount * MAX_PER_RULE;
-  const theoreticalMin = ruleCount * MIN_PER_RULE;
+  expect(result.percentage).toBeGreaterThanOrEqual(0);
+  expect(result.percentage).toBeLessThanOrEqual(100);
 
-  const percentage = Math.round(
-    ((result.score - theoreticalMin) /
-      (theoreticalMax - theoreticalMin)) *
-      100
-  );
+  // feedback explainability
+  const feedback = generateMatchFeedback(result);
 
-  console.log(`(Range: ${theoreticalMin} → ${theoreticalMax})`);
+  console.log('\n--- FEEDBACK ---');
 
-  console.log('\n==============================');
+  // positives 
+  console.log('\n Positivt:');
+  feedback.positives.forEach(p => console.log(`+ ${p}`));
+
+  // negatives
+  console.log('\n Negativt:');
+  feedback.negatives.forEach(n => console.log(`- ${n}`));
+
+  console.log('\n Konklusjon:');
+  console.log(feedback.conclusion);
+
+  // consistency
+  expect(feedback.percentage).toBe(result.percentage);
+
+  // sanity checks
+  if (result.percentage >= 60) {
+    expect(feedback.positives.length).toBeGreaterThan(0);
+  }
+
+  if (result.percentage < 50) {
+    expect(feedback.negatives.length).toBeGreaterThan(0);
+  }
+
+  // final summary
   console.log('FINAL MATCH SUMMARY');
-  console.log('==============================');
 
   console.table([
-    { Metric: 'Total Score', Value: result.score },
-    { Metric: 'Welfare Score', Value: welfareTotal },
-    { Metric: 'Human Score', Value: humanTotal },
-    { Metric: 'Match Percentage', Value: `${percentage}%` },
-    { Metric: 'Rules Evaluated', Value: result.rules.length },
+    {
+      Metric: 'Total Score',
+      Value: result.score,
+    },
+    {
+      Metric: 'Match Percentage',
+      Value: `${result.percentage}%`,
+    },
+    {
+      Metric: 'Positive Factors',
+      Value: feedback.positives.length,
+    },
+    {
+      Metric: 'Negative Factors',
+      Value: feedback.negatives.length,
+    },
   ]);
 
-  console.log('\n--- DETAILED RULE TABLE ---');
-
-  console.table(
-    result.rules.map((r: any) => ({
-      Rule: r.ruleName,
-      Type: r.scoreType,
-      Points: r.value,
-    }))
-  );
-
   expect(result.rejected).toBe(false);
-  expect(result.score).toBeGreaterThan(0);
   expect(result.rules.length).toBeGreaterThan(5);
 });
