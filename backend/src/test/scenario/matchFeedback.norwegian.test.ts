@@ -9,7 +9,7 @@
 
 // to run this test: "npm run test:matchFeedbackNorwegian"
 
-import { getMatchingService } from '../../services/matching/matchingEngine';
+import { matchAdopterWithPet } from '../../services/matching/matchingEngine';
 import { createTestAdopter } from '../helpers/createTestAdopter';
 import { createTestBird } from '../helpers/createTestBird';
 
@@ -47,7 +47,7 @@ test('MATCH FEEDBACK', () => {
     behaviourIssues: 'medium',
   });
 
-  const result = getMatchingService(bird).execute(adopter);
+   const result = matchAdopterWithPet(adopter, bird);
   const feedback = generateMatchFeedback(result);
 
   console.log('\n--- FEEDBACK ---');

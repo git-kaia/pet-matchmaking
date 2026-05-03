@@ -40,8 +40,7 @@ test('SCORING EXPLAINABILITY – full system validation', () => {
     behaviourIssues: 'medium',
   });
 
-
-  const result = getMatchingService(bird).execute(adopter);
+  const result = matchAdopterWithPet(adopter, bird);
 
   console.log('MATCH RESULT');
   console.log({
