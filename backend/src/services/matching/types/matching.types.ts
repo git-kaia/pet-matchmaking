@@ -41,8 +41,7 @@ export type MatchResult = {
   rejected: boolean;
   rejectionReason?: string;
 
-  rules: any[];
-  // rules?: RuleExecutionResult[];
+  rules: RuleExecutionResult[];
 };
 
 export type MatchingContext = {

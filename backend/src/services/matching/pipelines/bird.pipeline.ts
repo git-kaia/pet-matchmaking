@@ -8,7 +8,7 @@
  * - Create matching context (adopter + pet)
  * - Apply hard rules (reject invalid matches)
  * - Apply scoring rules (rank valid matches)
- * - Aggregate and sort results
+ * - Aggregate results (no sorting, single match)
  *
  * This defines the sequence of evaluation steps for birds.
  */
@@ -17,9 +17,11 @@ import { MatchingContext, MatchResult } from '../types/matching.types';
 import { Adopter } from '../../../domain/entities/adopter';
 import { Bird } from '../../../domain/entities/bird';
 
+import { HardRule } from '../types/rule.types';
+import { ScoringRule } from '../types/scoring.types';
+
 import { evaluateHardRules } from '../engines/hardRule.engine';
 import { calculateScore } from '../engines/scoring.engine';
-import { normalizeScore } from '../utils/scoreNormalization.utils';
 
 import { generalHardRules } from '../rules/general/generalHardRules';
 import { generalScoringRules } from '../rules/general/generalScoringRules';
@@ -31,8 +33,8 @@ export const runBirdPipeline = (
   adopter: Adopter,
   pet: Bird,
   deps?: {
-    hardRules: any[];
-    scoringRules: any[];
+    hardRules: HardRule[];
+    scoringRules: ScoringRule[];
   }
 ): MatchResult => {
 
@@ -53,25 +55,23 @@ export const runBirdPipeline = (
       humanScore: 0,
       rejected: true,
       rejectionReason: hardRuleResult.reason,
-      rules: [],
+      rules: hardRuleResult.rules,
     };
   }
 
   //  Apply scoring rules using engine
   const scoringResult = calculateScore(ctx, scoringRules);
 
-  const percentage = normalizeScore(
-  scoringResult.score,
-  scoringResult.rules.length
-);
-
   return {
     petId: pet.id,
     score: scoringResult.score,
-    percentage,
+    percentage: 0,
     welfareScore: scoringResult.welfareScore,
     humanScore: scoringResult.humanScore,
     rejected: false,
-    rules: scoringResult.rules,
+    rules: [
+      ...hardRuleResult.rules,
+      ...scoringResult.rules
+    ],
   };
 };

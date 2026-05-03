@@ -15,6 +15,7 @@ import { Adopter } from '../../domain/entities/adopter';
 import { isBird } from './utils/typeGuard.utils';
 
 import { MatchResult, MatchingPipeline } from './types/matching.types';
+import { normalizeScore } from './utils/matching.utils';
 
 // We use `any` at the boundary because TS cannot preserve narrowing across returns
 type AnyPipeline = MatchingPipeline<any>;
@@ -46,7 +47,17 @@ export const matchAdopterWithPet = (
 
   // Narrow type BEFORE selecting pipeline
   if (isBird(pet)) {
-    return runBirdPipeline(adopter, pet); // fully type-safe
+    const result = runBirdPipeline(adopter, pet); // 1. raw result
+
+    const percentage = normalizeScore(
+      result.score,
+      result.rules.length
+    ); // 2. compute percentage
+
+    return {
+      ...result,
+      percentage,
+    };
   }
 
   // Future types here...
@@ -60,5 +71,6 @@ export const matchAdopterWithPet = (
     rejected: true,
     rejectionReason: `No matching pipeline for pet type: ${pet.animalType}`,
     rules: [],
+    percentage: 0,
   };
 };

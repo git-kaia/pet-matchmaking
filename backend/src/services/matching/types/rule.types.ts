@@ -20,7 +20,7 @@ export type Rule = {
 
 ////////////////////////////////////////////////////////////
 
-import { MatchingContext, RuleResult } from './matching.types';
+import { MatchingContext } from './matching.types';
 
 // For use in hardRules
 export type HardRuleResult = {
@@ -36,6 +36,7 @@ export type HardRuleResult = {
 export type HardRuleEngineResult = {
   rejected: boolean;
   reason?: string;
+  rules: HardRuleResult[];
 };
 
 export type HardRule = (ctx: MatchingContext) => HardRuleResult;

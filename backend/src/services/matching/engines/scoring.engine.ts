@@ -17,7 +17,8 @@ import { ScoringRule } from '../types/scoring.types';
 
 export const calculateScore = (
   ctx: MatchingContext,
-  rules: ScoringRule[]) => {
+  rules: ScoringRule[]
+) => {
   let welfareScore = 0;
   let humanScore = 0;
 
@@ -25,6 +26,10 @@ export const calculateScore = (
 
   for (const rule of rules) {
     const result = rule(ctx);
+
+    if (!result || !result.rule || !result.rule.ruleName) {
+      throw new Error('Invalid scoring rule result detected');
+    }
 
     if (result.scoreType === 'welfare') {
       welfareScore += result.value;
@@ -35,24 +40,10 @@ export const calculateScore = (
     }
 
     ruleResults.push({
-      ruleName: typeof result.rule === 'string'
-        ? result.rule
-        : result.rule?.ruleName ?? 'unknown_rule',
-
-      scoreType: result.scoreType,
-      value: result.value,
-    });
-
-    if (!result || !result.rule || !result.rule.ruleName) {
-      throw new Error('Invalid scoring rule result detected');
-    }
-
-    ruleResults.push({
       ruleName: result.rule.ruleName,
       scoreType: result.scoreType,
       value: result.value,
     });
-
   }
 
   return {

@@ -13,19 +13,31 @@
  */
 
 import { MatchingContext } from '../types/matching.types';
-import { HardRule, HardRuleEngineResult } from '../types/rule.types';
+import { HardRule, HardRuleEngineResult, HardRuleResult } from '../types/rule.types';
 
 export const evaluateHardRules = (
   ctx: MatchingContext,
   rules: HardRule[]
 ): HardRuleEngineResult => {
+
+  const results: HardRuleResult[] = [];
+
   for (const rule of rules) {
     const result = rule(ctx);
 
+    results.push(result);
+
     if (result.rejected) {
-      return result;
+      return {
+        rejected: true,
+        reason: result.reason,
+        rules: results,
+      };
     }
   }
 
-  return { rejected: false };
+  return {
+    rejected: false,
+    rules: results,
+  };
 };

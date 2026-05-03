@@ -28,7 +28,7 @@ export function generateMatchFeedback(result: MatchResult) {
 
   return {
     rejected: false,
-    percentage: result.percentage, // ✅ bruker systemverdi
+    percentage: result.percentage, // bruker systemverdi
     positives,
     negatives,
     conclusion: generateConclusion(result.percentage),
