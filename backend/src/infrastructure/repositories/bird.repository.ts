@@ -19,7 +19,34 @@ import { mapBirdFromDb } from '../mappers/bird.mapper';
 
 export const getAllBirds = async (): Promise<Bird[]> => {
   const result = await pool.query(`
-    SELECT *
+    SELECT
+      id,
+      species_id,
+      animal_type,
+
+      size,
+      noise_level,
+      social_need,
+      affection_level,
+
+      experience_level,
+      lifespan_years,
+
+      time_required,
+      mess_level,
+      financial_burden,
+
+      care_need,
+      aggression_risk,
+      behaviour_issues,
+
+      bonding_style,
+      requires_bird_partner,
+      mental_stimulation_need,
+      sleep_need,
+      flight_need,
+      diet_complexity
+
     FROM birds
   `);
 
@@ -28,7 +55,38 @@ export const getAllBirds = async (): Promise<Bird[]> => {
 
 export const getBirdById = async (id: string): Promise<Bird | null> => {
   const result = await pool.query(
-    `SELECT * FROM birds WHERE id = $1`,
+    `
+    SELECT
+      id,
+      species_id,
+      animal_type,
+
+      size,
+      noise_level,
+      social_need,
+      affection_level,
+
+      experience_level,
+      lifespan_years,
+
+      time_required,
+      mess_level,
+      financial_burden,
+
+      care_need,
+      aggression_risk,
+      behaviour_issues,
+
+      bonding_style,
+      requires_bird_partner,
+      mental_stimulation_need,
+      sleep_need,
+      flight_need,
+      diet_complexity
+
+    FROM birds
+    WHERE id = $1
+    `,
     [id]
   );
 

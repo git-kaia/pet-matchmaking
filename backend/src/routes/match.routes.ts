@@ -1,11 +1,10 @@
-// router.post("/match", matchController.getMatches); - EKSEMPEL
+// match.routes.ts
 
-import express from 'express';
-import { getMatches } from '../controllers/match.controller';
+import { Router } from 'express';
+import { getMatchesForAdopter } from '../controllers/match.controller';
 
-const router = express.Router();
+const router = Router();
 
-// GET to retrieving matches
-router.get('/matches/:id', getMatches);
+router.get('/adopters/:id/matches', getMatchesForAdopter);
 
 export default router;

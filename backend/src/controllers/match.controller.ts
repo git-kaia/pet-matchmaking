@@ -1,33 +1,44 @@
-import { getAdopterById } from '../infrastructure/repositories/adopter.repository';
-import { getAllBirds } from '../infrastructure/repositories/bird.repository';
-import { saveMatch, saveMatchRuleResults } from '../infrastructure/repositories/match.repository';
+// match.controller.ts
 
-import { matchingEngine } from '../services/matching/matchingEngine';
+import { Request, Response } from 'express';
 
-export const getMatches = async (req, res) => {
-  const adopter = await getAdopterById(req.params.id);
-  const birds = await getAllBirds();
+import { getAdopterByIdService } from '../services/application/adopter.service';
+import { getAllPets } from '../services/application/pet.service';
+import { matchAdopterWithPets } from '../services/application/match.service';
 
-  if (!adopter) {
-    return res.status(404).json({ error: 'Adopter not found' });
-  }
+import { generateMatchFeedback } from '../services/matching/feedback/matchFeedback.service';
 
-  const results = [];
+type Params = {
+  id: string;
+};
 
-  for (const bird of birds) {
-    const match = matchingEngine(adopter, bird);
+export const getMatchesForAdopter = async (
+  req: Request<Params>,
+  res: Response
+) => {
+  try {
+    const adopterId = req.params.id;
 
-    const matchId = await saveMatch(adopter.id, bird.id, match.score);
+    const adopter = await getAdopterByIdService(adopterId);
 
-    if (match.rules) {
-      await saveMatchRuleResults(matchId, match.rules);
+    if (!adopter) {
+      return res.status(404).json({ message: 'Adopter not found' });
     }
 
-    results.push({
-      birdId: bird.id,
-      score: match.score
-    });
-  }
+    const pets = await getAllPets();
+    const matches = await matchAdopterWithPets(adopter, pets);
 
-  res.json(results);
+    const response = matches.map((m) => ({
+      petId: m.petId,
+      percentage: m.percentage,
+      score: m.score,
+      feedback: generateMatchFeedback(m),
+    }));
+
+    return res.json(response);
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
 };
