@@ -1,155 +1,95 @@
 -- scema.sql
--------------
--- SPECIES --
--------------
-CREATE TABLE species (
-  id TEXT PRIMARY KEY,
-  norwegian_name TEXT,
-  latin_name TEXT,
-
-  size TEXT,
-  noise_level TEXT,
-  noise_frequency TEXT,
-
-  activity_level TEXT,
-  social_need TEXT,
-  mental_stimulation_need TEXT,
-  training_need TEXT,
-
-  affection_level TEXT,
-  diet_complexity TEXT,
-
-  experience_level TEXT,
-  space_requirement TEXT,
-
-  lifespan_years INT,
-
-  requires_bird_partner BOOLEAN,
-  free_flight_expectation TEXT,
-  sleep_need TEXT
-);
 
 ----------------------
 -- INDIVIDUAL BIRDS --
 ----------------------
 CREATE TABLE birds (
   id TEXT PRIMARY KEY,
-  species_id TEXT REFERENCES species(id),
+  species_id TEXT NOT NULL,
+  name TEXT NOT NULL,
+  -- Pet core
+  animal_type TEXT NOT NULL DEFAULT 'bird',
 
-  name TEXT,
-  age_years INT,
-  sex TEXT,
-  origin TEXT,
+  size TEXT NOT NULL,
 
-  -- overrides (nullable = fallback to species)
-  noise_level TEXT,
-  activity_level TEXT,
-  social_need TEXT,
-  affection_level TEXT,
+  noise_level TEXT NOT NULL,
+  social_need TEXT NOT NULL,
+  affection_level TEXT NOT NULL,
 
-  -- behavior
-  tameness_level TEXT,
-  handling_tolerance TEXT,
-  human_trust_level TEXT,
+  experience_level TEXT NOT NULL,
+  lifespan_years INT NOT NULL,
 
-  social_with_humans TEXT,
-  social_with_birds TEXT,
-  bonding_style TEXT,
+  time_required INT NOT NULL,
+  mess_level TEXT NOT NULL,
+  financial_burden TEXT NOT NULL,
 
-  stress_sensitivity TEXT,
+  care_need TEXT NOT NULL,
+  aggression_risk TEXT NOT NULL,
+  behaviour_issues TEXT NOT NULL,
 
-  biting_risk TEXT,
-  screaming_level TEXT,
-  feather_plucking BOOLEAN,
-  destructiveness TEXT,
-  separation_anxiety TEXT,
+  -- Bird-specific
+  bonding_style TEXT NOT NULL,
+  requires_bird_partner BOOLEAN NOT NULL,
 
-  requires_bird_partner BOOLEAN,
+  mental_stimulation_need TEXT NOT NULL,
 
-  training_level TEXT,
-  training_need TEXT,
-  mental_stimulation_need TEXT,
+  sleep_need TEXT NOT NULL,
+  flight_need TEXT NOT NULL,
 
-  free_flight_expectation TEXT,
-  sleep_need TEXT,
-  social_isolation_risk TEXT
-
+  diet_complexity TEXT NOT NULL
 );
 ------------------------
 -- HOUSEHOLD PROFILES --
 ------------------------
--- General quiz
-
 CREATE TABLE adopters (
   id TEXT PRIMARY KEY,
 
-  space_level TEXT,
-  household_type TEXT,
-  kids_age TEXT,
+  -- Household
+  kids_age TEXT NOT NULL,
 
-  has_current_pets BOOLEAN,
-  current_pet_types TEXT[],
+  has_current_pets BOOLEAN NOT NULL,
+  type_of_pet TEXT[] NOT NULL,
 
-  household_noise_level TEXT,
+  household_work_pattern TEXT NOT NULL,
 
-  household_work_pattern TEXT,
-  household_work_hours TEXT,
+  -- Core inputs
+  daily_care_time INT NOT NULL,
+  alone_time_hours TEXT NOT NULL,
 
-  daily_care_time INT,
-  alone_time_hours TEXT,
+  cleaning_tolerance TEXT NOT NULL,
+  noise_tolerance_level TEXT NOT NULL,
 
-  cleaning_tolerance TEXT,
-  noise_tolerance_level TEXT,
+  household_allergy_sensitivity TEXT NOT NULL,
 
-  household_allergy_sensitivity TEXT,
+  life_stability TEXT NOT NULL,
+  commitment_horizon_years INT NOT NULL,
 
-  life_stability TEXT,
-  commitment_horizon_years INT,
+  financial_priority TEXT NOT NULL,
+  learning_willingness TEXT NOT NULL,
 
-  financial_priority TEXT,
+  experience_years JSONB NOT NULL,
 
-  has_pet_experience BOOLEAN,
-  pet_experience_types TEXT[],
+  desired_pet_sociability TEXT NOT NULL,
+  desired_pet_affection_level TEXT NOT NULL,
 
-  learning_willingness TEXT,
+  problem_behavior_tolerance TEXT NOT NULL,
 
-  desired_pet_sociability TEXT,
-  desired_pet_affection_level TEXT,
+  -- Bird-specific
+  desired_human_interaction TEXT NOT NULL,
+  sleep_environment_commitment TEXT NOT NULL,
+  free_flight_expectation TEXT NOT NULL,
 
-  problem_behavior_tolerance TEXT,
+  desired_bonding_style TEXT NOT NULL,
+  adoption_complexity_tolerance TEXT NOT NULL,
 
-  willingness_multiple_birds TEXT,
-  free_flight_expectation TEXT,
-  sleep_environment_commitment TEXT,
-  desired_human_interaction TEXT,
-  adoption_complexity_tolerance TEXT
-);
+  willingness_multiple_birds TEXT NOT NULL,
 
--- Adopters bird quiz
-CREATE TABLE adopter_bird_preferences (
-  adopter_id TEXT PRIMARY KEY REFERENCES adopters(id),
+  enrichment_commitment TEXT NOT NULL,
+  training_interest TEXT NOT NULL,
 
-  desired_human_interaction TEXT,
-  desired_bonding_style TEXT,
+  diet_complexity_tolerance TEXT NOT NULL,
 
-  willingness_multiple_birds TEXT,
-
-  free_flight_expectation TEXT,
-  free_roaming_tolerance TEXT,
-
-  mess_tolerance TEXT,
-  destruction_tolerance TEXT,
-
-  tameness_requirement TEXT,
-  adoption_complexity_tolerance TEXT,
-
-  noise_sensitivity_time TEXT,
-  sudden_noise_tolerance TEXT,
-
-  enrichment_commitment TEXT,
-  training_interest TEXT,
-
-  diet_complexity_tolerance TEXT
+  specific_animal_allergies TEXT[] NOT NULL
 );
 
 ----------------------
@@ -162,6 +102,7 @@ CREATE TABLE matches (
   bird_id TEXT REFERENCES birds(id),
 
   score INT,
+  percentage INT,
   welfare_score INT,
   human_score INT,
 
@@ -182,6 +123,10 @@ CREATE TABLE match_rule_results (
 
   rule_name TEXT,
   rule_type TEXT,
+
   value INT,
-  description TEXT
+  description TEXT,
+
+  rejected BOOLEAN,           
+  reason TEXT                  
 );

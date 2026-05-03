@@ -13,6 +13,8 @@
  * It strictly handles data access coordination.
  */
 import { getAllBirds } from '../../infrastructure/repositories/bird.repository';
+import { getBirdById } from '../../infrastructure/repositories/bird.repository';
+
 import { Pet } from '../../domain/entities/pet';
 
 export const getAllPets = async (): Promise<Pet[]> => {
@@ -20,4 +22,8 @@ export const getAllPets = async (): Promise<Pet[]> => {
 
     // since Bird extends Pet → no mapping needed
     return birds;
+};
+
+export const getPetByIdService = async (id: string) => {
+    return await getBirdById(id);
 };

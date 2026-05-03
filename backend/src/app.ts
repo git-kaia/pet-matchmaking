@@ -1,8 +1,11 @@
+// app.ts
+
 import express from "express";
 import cors from "cors";
 
 import adopterRoutes from './routes/adopter.routes';
-import birdRoutes from './routes/bird.routes';
+import petRoutes from './routes/pet.routes';
+import matchRoutes from './routes/match.routes';
 
 const app = express();
 
@@ -16,7 +19,9 @@ app.get("/", (req, res) => {
   res.send("API is running, yey");
 });
 
-app.use('/birds', birdRoutes);
-app.use(adopterRoutes);
+// register route groups
+app.use('/adopters', adopterRoutes);
+app.use('/pets', petRoutes);
+app.use(matchRoutes); // ← IMPORTANT
 
 export default app;
