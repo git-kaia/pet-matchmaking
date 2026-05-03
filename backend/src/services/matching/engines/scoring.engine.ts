@@ -35,24 +35,23 @@ export const calculateScore = (
     }
 
     ruleResults.push({
-        ruleName: typeof result.rule === 'string'
-          ? result.rule
-          : result.rule?.ruleName ?? 'unknown_rule',
+      ruleName: typeof result.rule === 'string'
+        ? result.rule
+        : result.rule?.ruleName ?? 'unknown_rule',
 
-        scoreType: result.scoreType,
-        value: result.value,
-      });
+      scoreType: result.scoreType,
+      value: result.value,
+    });
 
-      /* Uncomment this for when bird specific rules are added ! And remove the one above
-      if (!result || !result.rule || !result.rule.ruleName) {
-        throw new Error('Invalid scoring rule result detected');
-        }
+    if (!result || !result.rule || !result.rule.ruleName) {
+      throw new Error('Invalid scoring rule result detected');
+    }
 
-        ruleResults.push({
-          ruleName: result.rule.ruleName,
-          scoreType: result.scoreType,
-          value: result.value,
-      });*/
+    ruleResults.push({
+      ruleName: result.rule.ruleName,
+      scoreType: result.scoreType,
+      value: result.value,
+    });
 
   }
 
