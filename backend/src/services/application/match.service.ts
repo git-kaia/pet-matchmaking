@@ -1,28 +1,35 @@
-// match.service.ts
-/**
- * Match Service (Application Layer - Orchestrator)
- *
- * Responsible for coordinating the full matching process.
- *
- * Responsibilities:
- * - Retrieve adopter and pet data from services/repositories
- * - Select appropriate matching pipeline via the matching engine (dispatcher)
- * - Execute matching process
- * - Return ranked match results
- *
- * This service does NOT implement matching logic itself.
- * It delegates all evaluation to the matching domain layer.
- */
+import { matchAdopterWithPet } from '../matching/matchingEngine';
+import { Adopter } from '../../domain/entities/adopter';
+import { Pet } from '../../domain/entities/pet';
+import { MatchResult } from '../matching/types/matching.types';
 
-import { getMatchingService } from '../matching/matchingEngine';
-
+// Adopter → many pets
 export const matchAdopterWithPets = async (
-  adopter: any,
-  pets: any[],
-  petType: string
-) => {
-  const matchingService = getMatchingService(animalType);
+  adopter: Adopter,
+  pets: Pet[]
+): Promise<MatchResult[]> => {
 
-  return matchingService.execute(adopter, pet);
+  const results = pets.map((pet) =>
+    matchAdopterWithPet(adopter, pet)
+  );
+
+  return results
+    .filter((r) => !r.rejected)
+    .sort((a, b) => b.score - a.score);
 };
 
+
+// Pet → many adopters
+export const matchPetWithAdopters = async (
+  pet: Pet,
+  adopters: Adopter[]
+): Promise<MatchResult[]> => {
+
+  const results = adopters.map((adopter) =>
+    matchAdopterWithPet(adopter, pet)
+  );
+
+  return results
+    .filter((r) => !r.rejected)
+    .sort((a, b) => b.score - a.score);
+};

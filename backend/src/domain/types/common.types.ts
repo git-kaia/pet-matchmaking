@@ -44,19 +44,11 @@ export type ExperienceLevel =
   | 'experienced'
   | 'advanced';
 
-/////////////////////////////
-// Adopter values          //
-/////////////////////////////
-
 export type AllergySensitivity =
   | 'none'
   | 'mild'
   | 'specific_animal_allergy'
   | 'respiratory_sensitivity';
-
-export type TimeLevel = Level3;
-export type ToleranceLevel = Level3;
-export type StabilityLevel = Level3;
 
 export type HouseholdWorkPattern =
   | 'full_time'
@@ -77,12 +69,3 @@ export type BondingStyle =
   | 'multiple_people'
   | 'independent';
 
-export type InteractionLevel = Level3;
-
-export type CommitmentLevel = Level3;
-
-/////////////////////////////
-// Pet values              //
-/////////////////////////////
-
-export type AggressionRisk = Level3;

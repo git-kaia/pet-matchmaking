@@ -17,7 +17,7 @@
 
 // to test run: "npm run test:integration"
 
-import { getMatchingService } from '../../services/matching/matchingEngine';
+import { matchAdopterWithPet } from '../../services/matching/matchingEngine';
 import { createTestAdopter } from '../helpers/createTestAdopter';
 import { createTestBird } from '../helpers/createTestBird';
 import { Pet } from '../../domain/entities/pet';
@@ -74,8 +74,7 @@ test('MATCHING ENGINE – integration test', () => {
   const summary: any[] = [];
 
   for (const { adopter, pet } of scenarios) {
-    const service = getMatchingService(pet);
-    const result = service.execute(adopter);
+    const result = matchAdopterWithPet(adopter, pet);
 
     console.log('\n--------------------------------');
     console.log(`Adopter: ${adopter.id}`);

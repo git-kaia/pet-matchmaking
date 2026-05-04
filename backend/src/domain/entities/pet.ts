@@ -21,7 +21,6 @@ export interface Pet {
   size: 'very_small' | 'small' | 'medium' | 'large' | 'very_large';
 
   noiseLevel: Level;
-  activityLevel: Level;
   socialNeed: Level;
   affectionLevel: Level;
 

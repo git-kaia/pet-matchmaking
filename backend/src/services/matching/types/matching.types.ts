@@ -11,6 +11,14 @@ import { Adopter } from '../../../domain/entities/adopter';
 import { HardRuleResult } from './rule.types';
 import { ScoringRuleResult } from './scoring.types';
 
+///////////////////////////////////////////
+// Types for matching pipeline           //
+///////////////////////////////////////////
+
+export type MatchingPipeline<T extends Pet> = (
+  adopter: Adopter,
+  pet: T
+) => MatchResult;
 
 ///////////////////////////////////////////
 // Types for matching context and result //
@@ -21,7 +29,8 @@ type RuleExecutionResult =
   | HardRuleResult;
 
 export type MatchResult = {
-  petId: string;
+  petId?: string;
+  adopterId?: string;
 
   score: number;
   percentage: number;
@@ -32,11 +41,8 @@ export type MatchResult = {
   rejected: boolean;
   rejectionReason?: string;
 
-  rules: any[];
-  // rules?: RuleExecutionResult[];
+  rules: RuleExecutionResult[];
 };
-
-
 
 export type MatchingContext = {
   adopter: Adopter;

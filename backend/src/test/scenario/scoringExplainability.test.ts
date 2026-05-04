@@ -1,19 +1,4 @@
-/**
- * Scoring Explainability Test
- *
- * Purpose:
- * - Demonstrate how a final match score is constructed
- * - Provide full transparency into scoring rules
- *
- * This test:
- * - Uses 1 adopter and 1 bird
- * - Runs full pipeline (hard rules + scoring)
- * - Outputs detailed scoring breakdown
- */
-
-// to run this test: "npm run test:scoringExplainability"
-
-import { getMatchingService } from '../../services/matching/matchingEngine';
+import { matchAdopterWithPet } from '../../services/matching/matchingEngine';
 import { createTestAdopter } from '../helpers/createTestAdopter';
 import { createTestBird } from '../helpers/createTestBird';
 
@@ -27,22 +12,16 @@ test('SCORING EXPLAINABILITY – full system validation', () => {
    // create adopter for test
   const adopter = createTestAdopter({
     id: 'explain_adopter',
-
     dailyCareTime: 100,
     householdWorkPattern: 'flexible',
     commitmentHorizonYears: 15,
-
     noiseToleranceLevel: 'medium',
     cleaningTolerance: 'medium',
-
     lifeStability: 'medium',
     financialPriority: 'high',
-
     learningWillingness: 'high',
-
     desiredPetAffectionLevel: 'medium',
     desiredPetSociability: 'high',
-
     problemBehaviorTolerance: 'medium',
     aloneTimeHours: 'high',
   });
@@ -50,23 +29,18 @@ test('SCORING EXPLAINABILITY – full system validation', () => {
   // create bird for test
   const bird = createTestBird({
     id: 'bird5',
-
     timeRequired: 60,
     noiseLevel: 'medium',
     socialNeed: 'high',
     affectionLevel: 'medium',
-
     lifespanYears: 20,
     experienceLevel: 'intermediate',
-
     messLevel: 'medium',
     financialBurden: 'medium',
-
     behaviourIssues: 'medium',
   });
 
-
-  const result = getMatchingService(bird).execute(adopter);
+  const result = matchAdopterWithPet(adopter, bird);
 
   console.log('MATCH RESULT');
   console.log({

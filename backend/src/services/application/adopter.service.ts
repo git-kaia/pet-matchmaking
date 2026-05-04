@@ -16,9 +16,17 @@
  * Note:
  * This service contains no matching logic.
  */
-import { getAllAdopters } from '../../infrastructure/repositories/adopter.repository';
+import { getAllAdopters, getAdopterById } from '../../infrastructure/repositories/adopter.repository';
 import { Adopter } from '../../domain/entities/adopter';
+
+export const getAdopterByIdService = async (
+    id: string
+): Promise<Adopter | null> => {
+    return await getAdopterById(id);
+};
 
 export const getAllAdoptersService = async (): Promise<Adopter[]> => {
     return await getAllAdopters();
 };
+
+

@@ -5,322 +5,227 @@
 
 TRUNCATE match_rule_results RESTART IDENTITY CASCADE;
 TRUNCATE matches RESTART IDENTITY CASCADE;
-TRUNCATE adopter_bird_preferences CASCADE;
 TRUNCATE adopters CASCADE;
 TRUNCATE birds CASCADE;
-TRUNCATE species CASCADE;
-
 
 -- ============================================================
--- SPECIES (BASELINE TRAITS)
--- These represent "typical" characteristics of a species
--- Used as defaults in matching logic
--- ============================================================
-
-INSERT INTO species VALUES
-
--- Beginner, low noise, social
-('budgie', 'Undulat', 'Melopsittacus undulatus',
- 'small','low','frequent',
- 'high','high','medium','low',
- 'medium','low',
- 'beginner','small',
- 10,
- true,'high','medium'),
-
--- Calm, friendly, beginner-friendly
-('cockatiel','Nymfekakadue','Nymphicus hollandicus',
- 'medium','medium','daily',
- 'medium','high','medium','medium',
- 'high','low',
- 'beginner','medium',
- 20,
- false,'medium','medium'),
-
--- Intelligent, demanding, long lifespan
-('african_grey','Grå jako','Psittacus erithacus',
- 'large','high','daily',
- 'medium','very_high','very_high','high',
- 'medium','high',
- 'advanced','large',
- 50,
- false,'high','high'),
-
--- Very loud, very social, high energy
-('sun_conure','Solparakitt','Aratinga solstitialis',
- 'medium','very_high','frequent',
- 'very_high','very_high','very_high','high',
- 'medium','medium',
- 'experienced','large',
- 30,
- true,'very_high','medium'),
-
--- Very easy, quiet, low interaction
-('canary','Kanari','Serinus canaria',
- 'small','low','daily',
- 'low','low','low','low',
- 'low','low',
- 'beginner','small',
- 10,
- false,'low','low');
-
-
--- ============================================================
--- BIRDS (INDIVIDUAL ANIMALS)
--- These may override species traits (NULL = inherit)
--- Used to simulate real-world variation
+-- BIRDS
 -- ============================================================
 
 INSERT INTO birds VALUES
 
--- EASY / BEGINNER BIRDS
-('b1','budgie','Pip',2,'male','rehomed',
- NULL,NULL,NULL,NULL,
+-- Easy social beginner bird
+('social_beginner_budgie','budgie','Pip','bird','small',
+ 'low','high','medium',
+ 'beginner',10,
+ 60,'low','low',
+ 'medium','low','low',
+ 'flock',true,
+ 'medium',
+ 'medium','high',
+ 'low'),
+
+-- Independent low-need bird
+('independent_low_need_canary','canary','Sunny','bird','small',
+ 'low','low','low',
+ 'beginner',10,
+ 30,'low','low',
+ 'low','low','low',
+ 'independent',false,
+ 'low',
+ 'low','low',
+ 'low'),
+
+-- Friendly balanced bird
+('friendly_balanced_cockatiel','cockatiel','Koko','bird','medium',
+ 'medium','high','high',
+ 'beginner',20,
+ 90,'medium','low',
+ 'medium','low','low',
+ 'pair',false,
+ 'medium',
+ 'medium','medium',
+ 'medium'),
+
+-- High demand intelligent bird
+('high_needs_african_grey','african_grey','Athena','bird','large',
+ 'high','very_high','medium',
+ 'advanced',50,
+ 180,'high','high',
+ 'very_high','high','high',
+ 'one_person',false,
+ 'very_high',
+ 'high','high',
+ 'very_high'),
+
+-- Very loud and social bird
+('very_loud_social_conure','sun_conure','Rio','bird','medium',
+ 'very_high','very_high','medium',
+ 'experienced',30,
+ 150,'medium','medium',
+ 'high','medium','medium',
+ 'pair',true,
+ 'high',
+ 'medium','very_high',
+ 'medium'),
+
+-- Behaviour risk case
+('low_stability_budgie','budgie','Ghost','bird','small',
+ 'low','low','low',
+ 'beginner',10,
+ 45,'low','low',
+ 'low','high','high',
+ 'independent',false,
+ 'low',
+ 'low','low',
+ 'low'),
+
+-- Balanced moderate bird
+('moderate_balanced_cockatiel','cockatiel','Luna','bird','medium',
  'medium','medium','medium',
- 'high','high','flock','low',
- 'low','low',false,'low','low',
- true,
- 'low','low','medium',
- 'high','medium','high'),
+ 'beginner',20,
+ 90,'medium','medium',
+ 'medium','low','medium',
+ 'pair',false,
+ 'medium',
+ 'medium','medium',
+ 'medium'),
 
--- LOW BEED / INDEPENDENT
-('b2','canary','Sunny',1,'female','breeder',
- NULL,NULL,NULL,NULL,
- 'low','low','low',
- 'low','low','independent','low',
- 'low','low',false,'low','low',
- false,
- 'low','low','low',
- 'low','low','low'),
+-- Extreme intelligence + needs
+('extreme_intelligence_grey','african_grey','Einstein','bird','large',
+ 'high','very_high','medium',
+ 'advanced',50,
+ 180,'high','high',
+ 'very_high','high','high',
+ 'one_person',false,
+ 'very_high',
+ 'high','high',
+ 'very_high'),
 
--- SOCIAL & FRIENDLY
-('b3','cockatiel','Koko',3,'female','breeder',
- NULL,NULL,NULL,NULL,
+-- Chaotic high-social bird
+('chaotic_high_social_conure','sun_conure','Chaos','bird','medium',
+ 'very_high','very_high','high',
+ 'experienced',30,
+ 150,'medium','medium',
  'high','high','high',
- 'high','medium','pair','medium',
- 'low','medium',false,'low','low',
- false,
- 'medium','medium','medium',
- 'medium','medium','medium'),
+ 'flock',true,
+ 'high',
+ 'medium','very_high',
+ 'medium'),
 
--- VERY DEMANDING (HIGH RISK MATCH)
-('b4','african_grey','Athena',8,'female','rehomed',
- NULL,NULL,NULL,NULL,
- 'low','low','medium',
- 'very_high','low','one_person','high',
- 'high','high',true,'high','high',
- false,
- 'high','high','very_high',
- 'high','high','very_high'),
-
--- EXTREME NOISE BIRD
-('b5','sun_conure','Rio',4,'male','rehomed',
- NULL,NULL,NULL,NULL,
- 'medium','medium','medium',
- 'very_high','medium','pair','medium',
- 'medium','very_high',false,'medium','medium',
- true,
- 'high','high','high',
- 'very_high','medium','very_high'),
-
--- EDGE CASES (CHALLENGING)
-('b6','budgie','Ghost',5,'male','rehomed',
- NULL,NULL,NULL,NULL,
+-- Minimal care control case
+('minimal_care_canary','canary','Whisper','bird','small',
  'low','low','low',
- 'low','low','independent','high',
- 'high','low',true,'high','high',
- false,
+ 'beginner',10,
+ 30,'low','low',
  'low','low','low',
- 'low','high','high'),
-
--- BALANCED
-('b7','cockatiel','Luna',2,'female','breeder',
- NULL,NULL,NULL,NULL,
- 'medium','medium','medium',
- 'medium','medium','pair','low',
- 'low','medium',false,'low','low',
- false,
- 'medium','medium','medium',
- 'medium','medium','medium'),
-
--- HIGH INTELLIGENCE / DEMANDING
-('b8','african_grey','Einstein',12,'male','rehomed',
- NULL,NULL,NULL,NULL,
- 'high','high','high',
- 'very_high','low','one_person','high',
- 'high','high',true,'high','high',
- false,
- 'high','high','very_high',
- 'high','high','very_high'),
-
--- CHAOTIC / VERY SOCIAL
-('b9','sun_conure','Chaos',3,'male','rehomed',
- NULL,NULL,NULL,NULL,
- 'medium','medium','medium',
- 'very_high','high','flock','high',
- 'high','very_high',true,'high','high',
- true,
- 'high','high','high',
- 'very_high','medium','very_high'),
-
--- VERY LOW NEED (CONTROL CASE)
-('b10','canary','Whisper',1,'female','breeder',
- NULL,NULL,NULL,NULL,
- 'low','low','low',
- 'low','low','independent','low',
- 'low','low',false,'low','low',
- false,
- 'low','low','low',
- 'low','low','low');
-
-
+ 'independent',false,
+ 'low',
+ 'low','low',
+ 'low');
 
 -- ============================================================
--- ADOPTERS (GENERAL QUIZ DATA)
--- Represents household + lifestyle
--- Used in ALL matching
+-- ADOPTERS
 -- ============================================================
 
 INSERT INTO adopters VALUES
 
--- BAD MATCH (low time + cat)
-('busy_cat_owner',
- 'medium','couple','none',
+-- High risk: cat + low tolerance
+('busy_cat_low_tolerance',
+ 'none',
  true, ARRAY['cat'],
- 'medium',
- 'full_time','day_shift',
+ 'full_time',
  60,'high',
  'low','low',
  'none',
  'low',5,
+ 'low','low',
+ '{}'::jsonb,
+ 'low','low',
  'low',
- true,ARRAY['cat'],
+ 'low','low','low',
+ 'independent','low',
  'low',
  'low','low',
  'low',
+ ARRAY[]::TEXT[]),
 
- 'low','low','low','low','low'),
-
--- IDEAL MATCH (high resources)
-('experienced_bird_keeper',
- 'large','single','none',
- false,ARRAY[]::TEXT[],
- 'low',
- 'part_time','day_shift',
+-- Ideal high-resource adopter
+('ideal_experienced_bird_owner',
+ 'none',
+ false, ARRAY[]::TEXT[],
+ 'part_time',
  240,'low',
  'high','high',
  'none',
  'high',30,
+ 'high','high',
+ '{"bird":10}'::jsonb,
+ 'high','high',
  'high',
- true,ARRAY['bird'],
+ 'high','high','high',
+ 'one_person','high',
  'high',
  'high','high',
  'high',
+ ARRAY[]::TEXT[]),
 
- 'high','high','high','high','high'),
-
--- SHOULD BE REJECTED (no time)
-('no_time_user',
- 'small','single','none',
- false,ARRAY[]::TEXT[],
- 'low',
- 'full_time','day_shift',
+-- No time (guaranteed rejection)
+('zero_time_unavailable',
+ 'none',
+ false, ARRAY[]::TEXT[],
+ 'full_time',
  0,'high',
  'low','low',
  'none',
  'low',2,
+ 'low','low',
+ '{}'::jsonb,
+ 'low','low',
  'low',
- false,ARRAY[]::TEXT[],
+ 'low','low','low',
+ 'independent','low',
  'low',
  'low','low',
  'low',
+ ARRAY[]::TEXT[]),
 
- 'low','low','low','low','low'),
-
--- LOW NOISE TOLERANCE USER
-('noise_sensitive_user',
- 'small','single','none',
- false,ARRAY[]::TEXT[],
- 'low',
- 'part_time','day_shift',
+-- Noise-sensitive household
+('noise_sensitive_moderate_owner',
+ 'none',
+ false, ARRAY[]::TEXT[],
+ 'part_time',
  120,'medium',
  'medium','low',
  'none',
  'medium',10,
+ 'medium','medium',
+ '{"bird":2}'::jsonb,
+ 'medium','medium',
  'medium',
- true,ARRAY['bird'],
+ 'medium','medium','medium',
+ 'independent','medium',
  'medium',
  'medium','medium',
  'medium',
+ ARRAY[]::TEXT[]),
 
- 'low','medium','medium','medium','medium'),
-
--- HIGH TIME BUT LOW TOLERANCE (edge case)
-('overconfident_beginner',
- 'large','family','kids',
- false,ARRAY[]::TEXT[],
- 'high',
- 'part_time','day_shift',
+-- Overconfident beginner
+('overconfident_low_tolerance_beginner',
+ 'kids',
+ false, ARRAY[]::TEXT[],
+ 'part_time',
  180,'low',
  'low','low',
  'none',
  'medium',10,
- 'medium',
- false,ARRAY[]::TEXT[],
- 'low',
  'medium','low',
+ '{}'::jsonb,
+ 'low','medium',
  'low',
-
- 'low','high','low','low','low');
-
-
--- ============================================================
--- ADOPTER BIRD PREFERENCES (BIRD QUIZ)
--- Only used for bird-specific rules
--- ============================================================
-
-INSERT INTO adopter_bird_preferences VALUES
-
--- LOW ENGAGEMENT USER
-('busy_cat_owner',
- 'low','independent',
+ 'medium','low','low',
+ 'independent','low',
  'low',
- 'low','low',
- 'low','low',
- 'low','low',
- 'none','low',
- 'low','low',
- 'low'),
-
--- IDEAL USER
-('experienced_bird_keeper',
- 'high','one_person',
- 'high',
- 'high','high',
- 'high','high',
- 'high','high',
- 'none','high',
- 'high','high',
- 'high'),
-
--- LOW COMMITMENT USER
-('no_time_user',
- 'low','independent',
+ 'high','low',
  'low',
- 'low','low',
- 'low','low',
- 'low','low',
- 'none','low',
- 'low','low',
- 'low'),
-
--- NOISE SENSITIVE USER
-('noise_sensitive_user',
- 'medium','independent',
- 'low',
- 'medium','medium',
- 'medium','medium',
- 'medium','medium',
- 'morning','low',
- 'medium','medium',
- 'medium');
+ ARRAY[]::TEXT[]);
