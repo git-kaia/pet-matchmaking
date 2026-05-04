@@ -1,107 +1,102 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+
 import {
   Breadcrumbs,
   Button,
   Card,
-  CardContent,
   CardActionArea,
+  CardContent,
   Grid,
-  Tooltip,
   Typography,
-  Box,
+  Tooltip,
 } from "@mui/material";
 
 import NiKnobs from "@/icons/nexture/ni-knobs";
 
 export default function Page() {
-  const matches = [
-    {
-      id: "match-luna-adoptant1",
-      adoptantName: "Ola Normann",
-      adoptantImage: "/images/avatars/avatar-2.jpg",
-      animalName: "Luna",
-      animalImage: "/images/org/animals/luna.jpg",
-      score: 97,
-    },
-    {
-      id: "match-milo-adoptant3",
-      adoptantName: "Ola Normann",
-      adoptantImage: "/images/avatars/avatar-2.jpg",
-      animalName: "Milo",
-      animalImage: "/images/org/animals/milo.jpg",
-      score: 81,
-    },
+  const [matches, setMatches] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const adopterIds = [
+    "ideal_experienced_bird_owner",
+    "adopter_1",
   ];
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const results = await Promise.all(
+          adopterIds.map(async (id) => {
+            const res = await fetch(
+              `http://localhost:3000/adopters/${id}/matches`
+            );
+
+            if (!res.ok) return [];
+
+            const data = await res.json();
+
+            return Array.isArray(data)
+              ? data.map((m: any) => ({
+                  ...m,
+                  adopterId: id,
+                }))
+              : [];
+          })
+        );
+
+        setMatches(results.flat());
+      } catch (err) {
+        console.error("Failed to load matches:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    load();
+  }, []);
 
   return (
     <Grid container spacing={5}>
-      {/* Header */}
+      {/* HEADER */}
       <Grid container spacing={2.5} className="w-full">
-        <Grid xs={12} md={"grow"}>
+        <Grid>
           <Typography variant="h1">Matcher</Typography>
 
           <Breadcrumbs>
-            <Link to="/org/dashboard">Dashboard</Link>
-            <Typography variant="body2">Matcher</Typography>
+            <Typography>Dashboard</Typography>
+            <Typography>Matcher</Typography>
           </Breadcrumbs>
         </Grid>
 
-        <Grid xs={12} md={"auto"} className="flex flex-row items-start gap-2">
-          <Tooltip title="Sorter etter">
-            <Button
-              className="icon-only surface-standard"
-              variant="surface"
-              color="grey"
-              startIcon={<NiKnobs size={"medium"} />}
-            />
+        <Grid>
+          <Tooltip title="Sorter">
+            <Button startIcon={<NiKnobs />} variant="outlined">
+              Sorter
+            </Button>
           </Tooltip>
         </Grid>
       </Grid>
 
-      {/* Match cards */}
+      {loading && (
+        <Grid>
+          <Typography>Laster matcher...</Typography>
+        </Grid>
+      )}
+
+      {/* MATCH LIST */}
       <Grid container spacing={3}>
-        {matches.map((match) => (
-          <Grid key={match.id} xs={12} lg={4}>
+        {matches.map((m, i) => (
+          <Grid key={`${m.adopterId}-${m.petId}-${i}`}>
             <Card>
               <CardActionArea
                 component={Link}
-                to={`/org/matches/${match.id}`}
+                to={`/org/matches/${m.petId}?adopterId=${m.adopterId}`}
               >
-                <Typography variant="h6" className="px-4 pt-4">
-                  {match.adoptantName} ↔ {match.animalName}
-                </Typography>
-
-                <CardContent>
-                  <Box className="flex gap-3 mb-3">
-                    <img
-                      src={match.adoptantImage}
-                      alt={match.adoptantName}
-                      style={{
-                        width: 60,
-                        height: 60,
-                        borderRadius: "50%",
-                        objectFit: "cover",
-                      }}
-                    />
-                    <img
-                      src={match.animalImage}
-                      alt={match.animalName}
-                      style={{
-                        width: 60,
-                        height: 60,
-                        borderRadius: "50%",
-                        objectFit: "cover",
-                      }}
-                    />
-                  </Box>
-
-                  <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                    ❤️ Match score: {match.score}%
-                  </Typography>
-
-                  <Button variant="text" size="small" className="mt-2">
-                    Se match
-                  </Button>
+                <CardContent> 
+                  <Typography variant="h6">{m.petId}</Typography>
+                  <Typography>Adopter: {m.adopterId}</Typography>
+                  <Typography>❤️ {m.percentage}%</Typography>
                 </CardContent>
               </CardActionArea>
             </Card>

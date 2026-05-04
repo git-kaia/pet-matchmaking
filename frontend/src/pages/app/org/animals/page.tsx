@@ -10,7 +10,6 @@ import {
   Grid,
   Tooltip,
   Typography,
-  Box
 } from "@mui/material";
 
 import NiCellsPlus from "@/icons/nexture/ni-cells-plus";
@@ -22,100 +21,80 @@ export default function Page() {
 
   useEffect(() => {
     getBirds()
-      .then((data) => {
-        setAnimals(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setLoading(false);
-      });
+      .then(setAnimals)
+      .catch(console.error)
+      .finally(() => setLoading(false));
   }, []);
 
   return (
     <Grid container spacing={5}>
-      {/* Header */}
-      <Grid container spacing={2.5} className="w-full" size={12}>
-        <Grid size={{ xs: 12, md: "grow" }}>
+      {/* HEADER */}
+      <Grid container spacing={2.5} className="w-full">
+        <Grid>
           <Typography variant="h1">Dyreprofiler</Typography>
 
           <Breadcrumbs>
             <Link to="/org/dashboard">Dashboard</Link>
-            <Typography variant="body2">Dyreprofiler</Typography>
+            <Typography>Dyreprofiler</Typography>
           </Breadcrumbs>
         </Grid>
 
-        <Grid size={{ xs: 12, md: "auto" }} className="flex flex-row items-start gap-2">
-          <Tooltip title="Opprett ny dyreprofil">
-            <Button
-              className="icon-only surface-standard flex-none"
-              size="medium"
-              color="grey"
-              variant="surface"
-              startIcon={<NiCellsPlus size={"medium"} />}
-            />
+        <Grid>
+          <Tooltip title="Ny dyreprofil">
+            <Button startIcon={<NiCellsPlus />} variant="outlined">
+              Ny
+            </Button>
           </Tooltip>
         </Grid>
       </Grid>
 
-      {/* Loading state */}
+      {/* LOADING */}
       {loading && (
-        <Grid size={12}>
+        <Grid>
           <Typography>Laster fugler...</Typography>
         </Grid>
       )}
 
-      {/* Fuglekort */}
-      <Grid container size={12} spacing={3}>
+      {/* LIST */}
+      <Grid container spacing={3}>
         {animals.map((animal) => (
-          <Grid key={animal.id} size={{ lg: 4, xs: 12 }}>
+          <Grid key={animal.id}>
             <Card>
-              <CardActionArea
-                component={Link}
-                to={`/org/animals/${animal.id}`}
-              >
-                <Typography variant="h6" className="px-4 pt-4">
-                  {animal.name}
-                </Typography>
+              <CardActionArea component={Link} to={`/org/animals/${animal.id}`}>
 
                 <CardContent>
-                  <Box className="w-full mb-3">
-                    <img
-                      src={`/images/org/animals/${animal.id}.jpg`}
-                      alt={animal.name}
-                      style={{
-                        width: "100%",
-                        height: "180px",
-                        objectFit: "cover",
-                        borderRadius: "8px"
-                      }}
-                    />
-                  </Box>
+                  <img
+                    src={`/images/org/animals/${animal.id}.jpg`}
+                    onError={(e: any) =>
+                      (e.target.src = "/images/org/animals/default.jpg")
+                    }
+                    style={{
+                      width: "100%",
+                      height: 180,
+                      objectFit: "cover",
+                      borderRadius: 8,
+                    }}
+                  />
+
+                  <Typography variant="h6">{animal.name}</Typography>
 
                   <Typography variant="body2">
-                    Art: {animal.speciesId}
+                    Art: {animal.species_id}
                   </Typography>
 
                   <Typography variant="body2">
-                    Alder: {animal.ageYears} år
+                    Størrelse: {animal.size}
                   </Typography>
 
                   <Typography variant="body2">
-                    Kjønn: {animal.sex}
+                    Erfaring: {animal.experience_level}
                   </Typography>
 
-                  <Box className="flex flex-col mt-2">
-                    <Button variant="text" size="small">
-                      Deaktiver
-                    </Button>
-                    <Button variant="text" size="small">
-                      Aktiver
-                    </Button>
-                    <Button variant="text" size="small">
-                      Se matcher
-                    </Button>
-                  </Box>
+                  <Typography variant="body2">
+                    ❤️ Sosialt behov: {animal.social_need}
+                  </Typography>
                 </CardContent>
+
               </CardActionArea>
             </Card>
           </Grid>
