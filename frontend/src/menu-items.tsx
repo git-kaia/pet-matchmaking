@@ -69,6 +69,12 @@ export const leftMenuItems: MenuItem[] = [
   label: "Match Detaljer",
   hideInMenu: true
 },
+{
+  id: "org-adoptant-profile",
+  href: "/org/adoptants/:param",
+  label: "Adoptant Profile",
+  hideInMenu: true,
+},
 
 ];
 

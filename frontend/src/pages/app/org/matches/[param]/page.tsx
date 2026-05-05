@@ -128,11 +128,15 @@ export default function Page() {
               <Box sx={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
 
                 {/* ADOPTER */}
+                <Link to={`/org/adoptants/${adopterId}`} style={{ textDecoration: "none", color: "inherit" }}>
                 <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
                   <img
-                    src="/images/avatars/avatar-2.jpg"
-                    style={{ width: 70, height: 70, borderRadius: "50%" }}
-                  />
+                      src={`/images/adoptants/${adopterId}.jpg`}
+                      onError={(e: any) => {
+                        e.target.src = "/images/avatars/avatar-2.jpg";
+                      }}
+                      style={{ width: 70, height: 70, borderRadius: "50%" }}
+                    />
 
                   <Box>
                     <Typography variant="h6">{adopterId}</Typography>
@@ -156,6 +160,7 @@ export default function Page() {
                     </Typography>
                   </Box>
                 </Box>
+                </Link>
 
                 {/* PET (CLICKABLE) */}
                 <Link to={`/org/animals/${pet.id}`} style={{ textDecoration: "none", color: "inherit" }}>

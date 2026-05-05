@@ -151,7 +151,10 @@ export default function Page() {
                     <Box className="flex gap-3 items-center">
                       {/* ADOPTER */}
                       <img
-                        src="/images/avatars/avatar-2.jpg"
+                        src={`/images/adoptants/${m.adopterId}.jpg`}
+                        onError={(e: any) => {
+                          e.target.src = "/images/avatars/avatar-2.jpg";
+                        }}
                         alt="Adopter"
                         style={{
                           width: 50,
