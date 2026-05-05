@@ -118,7 +118,7 @@ export default function Page() {
               <Card>
                 <CardActionArea
                   component={Link}
-                  to={`/org/matches/${m.adopterId}/${m.petId}`}
+                  to={`/org/matches/${m.adopterId}__${m.petId}`}
                 >
                   <CardContent
                     sx={{

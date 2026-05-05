@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import {
@@ -9,57 +9,81 @@ import {
   Typography,
   Box,
   Divider,
+  Chip,
 } from "@mui/material";
 
+function t(val: string) {
+  const map: any = {
+    low: "Lav",
+    medium: "Moderat",
+    high: "Høy",
+    very_high: "Svært høy",
+
+    small: "Liten",
+    large: "Stor",
+
+    beginner: "Nybegynner",
+    experienced: "Erfaren",
+    advanced: "Avansert",
+  };
+
+  return map[val] ?? val ?? "-";
+}
+
+// Remove adopter-facing language
+function cleanFeedback(text: string) {
+  return text
+    .replace(/\bdu\b/gi, "Adoptanten")
+    .replace(/\bdin\b/gi, "Adoptantens")
+    .replace(/\bdere\b/gi, "Adoptant og fugl")
+    .replace(/\bDeg\b/gi, "Adoptanten")
+    .replace(/\bDin\b/gi, "Adoptantens");
+}
+
+const safe = (val: any) => (val === undefined || val === null ? "-" : val);
+
 export default function Page() {
-  const { adopterId, petId } = useParams(); // ✅ FIXED
+  const { param } = useParams();
+  const [adopterId, petId] = param?.split("__") || [];
 
   const [match, setMatch] = useState<any>(null);
   const [pet, setPet] = useState<any>(null);
+  const [adopter, setAdopter] = useState<any>(null);
 
   useEffect(() => {
     async function load() {
       try {
-        if (!adopterId || !petId) {
-          console.error("Missing params:", { adopterId, petId });
-          return;
-        }
+        if (!adopterId || !petId) return;
 
-        // 1. Fetch matches for adopter
+        // MATCHES
         const res = await fetch(
           `http://localhost:3000/adopters/${adopterId}/matches`
         );
 
-        if (!res.ok) return;
-
-        const data = await res.json();
-
-        const found = Array.isArray(data)
-          ? data.find((m: any) => m.petId === petId)
-          : null;
-
+        const matches = await res.json();
+        const found = matches.find((m: any) => m.petId === petId);
         setMatch(found);
 
-        // 2. Fetch pet
+        // PET
         const petRes = await fetch(
           `http://localhost:3000/pets/${petId}`
         );
+        if (petRes.ok) setPet(await petRes.json());
 
-        if (petRes.ok) {
-          const petData = await petRes.json();
-          setPet(petData);
-        } else {
-          console.error("Pet not found:", petId);
-        }
+        // ADOPTER (REAL DATA FIX)
+        const adopterRes = await fetch(
+          `http://localhost:3000/adopters/${adopterId}`
+        );
+        if (adopterRes.ok) setAdopter(await adopterRes.json());
       } catch (err) {
         console.error(err);
       }
     }
 
     load();
-  }, [adopterId, petId]);
+  }, [param]);
 
-  if (!match || !pet) {
+  if (!match || !pet || !adopter) {
     return <Typography sx={{ mt: 4 }}>Laster...</Typography>;
   }
 
@@ -71,83 +95,129 @@ export default function Page() {
 
   return (
     <Grid container spacing={5}>
+
       {/* HEADER */}
-      <Grid container spacing={2.5}>
+      <Grid container spacing={2}>
         <Grid size={{ xs: 12 }}>
           <Typography variant="h1">
-            Match med {pet.name || petId}
+            Matchanalyse
           </Typography>
 
           <Breadcrumbs>
-            <Typography>Dashboard</Typography>
-            <Typography>Matcher</Typography>
-            <Typography>{pet.name}</Typography>
+            <Link to="/org/dashboard">Dashboard</Link>
+            <Link to="/org/matches">Matcher</Link>
+            <Typography>{pet.id}</Typography>
           </Breadcrumbs>
         </Grid>
       </Grid>
 
-      {/* CONTENT */}
+      {/* MAIN */}
       <Grid container spacing={3}>
-        <Grid size={{ xs: 12, lg: 8 }}>
+        <Grid size={{ xs: 12, lg: 10 }}>
           <Card>
-            <CardContent className="flex flex-col gap-6">
+            <CardContent sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
 
               {/* SCORE */}
-              <Typography variant="h4" sx={{ fontWeight: 700 }}>
+              <Typography variant="h3" sx={{ fontWeight: 800 }}>
                 ❤️ {match.percentage}% match
               </Typography>
 
               <Divider />
 
-              {/* PET INFO */}
-              <Box className="flex gap-4 items-center">
-                <img
-                  src={`/images/org/animals/${pet.id}.png`}
-                  onError={(e: any) => {
-                    e.target.src = "/images/org/animals/default.jpg";
-                  }}
-                  alt={pet.name}
-                  style={{
-                    width: 120,
-                    height: 120,
-                    borderRadius: "12px",
-                    objectFit: "cover",
-                  }}
-                />
+              {/* ENTITY OVERVIEW */}
+              <Box sx={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
 
-                <Box>
-                  <Typography variant="h6">{pet.name}</Typography>
-                  <Typography variant="body2">
-                    Art: {pet.speciesId}
-                  </Typography>
-                  <Typography variant="body2">
-                    Størrelse: {pet.size}
-                  </Typography>
-                  <Typography variant="body2">
-                    Levetid: {pet.lifespanYears} år
-                  </Typography>
+                {/* ADOPTER */}
+                <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+                  <img
+                    src="/images/avatars/avatar-2.jpg"
+                    style={{ width: 70, height: 70, borderRadius: "50%" }}
+                  />
+
+                  <Box>
+                    <Typography variant="h6">{adopterId}</Typography>
+
+                    <Typography variant="body2">
+                      Erfaring: {adopter.experienceYears?.bird
+                        ? `${adopter.experienceYears.bird} år`
+                        : "-"}
+                    </Typography>
+
+                    <Typography variant="body2">
+                      Tid: {safe(adopter.dailyCareTime)} min/dag
+                    </Typography>
+
+                    <Typography variant="body2">
+                      Støytoleranse: {t(adopter.noiseToleranceLevel)}
+                    </Typography>
+
+                    <Typography variant="body2">
+                      Livsstabilitet: {t(adopter.lifeStability)}
+                    </Typography>
+                  </Box>
                 </Box>
+
+                {/* PET (CLICKABLE) */}
+                <Link to={`/org/animals/${pet.id}`} style={{ textDecoration: "none", color: "inherit" }}>
+                  <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+                    <img
+                      src={`/images/org/animals/${pet.id}.png`}
+                      onError={(e: any) =>
+                        (e.target.src = "/images/org/animals/default.jpg")
+                      }
+                      style={{
+                        width: 70,
+                        height: 70,
+                        borderRadius: 12,
+                        objectFit: "cover",
+                      }}
+                    />
+
+                    <Box>
+                      <Typography variant="h6">{pet.id}</Typography>
+                      <Typography variant="body2">
+                        Art: {pet.speciesId}
+                      </Typography>
+                      <Typography variant="body2">
+                        Størrelse: {t(pet.size)}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Link>
+
               </Box>
 
               <Divider />
 
-              {/* POSITIVES */}
+              {/* MATCH FACTORS */}
+              <Typography variant="h6">Viktige matchfaktorer</Typography>
+
+              <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+                <Chip label={`Støy: ${t(pet.noiseLevel)}`} />
+                <Chip label={`Sosial: ${t(pet.socialNeed)}`} />
+                <Chip label={`Omsorg: ${t(pet.careNeed)}`} />
+                <Chip label={`Erfaring: ${t(pet.experienceLevel)}`} />
+              </Box>
+
+              <Divider />
+
+              {/* STRENGTHS */}
               <Box>
-                <Typography variant="h6">✅ Positive faktorer</Typography>
+                <Typography variant="h6">✅ Styrker i matchen</Typography>
                 {feedback.positives.map((p: string, i: number) => (
-                  <Typography key={i}>• {p}</Typography>
+                  <Typography key={i}>• {cleanFeedback(p)}</Typography>
                 ))}
               </Box>
 
-              {/* NEGATIVES */}
+              {/* RISKS */}
               <Box>
-                <Typography variant="h6">⚠️ Utfordringer</Typography>
+                <Typography variant="h6">⚠️ Risikofaktorer</Typography>
                 {feedback.negatives.length ? (
                   feedback.negatives.map((n: string, i: number) => (
-                    <Typography key={i}>• {n}</Typography>
+                    <Typography key={i}>• {cleanFeedback(n)}</Typography>
                   ))
                 ) : (
-                  <Typography>Ingen utfordringer</Typography>
+                  <Typography>Ingen identifiserte risikofaktorer</Typography>
                 )}
               </Box>
 
@@ -155,8 +225,10 @@ export default function Page() {
 
               {/* CONCLUSION */}
               <Box>
-                <Typography variant="h6">📊 Vurdering</Typography>
-                <Typography>{feedback.conclusion}</Typography>
+                <Typography variant="h6">📊 Faglig vurdering</Typography>
+                <Typography>
+                  {cleanFeedback(feedback.conclusion)}
+                </Typography>
               </Box>
 
             </CardContent>
