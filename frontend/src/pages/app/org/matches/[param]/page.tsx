@@ -1,4 +1,4 @@
-import { useParams, useSearchParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import {
@@ -12,12 +12,7 @@ import {
 } from "@mui/material";
 
 export default function Page() {
-  const params = useParams();
-  const [searchParams] = useSearchParams();
-
-  const petId = params.param || params.matchid || null;
-
-  const adopterId = searchParams.get("adopterId");
+  const { adopterId, petId } = useParams(); // ✅ FIXED
 
   const [match, setMatch] = useState<any>(null);
   const [pet, setPet] = useState<any>(null);
@@ -25,9 +20,12 @@ export default function Page() {
   useEffect(() => {
     async function load() {
       try {
-        if (!adopterId || !petId) return;
+        if (!adopterId || !petId) {
+          console.error("Missing params:", { adopterId, petId });
+          return;
+        }
 
-        // 1. Get matches
+        // 1. Fetch matches for adopter
         const res = await fetch(
           `http://localhost:3000/adopters/${adopterId}/matches`
         );
@@ -42,16 +40,16 @@ export default function Page() {
 
         setMatch(found);
 
-        // 2. Get pet
-        if (found) {
-          const petRes = await fetch(
-            `http://localhost:3000/pets/${petId}`
-          );
+        // 2. Fetch pet
+        const petRes = await fetch(
+          `http://localhost:3000/pets/${petId}`
+        );
 
-          if (petRes.ok) {
-            const petData = await petRes.json();
-            setPet(petData);
-          }
+        if (petRes.ok) {
+          const petData = await petRes.json();
+          setPet(petData);
+        } else {
+          console.error("Pet not found:", petId);
         }
       } catch (err) {
         console.error(err);
@@ -81,9 +79,9 @@ export default function Page() {
           </Typography>
 
           <Breadcrumbs>
-            <Link to="/org/dashboard">Dashboard</Link>
-            <Link to="/org/matches">Matcher</Link>
-            <Typography>{pet.name || petId}</Typography>
+            <Typography>Dashboard</Typography>
+            <Typography>Matcher</Typography>
+            <Typography>{pet.name}</Typography>
           </Breadcrumbs>
         </Grid>
       </Grid>
@@ -101,10 +99,13 @@ export default function Page() {
 
               <Divider />
 
-              {/* PET FOCUS */}
+              {/* PET INFO */}
               <Box className="flex gap-4 items-center">
                 <img
-                  src={pet.image || `/images/org/animals/default.jpg`}
+                  src={`/images/org/animals/${pet.id}.png`}
+                  onError={(e: any) => {
+                    e.target.src = "/images/org/animals/default.jpg";
+                  }}
                   alt={pet.name}
                   style={{
                     width: 120,
@@ -120,10 +121,10 @@ export default function Page() {
                     Art: {pet.speciesId}
                   </Typography>
                   <Typography variant="body2">
-                    Alder: {pet.ageYears} år
+                    Størrelse: {pet.size}
                   </Typography>
                   <Typography variant="body2">
-                    Kjønn: {pet.sex}
+                    Levetid: {pet.lifespanYears} år
                   </Typography>
                 </Box>
               </Box>

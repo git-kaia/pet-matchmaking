@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 
 export default function Page() {
-  const adopterId = "ideal_experienced_bird_owner"; // later: dynamic from auth/router
+  const adopterId = "ideal_experienced_bird_owner";
 
   const [matches, setMatches] = useState<any[]>([]);
   const [pets, setPets] = useState<Record<string, any>>({});
@@ -19,7 +19,6 @@ export default function Page() {
   useEffect(() => {
     async function fetchData() {
       try {
-        // 1. Fetch matches
         const res = await fetch(
           `http://localhost:3000/adopters/${adopterId}/matches`
         );
@@ -27,7 +26,6 @@ export default function Page() {
 
         setMatches(matchesData);
 
-        // 2. Fetch pet details for each match
         const petPromises = matchesData.map((m: any) =>
           fetch(`http://localhost:3000/pets/${m.petId}`).then((res) =>
             res.json()
@@ -36,7 +34,6 @@ export default function Page() {
 
         const petResults = await Promise.all(petPromises);
 
-        // 3. Convert to lookup object
         const petMap: Record<string, any> = {};
         petResults.forEach((pet) => {
           petMap[pet.id] = pet;
@@ -53,7 +50,7 @@ export default function Page() {
 
   return (
     <Grid container spacing={5}>
-      {/* Header */}
+      {/* HEADER */}
       <Grid container spacing={2.5} className="w-full">
         <Grid size={{ xs: 12, lg: 4 }}>
           <Typography variant="h1">Mine matcher</Typography>
@@ -65,7 +62,7 @@ export default function Page() {
         </Grid>
       </Grid>
 
-      {/* Match cards */}
+      {/* MATCH CARDS */}
       <Grid container spacing={3}>
         {matches.map((match) => {
           const pet = pets[match.petId];
@@ -83,6 +80,7 @@ export default function Page() {
 
                   <CardContent>
                     <Box className="flex gap-3 mb-3">
+                      {/* ADOPTER IMAGE */}
                       <img
                         src="/images/avatars/avatar-2.jpg"
                         alt="Adoptant"
@@ -93,13 +91,19 @@ export default function Page() {
                         }}
                       />
 
+                      {/* PET IMAGE (FIXED) */}
                       <img
-                        src={pet?.image || "/images/org/animals/default.jpg"}
-                        alt={pet?.name}
+                        src={`/images/org/animals/${match.petId}.png`}
+                        onError={(e: any) =>
+                          (e.target.src =
+                            "/images/org/animals/default.jpg")
+                        }
+                        alt={pet?.name || match.petId}
                         style={{
                           width: 60,
                           height: 60,
                           borderRadius: "50%",
+                          objectFit: "cover",
                         }}
                       />
                     </Box>

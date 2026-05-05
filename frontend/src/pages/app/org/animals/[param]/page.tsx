@@ -1,25 +1,63 @@
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import {
-  Breadcrumbs,
-  Card,
-  CardContent,
-  Grid,
-  Typography,
-  Box,
-  Divider,
-} from "@mui/material";
+
+import { Breadcrumbs, Card, CardContent, Grid, Typography, Box, Divider, } from "@mui/material";
+
+function t(val: any) {
+  const map: any = {
+    low: "Lav",
+    medium: "Moderat",
+    high: "Høy",
+    very_high: "Svært høy",
+
+    small: "Liten",
+    large: "Stor",
+
+    beginner: "Nybegynner",
+    experienced: "Erfaren",
+    advanced: "Avansert",
+
+    flock: "Flokk",
+    pair: "Par",
+    one_person: "Én person",
+    independent: "Selvstendig",
+
+    true: "Ja",
+    false: "Nei",
+  };
+
+  return map[val] ?? val ?? "-";
+}
+
+function Field({ label, value }: any) {
+  return (
+    <Box>
+      <Typography variant="caption">{label}</Typography>
+      <Typography fontWeight={600}>{value ?? "-"}</Typography>
+    </Box>
+  );
+}
 
 export default function AnimalProfile() {
-  const { id } = useParams();
+  const { dyrenavn } = useParams();
   const [animal, setAnimal] = useState<any>(null);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/pets/${id}`)
-      .then((res) => res.json())
-      .then(setAnimal)
-      .catch(console.error);
-  }, [id]);
+  if (!dyrenavn) {
+    console.warn("Missing pet id in route!");
+    return;
+  }
+
+  fetch(`http://localhost:3000/pets/${dyrenavn}`)
+    .then((res) => res.json())
+    .then((data) => {
+      console.log("PET DATA:", data);
+      setAnimal(data);
+    })
+    .catch(console.error);
+}, [dyrenavn]);
+
+console.log("URL PARAMS:", useParams());
 
   if (!animal) {
     return <Typography sx={{ mt: 4 }}>Laster dyreprofil...</Typography>;
@@ -29,96 +67,72 @@ export default function AnimalProfile() {
     <Grid container spacing={5}>
       {/* HEADER */}
       <Grid>
-        <Typography variant="h1">{animal.name}</Typography>
+        <Typography variant="h1">{animal.speciesId}: {animal.id}</Typography>
 
         <Breadcrumbs>
-          <Typography>Dyreprofiler</Typography>
-          <Typography>{animal.name}</Typography>
+        <Link to="/org/animals">Dyreprofiler</Link>
+          <Typography>{animal.id}</Typography>
         </Breadcrumbs>
       </Grid>
 
       {/* CONTENT */}
-      <Grid container spacing={3}>
+      <Grid container size={12} spacing={3}>
         <Card>
-          <CardContent className="flex flex-col gap-6">
+          <CardContent className="flex flex-col gap-4">
+
+            {/* IMAGE */}
             <img
-              src={`/images/org/animals/${animal.id}.jpg`}
+              src={`/images/org/animals/${animal.id}.png`}
               onError={(e: any) =>
                 (e.target.src = "/images/org/animals/default.jpg")
               }
-              style={{
-                width: "100%",
-                height: 260,
-                objectFit: "cover",
-                borderRadius: 12,
-              }}
+              style={{ width: "100%", height: 260, objectFit: "cover" }}
             />
-
-            <Box className="flex gap-4 items-center">
-                <img
-                  src="/images/avatars/avatar-2.jpg"
-                  alt="Adopter"
-                  style={{ width: 100, height: 100, borderRadius: "50%" }}
-                />
-            </Box>
 
             <Divider />
 
-            {/* BASIC */}
-            <Box className="grid grid-cols-2 gap-4">
-              <Field label="Art" value={animal.species_id} />
-              <Field label="Størrelse" value={animal.size} />
-              <Field label="Levetid" value={`${animal.lifespan_years} år`} />
-              <Field label="Erfaringsnivå" value={animal.experience_level} />
+            {/* BASIC INFO */}
+            <Box className="grid grid-cols-5 gap-4">
+              <Field label="Art" value={animal.speciesId} />
+              <Field label="Størrelse" value={t(animal.size)} />
+              <Field label="Levetid" value={`${animal.lifespanYears ?? "-"} år`} />
+              <Field label="Erfaring" value={t(animal.experienceLevel)} />
             </Box>
 
             <Divider />
 
             {/* BEHAVIOR */}
-            <Typography variant="h6">Atferd</Typography>
-            <Box className="grid grid-cols-2 gap-4">
-              <Field label="Støynivå" value={animal.noise_level} />
-              <Field label="Sosialt behov" value={animal.social_need} />
-              <Field label="Kos" value={animal.affection_level} />
-              <Field label="Aggresjonsrisiko" value={animal.aggression_risk} />
+            <Box className="grid grid-cols-5 gap-4">
+              <Field label="Støynivå" value={t(animal.noiseLevel)} />
+              <Field label="Sosialt behov" value={t(animal.socialNeed)} />
+              <Field label="Kos" value={t(animal.affectionLevel)} />
+              <Field label="Aggresjon" value={t(animal.aggressionRisk)} />
             </Box>
 
             <Divider />
 
             {/* CARE */}
-            <Typography variant="h6">Omsorg</Typography>
-            <Box className="grid grid-cols-2 gap-4">
-              <Field label="Daglig tid" value={`${animal.time_required} min`} />
-              <Field label="Søvnbehov" value={animal.sleep_need} />
-              <Field label="Flybehov" value={animal.flight_need} />
-              <Field label="Mental stimulering" value={animal.mental_stimulation_need} />
+            <Box className="grid grid-cols-5 gap-4">
+              <Field label="Daglig tid" value={`${animal.timeRequired ?? "-"} min`} />
+              <Field label="Rotnivå" value={t(animal.messLevel)} />
+              <Field label="Kostnad" value={t(animal.financialBurden)} />
+              <Field label="Omsorg" value={t(animal.careNeed)} />
             </Box>
 
             <Divider />
 
             {/* SPECIAL */}
-            <Typography variant="h6">Spesielt</Typography>
-            <Box className="grid grid-cols-2 gap-4">
-              <Field label="Bonding" value={animal.bonding_style} />
-              <Field
-                label="Trenger partner"
-                value={animal.requires_bird_partner ? "Ja" : "Nei"}
-              />
-              <Field label="Diett" value={animal.diet_complexity} />
-              <Field label="Mess nivå" value={animal.mess_level} />
+            <Box className="grid grid-cols-5 gap-4">
+              <Field label="Bonding" value={t(animal.bondingStyle)} />
+              <Field label="Trenger partner" value={t(animal.requiresBirdPartner)} />
+              <Field label="Mental stimulering" value={t(animal.mentalStimulationNeed)} />
+              <Field label="Flybehov" value={t(animal.flightNeed)} />
+              <Field label="Diett" value={t(animal.dietComplexity)} />
             </Box>
+
           </CardContent>
         </Card>
       </Grid>
     </Grid>
-  );
-}
-
-function Field({ label, value }: any) {
-  return (
-    <Box>
-      <Typography variant="caption">{label}</Typography>
-      <Typography fontWeight={600}>{value || "-"}</Typography>
-    </Box>
   );
 }
