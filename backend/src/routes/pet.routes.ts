@@ -5,7 +5,7 @@ import { getPets, getPet } from '../controllers/pet.controller';
 
 const router = Router();
 
-router.get('/pets', getPets);
-router.get('/pets/:id', getPet);
+router.get('/', getPets);
+router.get('/:id', getPet);
 
 export default router;

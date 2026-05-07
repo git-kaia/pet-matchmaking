@@ -1,120 +1,99 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Breadcrumbs, Card, CardContent,  CardActionArea, Grid, Typography, } from "@mui/material";
 
-import {
-  Breadcrumbs,
-  Button,
-  Card,
-  CardActionArea,
-  CardContent,
-  Grid,
-  Tooltip,
-  Typography,
-  Box
-} from "@mui/material";
+function t(val: string) {
+  const map: any = {
+    low: "Lav",
+    medium: "Moderat",
+    high: "Høy",
+    very_high: "Svært høy",
 
-import NiCellsPlus from "@/icons/nexture/ni-cells-plus";
-import { getBirds } from "@/api/birds";
+    small: "Liten",
+    medium_size: "Medium",
+    large: "Stor",
+
+    beginner: "Nybegynner",
+    experienced: "Erfaren",
+    advanced: "Avansert",
+  };
+
+  return map[val] ?? val ?? "-";
+}
 
 export default function Page() {
   const [animals, setAnimals] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getBirds()
-      .then((data) => {
-        setAnimals(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setLoading(false);
-      });
+    fetch("http://localhost:3000/pets")
+      .then((res) => res.json())
+      .then(setAnimals)
+      .catch(console.error);
   }, []);
+
+  console.log("ANIMALS:", animals);
 
   return (
     <Grid container spacing={5}>
-      {/* Header */}
-      <Grid container spacing={2.5} className="w-full" size={12}>
-        <Grid size={{ xs: 12, md: "grow" }}>
-          <Typography variant="h1">Dyreprofiler</Typography>
+      {/* HEADER */}
+      <Grid>
+        <Typography variant="h1">Dyreprofiler</Typography>
 
-          <Breadcrumbs>
-            <Link to="/org/dashboard">Dashboard</Link>
-            <Typography variant="body2">Dyreprofiler</Typography>
-          </Breadcrumbs>
-        </Grid>
-
-        <Grid size={{ xs: 12, md: "auto" }} className="flex flex-row items-start gap-2">
-          <Tooltip title="Opprett ny dyreprofil">
-            <Button
-              className="icon-only surface-standard flex-none"
-              size="medium"
-              color="grey"
-              variant="surface"
-              startIcon={<NiCellsPlus size={"medium"} />}
-            />
-          </Tooltip>
-        </Grid>
+        <Breadcrumbs>
+          <Link to="/org/dashboard">Dashboard</Link>
+          <Typography>Dyreprofiler</Typography>
+        </Breadcrumbs>
       </Grid>
 
-      {/* Loading state */}
-      {loading && (
-        <Grid size={12}>
-          <Typography>Laster fugler...</Typography>
-        </Grid>
-      )}
-
-      {/* Fuglekort */}
-      <Grid container size={12} spacing={3}>
+      {/* LIST */}
+      <Grid container spacing={3}>
         {animals.map((animal) => (
-          <Grid key={animal.id} size={{ lg: 4, xs: 12 }}>
+          <Grid key={animal.id} size={{ xs: 12, md: 4 }}>
             <Card>
-              <CardActionArea
-                component={Link}
-                to={`/org/animals/${animal.id}`}
-              >
-                <Typography variant="h6" className="px-4 pt-4">
-                  {animal.name}
-                </Typography>
-
+              <CardActionArea component={Link} to={`/org/animals/${animal.id}`}>
                 <CardContent>
-                  <Box className="w-full mb-3">
-                    <img
-                      src={`/images/org/animals/${animal.id}.jpg`}
-                      alt={animal.name}
-                      style={{
-                        width: "100%",
-                        height: "180px",
-                        objectFit: "cover",
-                        borderRadius: "8px"
-                      }}
-                    />
-                  </Box>
 
+                  {/* IMAGE */}
+                  <img
+                    src={`/images/org/animals/${animal.id}.png`}
+                    onError={(e: any) =>
+                      (e.target.src = "/images/org/animals/default.jpg")
+                    }
+                    style={{
+                      width: "100%",
+                      height: 275,
+                      objectFit: "cover",
+                      borderRadius: 8,
+                    }}
+                  />
+
+                  {/* NAME */}
+                  <Typography variant="h6" mt={1}>
+                    {animal.name}
+                  </Typography>
+
+                  {/* SPECIES */}
                   <Typography variant="body2">
-                    Art: {animal.speciesId}
+                    Art: {animal.speciesId ?? "-"}
+                  </Typography>
+
+                  {/* CORE INFO */}
+                  <Typography variant="body2">
+                    Størrelse: {t(animal.size)}
                   </Typography>
 
                   <Typography variant="body2">
-                    Alder: {animal.ageYears} år
+                    Støynivå: {t(animal.noiseLevel)}
                   </Typography>
 
                   <Typography variant="body2">
-                    Kjønn: {animal.sex}
+                    Sosialt behov: {t(animal.socialNeed)}
                   </Typography>
 
-                  <Box className="flex flex-col mt-2">
-                    <Button variant="text" size="small">
-                      Deaktiver
-                    </Button>
-                    <Button variant="text" size="small">
-                      Aktiver
-                    </Button>
-                    <Button variant="text" size="small">
-                      Se matcher
-                    </Button>
-                  </Box>
+                  <Typography variant="body2">
+                    Erfaring: {t(animal.experienceLevel)}
+                  </Typography>
+
                 </CardContent>
               </CardActionArea>
             </Card>

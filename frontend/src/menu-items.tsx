@@ -14,49 +14,42 @@ export const leftMenuItems: MenuItem[] = [
   icon: "NiUser",
   href: "/adoptant/matches",
   label: "Adoptant Matches",
-  hidden: true
 },
 {
   id: "adoptant-profile",
   icon: "NiUser",
   href: "/adoptant/profile",
   label: "Adoptant Profile",
-  hidden: true
 },
 {
   id: "adoptant/quiz",
   icon: "NiUser",
   href: "/adoptant/quiz",
   label: "Adoptant Quiz",
-  hidden: true,
 },
   {
     id: "org/dashboard",
     icon: "NiBriefcase",
     label: "Org Dashboard",
     href: "/org/dashboard",
-    hidden: true,
   },
   {
     id: "org/animals",
     icon: "NiBriefcase",
     href: "/org/animals",
     label: "Org Animals",
-    hidden: true,
   },
   {
     id: "org-matches",
     icon: "NiBriefcase",
     href: "/org/matches",
     label: "Org Matches",
-    hidden: true,
   },
   {
     id: "org-info",
     icon: "NiBriefcase",
     href: "/org/info",
     label: "Org Info",
-    hidden: true,
   }, 
 {
   id: "org-animal-profile",
@@ -72,9 +65,22 @@ export const leftMenuItems: MenuItem[] = [
 },
 {
   id: "org-match-details",
-  href: "/org/matches/:matchid",
+  href: "/org/matches/:param",
   label: "Match Detaljer",
   hideInMenu: true
+},
+{
+  id: "org-adoptant-profile",
+  href: "/org/adoptants/:param",
+  label: "Adoptant Profile",
+  hideInMenu: true,
+},
+
+{
+  id: "adoptant-animal-profile",
+  href: "/adoptant/animals/:dyrenavn",
+  label: "Adoptant Animal Profile",
+  hideInMenu: true,
 },
 
 ];

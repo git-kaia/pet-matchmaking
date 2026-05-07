@@ -1,112 +1,186 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  Breadcrumbs,
-  Button,
-  Card,
-  CardContent,
-  CardActionArea,
-  Grid,
-  Tooltip,
-  Typography,
-  Box,
-} from "@mui/material";
+
+import { Breadcrumbs, Button, Card, CardActionArea, CardContent, Grid, Typography, Tooltip, Box, Divider,} from "@mui/material";
 
 import NiKnobs from "@/icons/nexture/ni-knobs";
 
 export default function Page() {
-  const matches = [
-    {
-      id: "match-luna-adoptant1",
-      adoptantName: "Ola Normann",
-      adoptantImage: "/images/avatars/avatar-2.jpg",
-      animalName: "Luna",
-      animalImage: "/images/org/animals/luna.jpg",
-      score: 97,
-    },
-    {
-      id: "match-milo-adoptant3",
-      adoptantName: "Ola Normann",
-      adoptantImage: "/images/avatars/avatar-2.jpg",
-      animalName: "Milo",
-      animalImage: "/images/org/animals/milo.jpg",
-      score: 81,
-    },
+  const [matches, setMatches] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [pets, setPets] = useState<Record<string, any>>({});
+
+  const adopterIds = [
+    "ideal_experienced_bird_owner",
+    "busy_cat_low_tolerance",
+    "noise_sensitive_moderate_owner",
+    "overconfident_low_tolerance_beginner",
+    "zero_time_unavailable",
   ];
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const results = await Promise.all(
+          adopterIds.map(async (id) => {
+            const res = await fetch(
+              `http://localhost:3000/adopters/${id}/matches`
+            );
+
+            if (!res.ok) return [];
+
+            const data = await res.json();
+
+            return Array.isArray(data)
+              ? data.map((m: any) => ({
+                  ...m,
+                  adopterId: id,
+                }))
+              : [];
+          })
+        );
+
+        const allMatches = results.flat();
+        setMatches(allMatches);
+
+        const petResults = await Promise.all(
+          allMatches.map(async (m: any) => {
+            const res = await fetch(
+              `http://localhost:3000/pets/${m.petId}`
+            );
+            return res.ok ? res.json() : null;
+          })
+        );
+
+        const petMap: Record<string, any> = {};
+        petResults.forEach((pet) => {
+          if (pet?.id) petMap[pet.id] = pet;
+        });
+
+        setPets(petMap);
+      } catch (err) {
+        console.error("Failed to load matches:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    load();
+  }, []);
 
   return (
     <Grid container spacing={5}>
-      {/* Header */}
+      {/* HEADER */}
       <Grid container spacing={2.5} className="w-full">
-        <Grid xs={12} md={"grow"}>
-          <Typography variant="h1">Matcher</Typography>
+        <Grid>
+          <Typography variant="h1">Alle matcher</Typography>
 
           <Breadcrumbs>
-            <Link to="/org/dashboard">Dashboard</Link>
-            <Typography variant="body2">Matcher</Typography>
+            <Typography>Dashboard</Typography>
+            <Typography>Matcher</Typography>
           </Breadcrumbs>
         </Grid>
 
-        <Grid xs={12} md={"auto"} className="flex flex-row items-start gap-2">
-          <Tooltip title="Sorter etter">
-            <Button
-              className="icon-only surface-standard"
-              variant="surface"
-              color="grey"
-              startIcon={<NiKnobs size={"medium"} />}
-            />
+        <Grid>
+          <Tooltip title="Sorter">
+            <Button startIcon={<NiKnobs />} variant="outlined">
+              Sorter
+            </Button>
           </Tooltip>
         </Grid>
       </Grid>
 
-      {/* Match cards */}
+      {/* LOADING */}
+      {loading && (
+        <Grid>
+          <Typography>Laster matcher...</Typography>
+        </Grid>
+      )}
+
+      {/* MATCH LIST */}
       <Grid container spacing={3}>
-        {matches.map((match) => (
-          <Grid key={match.id} xs={12} lg={4}>
-            <Card>
-              <CardActionArea
-                component={Link}
-                to={`/org/matches/${match.id}`}
-              >
-                <Typography variant="h6" className="px-4 pt-4">
-                  {match.adoptantName} ↔ {match.animalName}
-                </Typography>
+        {matches.map((m, i) => {
+          const pet = pets[m.petId];
 
-                <CardContent>
-                  <Box className="flex gap-3 mb-3">
-                    <img
-                      src={match.adoptantImage}
-                      alt={match.adoptantName}
-                      style={{
-                        width: 60,
-                        height: 60,
-                        borderRadius: "50%",
-                        objectFit: "cover",
-                      }}
-                    />
-                    <img
-                      src={match.animalImage}
-                      alt={match.animalName}
-                      style={{
-                        width: 60,
-                        height: 60,
-                        borderRadius: "50%",
-                        objectFit: "cover",
-                      }}
-                    />
-                  </Box>
+          return (
+            <Grid key={`${m.adopterId}-${m.petId}-${i}`}>
+              <Card>
+                <CardActionArea
+                  component={Link}
+                  to={`/org/matches/${m.adopterId}__${m.petId}`}
+                >
+                  <CardContent
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 2,
+                      p: 2.5,
+                    }}
+                  >
 
-                  <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                    ❤️ Match score: {match.score}%
-                  </Typography>
+                    {/* MATCH SCORE */}
+                    <Typography variant="h4" sx={{ fontWeight: 800 }}>
+                      ❤️ Match: {m.percentage}%
+                    </Typography>
 
-                  <Button variant="text" size="small" className="mt-2">
-                    Se match
-                  </Button>
-                </CardContent>
-              </CardActionArea>
-            </Card>
-          </Grid>
-        ))}
+                    {/* HEADER TEXT */}
+                    <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
+                      <Typography variant="body1" color="text.secondary">
+                        Fugl: {pet?.name || m.petId}
+                      </Typography>
+
+                      <Typography variant="body1" color="text.secondary">
+                        Adoptant: {m.adopterId}
+                      </Typography>
+                    </Box>
+
+                    <Divider />
+
+                    {/* IMAGES */}
+                    <Box className="flex gap-3 items-center">
+                      {/* ADOPTER */}
+                      <img
+                        src={`/images/adoptants/${m.adopterId}.jpg`}
+                        onError={(e: any) => {
+                          e.target.src = "/images/avatars/avatar-2.jpg";
+                        }}
+                        alt="Adopter"
+                        style={{
+                          width: 50,
+                          height: 50,
+                          borderRadius: "50%",
+                        }}
+                      />
+
+                      {/* BIRD */}
+                      <img
+                        src={
+                          pet
+                            ? `/images/org/animals/${pet.id}.png`
+                            : "/images/org/animals/default.jpg"
+                        }
+                        onError={(e: any) => {
+                          e.target.src =
+                            "/images/org/animals/default.jpg";
+                        }}
+                        alt={pet?.name || "Bird"}
+                        style={{
+                          width: 50,
+                          height: 50,
+                          borderRadius: "12px",
+                          objectFit: "cover",
+                        }}
+                      />
+                    </Box>
+
+                    <Divider />
+
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Grid>
+          );
+        })}
       </Grid>
     </Grid>
   );
