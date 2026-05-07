@@ -1,3 +1,4 @@
+// to run this test "npm run test:scoringExplainability"
 import { matchAdopterWithPet } from '../../services/matching/matchingEngine';
 import { createTestAdopter } from '../helpers/createTestAdopter';
 import { createTestBird } from '../helpers/createTestBird';
@@ -59,13 +60,17 @@ test('SCORING EXPLAINABILITY – full system validation', () => {
   // rules breakdown
   let total = 0;
 
-  result.rules.forEach((rule: any) => {
-    console.log(
-      `${rule.ruleName.padEnd(30)} | ${rule.scoreType.padEnd(8)} | ${rule.value}`
-    );
+result.rules.forEach((rule: any) => {
+  const ruleName = String(rule.ruleName ?? "Unknown Rule");
+  const scoreType = String(rule.scoreType ?? "general");
+  const value = Number(rule.value ?? 0);
 
-    total += rule.value;
-  });
+  console.log(
+    `${ruleName.padEnd(30)} | ${scoreType.padEnd(10)} | ${value}`
+  );
+
+  total += value;
+});
 
 
   // feedback generation

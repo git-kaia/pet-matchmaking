@@ -5,6 +5,6 @@ import { getMatchesForAdopter } from '../controllers/match.controller';
 
 const router = Router();
 
-router.get('/adopters/:id/matches', getMatchesForAdopter);
+router.get('/:id/matches', getMatchesForAdopter);
 
 export default router;

@@ -22,6 +22,6 @@ app.get("/", (req, res) => {
 // register route groups
 app.use('/adopters', adopterRoutes);
 app.use('/pets', petRoutes);
-app.use(matchRoutes); // ← IMPORTANT
+app.use('/adopters', matchRoutes); 
 
 export default app;

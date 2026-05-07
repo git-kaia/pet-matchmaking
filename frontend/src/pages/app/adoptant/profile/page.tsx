@@ -1,142 +1,191 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { Breadcrumbs, Button, Card, CardContent, Grid, Tooltip, Typography, Avatar, Box, Divider } from "@mui/material";
-
-import NiCellsPlus from "@/icons/nexture/ni-cells-plus";
-import NiKnobs from "@/icons/nexture/ni-knobs";
+import { Breadcrumbs, Button, Card,  CardContent, Grid, Typography, Avatar, Box, Divider, } from "@mui/material";
 
 import { getAdopter } from "@/api/adopter";
 
 export default function Page() {
+  const adopterId = "ideal_experienced_bird_owner";
   const [adopter, setAdopter] = useState<any>(null);
 
   useEffect(() => {
-    getAdopter("adopter_1")
+    getAdopter(adopterId)
       .then(setAdopter)
       .catch(console.error);
   }, []);
 
   if (!adopter) {
-    return <Typography>Loading profile...</Typography>;
+    return <Typography sx={{ mt: 4 }}>Laster profil...</Typography>;
   }
+
+  console.log(adopter);
+
+const mapValue = (value: any) => {
+  const map: Record<string, string> = {
+    high: "Høy",
+    very_high: "Svært høy",
+    medium: "Middels",
+    low: "Lav",
+    none: "Ingen",
+    part_time: "Deltid",
+    full_time: "Fulltid",
+    one_person: "Knytter seg til én person",
+  };
+
+  return map[value] ?? value;
+};
 
   return (
     <Grid container spacing={5}>
       {/* Header */}
-      <Grid container spacing={2.5} className="w-full" size={12}>
-        <Grid size={{ xs: 12, md: "grow" }}>
-          <Typography variant="h1" component="h1" className="mb-0">
-            Min profil
-          </Typography>
+      <Grid container spacing={2.5}>
+        <Grid>
+          <Typography variant="h1">Min profil</Typography>
 
           <Breadcrumbs>
             <Link to="/adoptant/dashboard">Dashboard</Link>
             <Typography variant="body2">Profil</Typography>
           </Breadcrumbs>
         </Grid>
-
-        <Grid size={{ xs: 12, md: "auto" }} className="flex gap-2">
-          <Tooltip title="Configuration">
-            <Button
-              className="icon-only surface-standard"
-              size="medium"
-              color="grey"
-              variant="surface"
-              startIcon={<NiKnobs size={"medium"} />}
-            />
-          </Tooltip>
-
-          <Tooltip title="Add Widget">
-            <Button
-              className="icon-only surface-standard"
-              size="medium"
-              color="grey"
-              variant="surface"
-              startIcon={<NiCellsPlus size={"medium"} />}
-            />
-          </Tooltip>
-        </Grid>
       </Grid>
 
-      {/* Profile card */}
+      {/* Profile */}
       <Grid container size={12} spacing={3}>
-        <Grid size={{ lg: 8, xs: 12 }}>
-          <Card>
-            <CardContent className="flex flex-col gap-6">
-
-              <Grid container spacing={4}>
-                {/* Avatar */}
-                <Grid size={{ xs: 12, sm: 4 }} className="flex justify-center">
-                  <Box className="flex flex-col items-center gap-2">
-                    <Avatar
-                      src="/images/avatars/avatar-2.jpg"
-                      alt="Profilbilde"
-                      sx={{ width: "100px !important", height: "100px !important" }}
-                    />
-                    <Button variant="outlined" size="small">
-                      Bytt profilbilde
-                    </Button>
-                  </Box>
-                </Grid>
-
-                {/* Dynamic adopter data */}
-                <Grid size={{ xs: 12, sm: 8 }}>
-                  <Box className="grid grid-cols-2 gap-4">
-                    <ProfileField label="ID:" value={adopter.id} />
-                    <ProfileField label="Boligtype:" value={adopter.householdType} />
-                    <ProfileField label="Plass:" value={adopter.spaceLevel} />
-                    <ProfileField label="Støynivå:" value={adopter.noiseToleranceLevel} />
-                    <ProfileField label="Omsorgstid:" value={adopter.dailyCareTime?.toString()} />
-                    <ProfileField label="Erfaring med fugl:" value={adopter.experienceYearsBird?.toString()} />
-                    <ProfileField label="Livsstil:" value={adopter.lifeStability} />
-                    <ProfileField label="Forpliktelse:" value={adopter.commitmentHorizonYears?.toString()} />
-                  </Box>
-                </Grid>
+        <Card>
+          <CardContent className="flex flex-col gap-4">
+            <Grid container spacing={4}>
+              {/* Avatar */}
+              <Grid>
+                <Box className="flex flex-col items-center gap-2">
+                  <Avatar
+                    src="/images/avatars/avatar-2.jpg"
+                    sx={{ width: 100, height: 100 }}
+                  />
+                  <Button size="small">Bytt bilde</Button>
+                </Box>
               </Grid>
 
-              <Divider />
+              {/* Data */}
+              <Grid>
+                <Typography variant="h3" className="font-bold gap-2">Om deg</Typography>
 
-              {/* About */}
-              <Box>
-                <Typography variant="subtitle1" className="mb-1">
-                  Om meg
-                </Typography>
+                <Box className="grid grid-cols-4 gap-4">
+                    <Field label="Barn i husstanden" value={mapValue(adopter.kidsAge)} />
 
-                <Typography variant="body2" color="text.secondary">
-                  Dette er din adopter-profil basert på spørreskjemaet.
-                  Dataene brukes til å finne riktige dyrematcher.
-                </Typography>
-              </Box>
+                    <Field
+                      label="Har andre dyr"
+                      value={adopter.hasCurrentPets ? "Ja" : "Nei"}
+                    />
 
-              <Box className="flex justify-end mt-4">
-                <Button variant="contained">Rediger profil</Button>
-              </Box>
+                    <Field
+                      label="Type dyr"
+                      value={adopter.typeOfPet?.length ? adopter.typeOfPet.join(", ") : "Ingen"}
+                    />
 
-            </CardContent>
-          </Card>
-        </Grid>
+                    <Field
+                      label="Arbeidshverdag"
+                      value={mapValue(adopter.householdWorkPattern)}
+                    />
+
+                    <Field
+                      label="Daglig omsorgstid"
+                      value={`${adopter.dailyCareTime} min`}
+                    />
+
+                    <Field
+                      label="Alenetid"
+                      value={mapValue(adopter.aloneTimeHours)}
+                    />
+
+                    <Field
+                      label="Støytoleranse"
+                      value={mapValue(adopter.noiseToleranceLevel)}
+                    />
+
+                    <Field
+                      label="Toleranse for rot"
+                      value={mapValue(adopter.cleaningTolerance)}
+                    />
+
+                    <Field
+                      label="Livsstabilitet"
+                      value={mapValue(adopter.lifeStability)}
+                    />
+
+                    <Field
+                      label="Forpliktelse"
+                      value={`${adopter.commitmentHorizonYears} år`}
+                    />
+
+                    <Field
+                      label="Erfaring med fugl"
+                      value={
+                        adopter.experienceYears?.bird
+                          ? `${adopter.experienceYears.bird} år`
+                          : "Ingen"
+                      }
+                    />
+
+                    <Field
+                      label="Læringsvilje"
+                      value={mapValue(adopter.learningWillingness)}
+                    />
+                  </Box>
+              </Grid>
+            </Grid>
+
+            {/* Info */}
+            <Box>
+              <Typography variant="subtitle1">Om meg</Typography>
+              <Typography variant="body2" color="text.secondary">
+                Jeg er en erfaren fugleentusiast med over 10 års erfaring med å ta vare på ulike fuglearter. 
+                Jeg har hatt alt fra små undulater til større papegøyer.
+              </Typography>
+            </Box>
+
+            <Divider />
+                <Typography variant="h6">Dine preferanser</Typography>
+
+                <Box className="grid grid-cols-2 gap-4">
+                  <Field label="Ønsket sosialitet" value={mapValue(adopter.desiredPetSociability)} />
+                  <Field label="Ønsket kos" value={mapValue(adopter.desiredPetAffectionLevel)} />
+                  <Field label="Toleranse for problematferd" value={mapValue(adopter.problemBehaviorTolerance)} />
+                  <Field label="Ønsket interaksjon" value={mapValue(adopter.desiredHumanInteraction)} />
+                  <Field label="Bonding-type" value={mapValue(adopter.desiredBondingStyle)} />
+                  <Field label="Flere fugler" value={mapValue(adopter.willingnessMultipleBirds)} />
+                </Box>
+
+            <Divider />
+                <Typography variant="h6">Fuglehold</Typography>
+
+                <Box className="grid grid-cols-2 gap-4">
+                  <Field label="Søvnforhold" value={mapValue(adopter.sleepEnvironmentCommitment)} />
+                  <Field label="Fri flyging" value={mapValue(adopter.freeFlightExpectation)} />
+                  <Field label="Berikelse" value={mapValue(adopter.enrichmentCommitment)} />
+                  <Field label="Trening" value={mapValue(adopter.trainingInterest)} />
+                  <Field label="Diett-toleranse" value={mapValue(adopter.dietComplexityTolerance)} />
+                  <Field label="Adopsjonskompleksitet" value={mapValue(adopter.adoptionComplexityTolerance)} />
+                </Box>
+
+            <Divider />
+
+            <Box className="flex justify-end">
+              <Button variant="contained">Rediger profil</Button>
+            </Box>
+          </CardContent>
+        </Card>
       </Grid>
     </Grid>
   );
 }
 
-/* Reusable component */
-function ProfileField({
-  label,
-  value,
-}: {
-  label: string;
-  value: string | undefined;
-}) {
+function Field({ label, value }: any) {
   return (
-    <Box className="flex flex-col">
-      <Typography variant="caption" sx={{ fontWeight: 600, opacity: 0.8 }}>
-        {label}
-      </Typography>
-
-      <Typography variant="body2" sx={{ fontWeight: 600 }}>
-        {value || "-"}
+    <Box>
+      <Typography variant="caption">{label}</Typography>
+      <Typography variant="body2" fontWeight={600}>
+        {value ?? "-"}
       </Typography>
     </Box>
   );
