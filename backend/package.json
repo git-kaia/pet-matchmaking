@@ -8,6 +8,7 @@
     "start": "node dist/server.js",
     "test": "jest",
     "test:integration": "jest src/test/integration",
+    "test:scoringScenario": "jest src/test/scenario/scoringRules.scenario.test.ts",
     "test:scoringExplainability": "jest src/test/scenario/scoringExplainability.test.ts",
     "test:matchFeedbackNorwegian": "jest src/test/scenario/matchFeedback.norwegian.test.ts"
 

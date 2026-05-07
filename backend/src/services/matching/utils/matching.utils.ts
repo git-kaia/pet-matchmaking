@@ -3,8 +3,8 @@
 export function normalizeScore(
   score: number,
   ruleCount: number,
-  minPerRule = -10,
-  maxPerRule = 10
+  minPerRule = -5,
+  maxPerRule = 7
 ): number {
 
   if (ruleCount === 0) return 0;
