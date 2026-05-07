@@ -43,7 +43,7 @@ export default function Page() {
 
       <Grid container size={12} spacing={3}>
 
-        {/* ➤ DYREPROFILER */}
+        {/* DYREPROFILER */}
         <Grid size={{ lg: 4, xs: 12 }}>
           <Card>
             <CardActionArea component={Link} to="/org/animals">
@@ -59,7 +59,7 @@ export default function Page() {
           </Card>
         </Grid>
 
-        {/* ➤ SE MATCHER */}
+        {/* SE MATCHER */}
         <Grid size={{ lg: 4, xs: 12 }}>
           <Card>
             <CardActionArea component={Link} to="/org/matches">
@@ -75,7 +75,7 @@ export default function Page() {
           </Card>
         </Grid>
 
-        {/* ➤ ORGANISASJON */}
+        {/* ORGANISASJON */}
         <Grid size={{ lg: 4, xs: 12 }}>
           <Card>
             <CardActionArea component={Link} to="/org/info">

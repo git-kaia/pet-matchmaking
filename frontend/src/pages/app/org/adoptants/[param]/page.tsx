@@ -1,16 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-import {
-  Breadcrumbs,
-  Card,
-  CardContent,
-  Grid,
-  Typography,
-  Box,
-  Divider,
-  Avatar,
-} from "@mui/material";
+import { Breadcrumbs, Card, CardContent, Grid, Typography, Box, Divider, Avatar, } from "@mui/material";
 
 function mapValue(value: any) {
   const map: Record<string, string> = {
@@ -190,10 +181,8 @@ export default function AdoptantProfileOrgView() {
 
             <Divider />
 
-            {/* ============================= */}
-            {/* MATCH HISTORY (NEW SECTION) */}
-            {/* ============================= */}
-
+        
+            {/* MATCH HISTORY */}
             <Typography variant="h5">Matchhistorikk</Typography>
 
             <Box className="grid grid-cols-2 gap-4">

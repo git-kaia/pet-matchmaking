@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { Breadcrumbs, Button, Card,  CardContent, Grid, Tooltip,  Typography, Avatar, Box, Divider, } from "@mui/material";
-
-import NiKnobs from "@/icons/nexture/ni-knobs";
+import { Breadcrumbs, Button, Card,  CardContent, Grid, Typography, Avatar, Box, Divider, } from "@mui/material";
 
 import { getAdopter } from "@/api/adopter";
 

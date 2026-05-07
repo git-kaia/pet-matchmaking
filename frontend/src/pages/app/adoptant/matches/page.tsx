@@ -1,14 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  Breadcrumbs,
-  Card,
-  CardContent,
-  CardActionArea,
-  Grid,
-  Typography,
-  Box,
-} from "@mui/material";
+import { Breadcrumbs, Card, CardContent, CardActionArea, Grid, Typography, Box, } from "@mui/material";
 
 export default function Page() {
   const adopterId = "ideal_experienced_bird_owner";
@@ -91,7 +83,7 @@ export default function Page() {
                         }}
                       />
 
-                      {/* PET IMAGE (FIXED) */}
+                      {/* PET IMAGE */}
                       <img
                         src={`/images/org/animals/${match.petId}.png`}
                         onError={(e: any) =>

@@ -1,13 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  Breadcrumbs,
-  Card,
-  CardContent,
-  CardActionArea,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { Breadcrumbs, Card, CardContent,  CardActionArea, Grid, Typography, } from "@mui/material";
 
 function t(val: string) {
   const map: any = {
@@ -68,7 +61,7 @@ export default function Page() {
                     }
                     style={{
                       width: "100%",
-                      height: 180,
+                      height: 275,
                       objectFit: "cover",
                       borderRadius: 8,
                     }}
@@ -79,12 +72,12 @@ export default function Page() {
                     {animal.name}
                   </Typography>
 
-                  {/* SPECIES (FIXED) */}
+                  {/* SPECIES */}
                   <Typography variant="body2">
                     Art: {animal.speciesId ?? "-"}
                   </Typography>
 
-                  {/* CORE INFO (MORE USEFUL THAN STØRRELSE ONLY) */}
+                  {/* CORE INFO */}
                   <Typography variant="body2">
                     Størrelse: {t(animal.size)}
                   </Typography>

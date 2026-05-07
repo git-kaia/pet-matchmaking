@@ -76,6 +76,13 @@ export const leftMenuItems: MenuItem[] = [
   hideInMenu: true,
 },
 
+{
+  id: "adoptant-animal-profile",
+  href: "/adoptant/animals/:dyrenavn",
+  label: "Adoptant Animal Profile",
+  hideInMenu: true,
+},
+
 ];
 
 export const leftMenuBottomItems: MenuItem[] = [

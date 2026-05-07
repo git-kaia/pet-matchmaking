@@ -1,7 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-import { Breadcrumbs, Card, CardContent, Grid, Typography, Box, Divider, } from "@mui/material";
+import { Breadcrumbs, Card, CardContent, Grid, Typography, Box, Divider,} from "@mui/material";
 
 function t(val: any) {
   const map: any = {
@@ -42,7 +42,6 @@ export default function AnimalProfile() {
   const { dyrenavn } = useParams();
 
   const [animal, setAnimal] = useState<any>(null);
-  const [matches, setMatches] = useState<any[]>([]);
 
   useEffect(() => {
     if (!dyrenavn) return;
@@ -53,36 +52,6 @@ export default function AnimalProfile() {
       .then(setAnimal)
       .catch(console.error);
 
-    // 2. ALL MATCHES
-    const adopterIds = [
-      "ideal_experienced_bird_owner",
-      "busy_cat_low_tolerance",
-      "noise_sensitive_moderate_owner",
-      "overconfident_low_tolerance_beginner",
-      "zero_time_unavailable",
-    ];
-
-    Promise.all(
-      adopterIds.map((id) =>
-        fetch(`http://localhost:3000/adopters/${id}/matches`)
-          .then((r) => r.json())
-          .then((data) =>
-            data.map((m: any) => ({
-              ...m,
-              adopterId: id,
-            }))
-          )
-      )
-    )
-      .then((results) => results.flat())
-      .then((allMatches) => {
-        const filtered = allMatches.filter(
-          (m: any) => m.petId === dyrenavn
-        );
-
-        setMatches(filtered);
-      })
-      .catch(console.error);
   }, [dyrenavn]);
 
   if (!animal) {
@@ -105,7 +74,7 @@ export default function AnimalProfile() {
       </Grid>
 
       {/* MAIN LAYOUT */}
-      <Grid container spacing={3}>
+      <Grid container size={8} spacing={3}>
 
         {/* ANIMAL PROFILE */}
         <Grid size={{ xs: 12, lg: 8 }}>
@@ -154,52 +123,6 @@ export default function AnimalProfile() {
                 <Field label="Kostnad" value={t(animal.financialBurden)} />
                 <Field label="Omsorg" value={t(animal.careNeed)} />
               </Box>
-
-            </CardContent>
-          </Card>
-        </Grid>
-
-        {/* MATCHES PANEL */}
-        <Grid size={{ xs: 12, lg: 4 }}>
-          <Card>
-            <CardContent>
-
-              <Typography variant="h6" sx={{ mb: 2 }}>
-                Matcher ({matches.length})
-              </Typography>
-
-              {matches.length === 0 ? (
-                <Typography variant="body2">
-                  Ingen matcher funnet for dette dyret
-                </Typography>
-              ) : (
-                <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                  {matches.map((m, i) => (
-                    <Link
-                      key={i}
-                      to={`/org/matches/${m.adopterId}__${m.petId}`}
-                      style={{ textDecoration: "none", color: "inherit" }}
-                    >
-                      <Box
-                        sx={{
-                          p: 2,
-                          border: "1px solid #eee",
-                          borderRadius: 2,
-                          "&:hover": { background: "#fafafa" },
-                        }}
-                      >
-                        <Typography fontWeight={700}>
-                          ❤️ {m.percentage}%
-                        </Typography>
-
-                        <Typography variant="body2">
-                          Adoptant: {m.adopterId}
-                        </Typography>
-                      </Box>
-                    </Link>
-                  ))}
-                </Box>
-              )}
 
             </CardContent>
           </Card>

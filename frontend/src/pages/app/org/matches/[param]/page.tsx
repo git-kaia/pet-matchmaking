@@ -1,16 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-import {
-  Breadcrumbs,
-  Card,
-  CardContent,
-  Grid,
-  Typography,
-  Box,
-  Divider,
-  Chip,
-} from "@mui/material";
+import { Breadcrumbs, Card, CardContent, Grid, Typography, Box, Divider, Chip, } from "@mui/material";
 
 function t(val: string) {
   const map: any = {
@@ -70,7 +61,7 @@ export default function Page() {
         );
         if (petRes.ok) setPet(await petRes.json());
 
-        // ADOPTER (REAL DATA FIX)
+        // ADOPTER
         const adopterRes = await fetch(
           `http://localhost:3000/adopters/${adopterId}`
         );
@@ -162,7 +153,7 @@ export default function Page() {
                 </Box>
                 </Link>
 
-                {/* PET (CLICKABLE) */}
+                {/* PET */}
                 <Link to={`/org/animals/${pet.id}`} style={{ textDecoration: "none", color: "inherit" }}>
                   <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
                     <img
