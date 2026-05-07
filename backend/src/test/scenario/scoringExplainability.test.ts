@@ -1,3 +1,4 @@
+// to run this test "npm run test:scoringExplainability"
 import { matchAdopterWithPet } from '../../services/matching/matchingEngine';
 import { createTestAdopter } from '../helpers/createTestAdopter';
 import { createTestBird } from '../helpers/createTestBird';
