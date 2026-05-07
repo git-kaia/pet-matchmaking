@@ -15,19 +15,15 @@ export const socialBeginnerFriendlyBird: Bird = createTestBird({
   speciesId: 'budgie',
 
   // ---- Pet base fields ----
-  size: 'small',
+  size: 'very_small',
   noiseLevel: 'low',
   socialNeed: 'high',
-
   timeRequired: 120,
-
   behaviourIssues: 'low',
 
   // ---- Bird-specific fields ----
   bondingStyle: 'multiple_people',
-
   requiresBirdPartner: true,
-
   flightNeed: 'high',
 });
 
@@ -43,15 +39,11 @@ export const highMaintenanceDemandingBird: Bird = createTestBird({
   size: 'large',
   noiseLevel: 'high',
   socialNeed: 'very_high',
-
   experienceLevel: 'advanced',
   lifespanYears: 50,
-
   timeRequired: 300,
-
   messLevel: 'high',
   financialBurden: 'high',
-
   careNeed: 'very_high',
   aggressionRisk: 'high',
   behaviourIssues: 'high',
@@ -59,7 +51,6 @@ export const highMaintenanceDemandingBird: Bird = createTestBird({
   // ---- Bird-specific fields ----
   bondingStyle: 'one_person',
   mentalStimulationNeed: 'very_high',
-
   sleepNeed: 'high',
   flightNeed: 'high',
 });
@@ -73,24 +64,19 @@ export const lowMaintenanceIndependentBird: Bird = createTestBird({
   speciesId: 'canary',
 
   // ---- Pet base fields ----
-  size: 'small',
+  size: 'very_small',
   noiseLevel: 'low',
   socialNeed: 'low',
   affectionLevel: 'low',
-
   timeRequired: 30,
-
   messLevel: 'low',
   financialBurden: 'low',
-
   careNeed: 'low',
   behaviourIssues: 'low',
 
   // ---- Bird-specific fields ----
   bondingStyle: 'independent',
-
   mentalStimulationNeed: 'low',
-
   sleepNeed: 'low',
   flightNeed: 'low',
 });
