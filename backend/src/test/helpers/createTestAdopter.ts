@@ -9,17 +9,12 @@ export const createTestAdopter = (
 
   // ---- General pet fields ----
 
-  spaceLevel: 'medium',
-  householdType: 'apartment',
   kidsAge: 'none',
 
   hasCurrentPets: false,
   typeOfPet: [],
 
-  householdNoiseLevel: 'medium',
-
   householdWorkPattern: 'full_time',
-  householdWorkHours: '9-17',
 
   dailyCareTime: 60,
   aloneTimeHours: 'medium',
@@ -32,7 +27,6 @@ export const createTestAdopter = (
   lifeStability: 'medium',
   commitmentHorizonYears: 10,
 
-  rehomeResponsibilityLevel: 'medium',
   financialPriority: 'medium',
 
   // hasPetExperience: false,
@@ -50,21 +44,12 @@ export const createTestAdopter = (
 
   sleepEnvironmentCommitment: 'medium',
   freeFlightExpectation: 'medium',
-  freeRoamingTolerance: 'medium',
-
-  messTolerance: 'medium',
-  destructionTolerance: 'medium',
 
   desiredBondingStyle: 'independent',
-  birdOverHumanAcceptance: 'medium',
 
-  tamenessRequirement: 'medium',
   adoptionComplexityTolerance: 'medium',
 
   willingnessMultipleBirds: 'medium',
-
-  noiseSensitivityTime: 'medium',
-  suddenNoiseTolerance: 'medium',
 
   enrichmentCommitment: 'medium',
   trainingInterest: 'medium',

@@ -12,7 +12,6 @@ export const createTestPet = (
   size: 'medium',
 
   noiseLevel: 'medium',
-  activityLevel: 'medium',
   socialNeed: 'medium',
   affectionLevel: 'medium',
 

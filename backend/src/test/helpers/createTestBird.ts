@@ -14,7 +14,6 @@ export const createTestBird = (
   size: 'medium',
 
   noiseLevel: 'medium',
-  activityLevel: 'medium',
   socialNeed: 'medium',
   affectionLevel: 'medium',
 
@@ -30,22 +29,9 @@ export const createTestBird = (
   behaviourIssues: 'medium',
 
   // ---- Bird-specific fields ----
-  socialWithHumans: 'medium',
-  socialWithBirds: 'medium',
   bondingStyle: 'independent',
 
-  bitingRisk: 'low',
-  screamingLevel: 'medium',
-  destructiveness: 'medium',
-  separationAnxiety: 'medium',
-
-  toleratesChildren: 'medium',
-  toleratesStrangers: 'medium',
-
   requiresBirdPartner: false,
-  canLiveWithOtherBirds: 'medium',
-
-  trainingLevel: 'beginner',
   mentalStimulationNeed: 'medium',
 
   sleepNeed: 'medium',

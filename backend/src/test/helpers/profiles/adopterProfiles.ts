@@ -1,4 +1,4 @@
-// test/scenarios/adopterProfiles.ts
+// adopterProfiles.ts
 
 import { createTestAdopter } from '../createTestAdopter';
 import { Adopter } from '../../../domain/entities/adopter';
@@ -26,10 +26,8 @@ export const lowCommitmentLowToleranceAdopter: Adopter = createTestAdopter({
   lifeStability: 'low',
   commitmentHorizonYears: 10,
 
-  rehomeResponsibilityLevel: 'low',
   financialPriority: 'low',
 
-  hasPetExperience: true,
   learningWillingness: 'low',
   experienceYears: { cat: 5 },
 
@@ -42,20 +40,9 @@ export const lowCommitmentLowToleranceAdopter: Adopter = createTestAdopter({
   // ---- Bird-specific fields ----
   sleepEnvironmentCommitment: 'low',
   freeFlightExpectation: 'low',
-  freeRoamingTolerance: 'low',
-
-  messTolerance: 'low',
-  destructionTolerance: 'low',
-
-  birdOverHumanAcceptance: 'low',
-
-  tamenessRequirement: 'low',
   adoptionComplexityTolerance: 'low',
 
   willingnessMultipleBirds: 'low',
-
-  noiseSensitivityTime: 'low',
-  suddenNoiseTolerance: 'low',
 
   enrichmentCommitment: 'low',
   trainingInterest: 'low',
@@ -72,9 +59,6 @@ export const highlyExperiencedHighCommitmentAdopter: Adopter = createTestAdopter
   id: 'experienced_bird_keeper',
 
   // ---- General pet fields ----
-  spaceLevel: 'high',
-
-  householdNoiseLevel: 'low',
 
   householdWorkPattern: 'part_time',
 
@@ -86,11 +70,8 @@ export const highlyExperiencedHighCommitmentAdopter: Adopter = createTestAdopter
 
   lifeStability: 'high',
   commitmentHorizonYears: 30,
-
-  rehomeResponsibilityLevel: 'high',
   financialPriority: 'high',
 
-  hasPetExperience: true,
   learningWillingness: 'high',
   experienceYears: { bird: 10 },
 
@@ -103,21 +84,12 @@ export const highlyExperiencedHighCommitmentAdopter: Adopter = createTestAdopter
   // ---- Bird-specific fields ----
   sleepEnvironmentCommitment: 'high',
   freeFlightExpectation: 'high',
-  freeRoamingTolerance: 'high',
-
-  messTolerance: 'high',
-  destructionTolerance: 'high',
 
   desiredBondingStyle: 'one_person',
-  birdOverHumanAcceptance: 'high',
 
-  tamenessRequirement: 'high',
   adoptionComplexityTolerance: 'high',
 
   willingnessMultipleBirds: 'high',
-
-  noiseSensitivityTime: 'low',
-  suddenNoiseTolerance: 'high',
 
   enrichmentCommitment: 'high',
   trainingInterest: 'high',
@@ -134,7 +106,6 @@ export const noTimeInexperiencedLowToleranceAdopter: Adopter = createTestAdopter
   id: 'no_time_user',
 
   // ---- General pet fields ----
-  spaceLevel: 'low',
 
   dailyCareTime: 0,
   aloneTimeHours: 'high',
@@ -145,10 +116,8 @@ export const noTimeInexperiencedLowToleranceAdopter: Adopter = createTestAdopter
   lifeStability: 'low',
   commitmentHorizonYears: 2,
 
-  rehomeResponsibilityLevel: 'low',
   financialPriority: 'low',
 
-  hasPetExperience: false,
   learningWillingness: 'low',
 
   desiredPetSociability: 'low',
@@ -160,20 +129,10 @@ export const noTimeInexperiencedLowToleranceAdopter: Adopter = createTestAdopter
   // ---- Bird-specific fields ----
   sleepEnvironmentCommitment: 'low',
   freeFlightExpectation: 'low',
-  freeRoamingTolerance: 'low',
 
-  messTolerance: 'low',
-  destructionTolerance: 'low',
-
-  birdOverHumanAcceptance: 'low',
-
-  tamenessRequirement: 'low',
   adoptionComplexityTolerance: 'low',
 
   willingnessMultipleBirds: 'low',
-
-  noiseSensitivityTime: 'low',
-  suddenNoiseTolerance: 'low',
 
   enrichmentCommitment: 'low',
   trainingInterest: 'low',

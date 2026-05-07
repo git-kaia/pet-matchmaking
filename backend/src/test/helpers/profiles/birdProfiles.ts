@@ -1,4 +1,4 @@
-// test/scenarios/birdProfiles.ts
+// birdProfiles.ts
 
 import { createTestBird } from '../createTestBird';
 import { Bird } from '../../../domain/entities/bird';
@@ -17,7 +17,6 @@ export const socialBeginnerFriendlyBird: Bird = createTestBird({
   // ---- Pet base fields ----
   size: 'small',
   noiseLevel: 'low',
-  activityLevel: 'high',
   socialNeed: 'high',
 
   timeRequired: 120,
@@ -25,12 +24,9 @@ export const socialBeginnerFriendlyBird: Bird = createTestBird({
   behaviourIssues: 'low',
 
   // ---- Bird-specific fields ----
-  socialWithHumans: 'high',
-  socialWithBirds: 'high',
   bondingStyle: 'multiple_people',
 
   requiresBirdPartner: true,
-  canLiveWithOtherBirds: 'high',
 
   flightNeed: 'high',
 });
@@ -61,21 +57,7 @@ export const highMaintenanceDemandingBird: Bird = createTestBird({
   behaviourIssues: 'high',
 
   // ---- Bird-specific fields ----
-  socialWithHumans: 'low',
-  socialWithBirds: 'low',
   bondingStyle: 'one_person',
-
-  bitingRisk: 'high',
-  screamingLevel: 'high',
-  destructiveness: 'high',
-  separationAnxiety: 'high',
-
-  toleratesChildren: 'low',
-  toleratesStrangers: 'low',
-
-  canLiveWithOtherBirds: 'low',
-
-  trainingLevel: 'experienced',
   mentalStimulationNeed: 'very_high',
 
   sleepNeed: 'high',
@@ -93,7 +75,6 @@ export const lowMaintenanceIndependentBird: Bird = createTestBird({
   // ---- Pet base fields ----
   size: 'small',
   noiseLevel: 'low',
-  activityLevel: 'low',
   socialNeed: 'low',
   affectionLevel: 'low',
 
@@ -106,8 +87,6 @@ export const lowMaintenanceIndependentBird: Bird = createTestBird({
   behaviourIssues: 'low',
 
   // ---- Bird-specific fields ----
-  socialWithHumans: 'low',
-  socialWithBirds: 'low',
   bondingStyle: 'independent',
 
   mentalStimulationNeed: 'low',
