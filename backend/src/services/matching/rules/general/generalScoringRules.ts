@@ -318,10 +318,12 @@ export const experienceMatchRule: ScoringRule = (ctx) => {
     advanced: 3,
   } as const;
 
-  const petLevel = experienceMap[ctx.pet.experienceLevel];
+  const adopterScore = adopterLevel;
+  const petScore = experienceMap[ctx.pet.experienceLevel];
 
-  const gap = adopterLevel - petLevel;
+  const gap = adopterScore - petScore;
 
+  // Severe mismatch
   if (gap <= -2) {
     return createScore(
       scoreType,
@@ -331,29 +333,45 @@ export const experienceMatchRule: ScoringRule = (ctx) => {
     );
   }
 
+  // Slight mismatch
   if (gap === -1) {
     return createScore(
       scoreType,
-      SCORE.LOW,
+      SCORE.NEGATIVE,
       ruleName,
       `Experience slightly below requirement for ${petType}`
     );
   }
 
-  if (gap === 0) {
+  // Ideal advanced pairing
+  if (
+    adopterScore === 3 &&
+    ctx.pet.experienceLevel === 'advanced'
+  ) {
     return createScore(
       scoreType,
-      SCORE.MEDIUM,
+      15,
       ruleName,
-      `Experience matches requirement for ${petType}`
+      `Advanced adopter ideal for advanced ${petType}`
     );
   }
 
+  // Strong match for demanding pets
+  if (gap >= 1 && petScore >= 2) {
+    return createScore(
+      scoreType,
+      SCORE.HIGH,
+      ruleName,
+      `Highly experienced for demanding ${petType}`
+    );
+  }
+
+  // General appropriate experience
   return createScore(
     scoreType,
-    SCORE.HIGH,
+    SCORE.MEDIUM,
     ruleName,
-    `Highly experienced for ${petType}`
+    `Experience level appropriate for ${petType}`
   );
 };
 
