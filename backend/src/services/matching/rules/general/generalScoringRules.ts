@@ -76,7 +76,20 @@ export const noiseToleranceRule: ScoringRule = (ctx) => {
   const adopterTolerance = levelMap[ctx.adopter.noiseToleranceLevel];
   const petNoise = levelMap[ctx.pet.noiseLevel];
 
-  // If adopter can tolerate equal or more → always fine
+  // If adopter tolerates high noise level and pet has high noise level - extra points
+  if (
+    isHigh(ctx.pet.noiseLevel) &&
+    adopterTolerance >= petNoise
+  ) {
+    return createScore(
+      scoreType,
+      SCORE.HIGH,
+      ruleName,
+      'Excellent tolerance for high-noise pet'
+    );
+  }
+
+  // If adopter can tolerate equal or more - always fine
   if (petNoise <= adopterTolerance) {
     return createScore(
       scoreType,
@@ -305,10 +318,12 @@ export const experienceMatchRule: ScoringRule = (ctx) => {
     advanced: 3,
   } as const;
 
-  const petLevel = experienceMap[ctx.pet.experienceLevel];
+  const adopterScore = adopterLevel;
+  const petScore = experienceMap[ctx.pet.experienceLevel];
 
-  const gap = adopterLevel - petLevel;
+  const gap = adopterScore - petScore;
 
+  // Severe mismatch
   if (gap <= -2) {
     return createScore(
       scoreType,
@@ -318,29 +333,45 @@ export const experienceMatchRule: ScoringRule = (ctx) => {
     );
   }
 
+  // Slight mismatch
   if (gap === -1) {
     return createScore(
       scoreType,
-      SCORE.LOW,
+      SCORE.NEGATIVE,
       ruleName,
       `Experience slightly below requirement for ${petType}`
     );
   }
 
-  if (gap === 0) {
+  // Ideal advanced pairing
+  if (
+    adopterScore === 3 &&
+    ctx.pet.experienceLevel === 'advanced'
+  ) {
     return createScore(
       scoreType,
-      SCORE.MEDIUM,
+      15,
       ruleName,
-      `Experience matches requirement for ${petType}`
+      `Advanced adopter ideal for advanced ${petType}`
     );
   }
 
+  // Strong match for demanding pets
+  if (gap >= 1 && petScore >= 2) {
+    return createScore(
+      scoreType,
+      SCORE.HIGH,
+      ruleName,
+      `Highly experienced for demanding ${petType}`
+    );
+  }
+
+  // General appropriate experience
   return createScore(
     scoreType,
-    SCORE.HIGH,
+    SCORE.MEDIUM,
     ruleName,
-    `Highly experienced for ${petType}`
+    `Experience level appropriate for ${petType}`
   );
 };
 
@@ -352,35 +383,72 @@ export const learningWillingnessRule: ScoringRule = (ctx) => {
   const petType = ctx.pet.animalType;
 
   const hasExperience = hasExperienceForPet(ctx);
+
   const { learningWillingness } = ctx.adopter;
+  const petExperienceLevel = ctx.pet.experienceLevel;
 
+  const demandingPet =
+    petExperienceLevel === 'experienced' ||
+    petExperienceLevel === 'advanced';
+
+  // High willingness
   if (isHigh(learningWillingness)) {
+
+    // Experienced adopter + high willingness
+    if (hasExperience) {
+      return createScore(
+        scoreType,
+        SCORE.HIGH,
+        ruleName,
+        `Experienced with ${petType} and highly motivated to improve`
+      );
+    }
+
+    // Beginner + demanding pet
+    if (demandingPet) {
+      return createScore(
+        scoreType,
+        SCORE.LOW,
+        ruleName,
+        `Motivated to learn, but lacks experience for demanding ${petType}`
+      );
+    }
+
+    // Beginner + beginner-friendly pet
     return createScore(
       scoreType,
-      hasExperience ? SCORE.MEDIUM : SCORE.HIGH,
+      SCORE.MEDIUM,
       ruleName,
-      hasExperience
-        ? `Experienced with ${petType}, high willingness to improve`
-        : `No ${petType} experience but high willingness to learn`
+      `Motivated to learn about ${petType}`
     );
   }
 
+  // Medium willingness
   if (learningWillingness === 'medium') {
+
+    if (hasExperience) {
+      return createScore(
+        scoreType,
+        SCORE.MEDIUM,
+        ruleName,
+        `Experienced with ${petType}, moderate willingness to improve`
+      );
+    }
+
     return createScore(
       scoreType,
-      hasExperience ? SCORE.LOW : SCORE.MEDIUM,
+      SCORE.LOW,
       ruleName,
-      hasExperience
-        ? `Experienced with ${petType}, moderate willingness`
-        : `Limited ${petType} experience, moderate willingness to learn`
+      `Limited ${petType} experience and moderate willingness`
     );
   }
 
+  // Low willingness
   return createScore(
     scoreType,
-    SCORE.LOW,
+    SCORE.NEGATIVE,
     ruleName,
-    'No learning bonus'
+    `Low willingness to learn about ${petType}`
   );
 };
 

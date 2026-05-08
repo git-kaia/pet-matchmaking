@@ -37,22 +37,37 @@ export const highMaintenanceDemandingBird: Bird = createTestBird({
 
   // ---- Pet base fields ----
   size: 'large',
-  noiseLevel: 'high',
+
+  noiseLevel: 'very_high',
+
   socialNeed: 'very_high',
+  affectionLevel: 'very_high',
+
   experienceLevel: 'advanced',
-  lifespanYears: 50,
-  timeRequired: 300,
+
+  lifespanYears: 40,
+
+  timeRequired: 480,
+
   messLevel: 'high',
   financialBurden: 'high',
+
   careNeed: 'very_high',
   aggressionRisk: 'high',
   behaviourIssues: 'high',
 
   // ---- Bird-specific fields ----
   bondingStyle: 'one_person',
+
+  requiresBirdPartner: false,
+
   mentalStimulationNeed: 'very_high',
+
   sleepNeed: 'high',
+
   flightNeed: 'high',
+
+  dietComplexity: 'high',
 });
 
 
@@ -81,8 +96,127 @@ export const lowMaintenanceIndependentBird: Bird = createTestBird({
   flightNeed: 'low',
 });
 
+/**
+ * Loud, socially demanding bird.
+ * Designed to stress-test preference compatibility.
+ */
+export const loudSocialCockatoo: Bird = createTestBird({
+  id: 'b4',
+  speciesId: 'cockatoo',
+
+  // ---- General ----
+  size: 'large',
+
+  noiseLevel: 'very_high',
+  socialNeed: 'very_high',
+  affectionLevel: 'very_high',
+
+  experienceLevel: 'advanced',
+  lifespanYears: 60,
+
+  timeRequired: 360,
+
+  messLevel: 'high',
+  financialBurden: 'high',
+
+  careNeed: 'very_high',
+  aggressionRisk: 'high',
+  behaviourIssues: 'high',
+
+  // ---- Bird-specific ----
+  bondingStyle: 'one_person',
+
+  requiresBirdPartner: false,
+
+  mentalStimulationNeed: 'very_high',
+
+  sleepNeed: 'high',
+  flightNeed: 'very_high',
+
+  dietComplexity: 'high',
+});
+
+
+/**
+ * Balanced companion bird.
+ * Intended to produce moderate and varied scoring outcomes.
+ */
+export const balancedCompanionBird: Bird = createTestBird({
+  id: 'b5',
+  speciesId: 'conure',
+
+  // General
+  size: 'small',
+
+  noiseLevel: 'high',
+  socialNeed: 'medium',
+  affectionLevel: 'medium',
+
+  experienceLevel: 'intermediate',
+  lifespanYears: 20,
+
+  timeRequired: 90,
+
+  messLevel: 'medium',
+  financialBurden: 'medium',
+
+  careNeed: 'medium',
+  aggressionRisk: 'low',
+  behaviourIssues: 'medium',
+
+  // Bird-specific
+  bondingStyle: 'multiple_people',
+
+  requiresBirdPartner: false,
+
+  mentalStimulationNeed: 'medium',
+
+  sleepNeed: 'medium',
+  flightNeed: 'medium',
+
+  dietComplexity: 'medium',
+});
+
+export const destructiveMacaw: Bird =
+  createTestBird({
+    id: 'destructive_macaw',
+    speciesId: 'macaw',
+
+    size: 'very_large',
+
+    noiseLevel: 'very_high',
+    socialNeed: 'very_high',
+    affectionLevel: 'high',
+
+    experienceLevel: 'advanced',
+    lifespanYears: 55,
+
+    timeRequired: 420,
+
+    messLevel: 'very_high',
+    financialBurden: 'high',
+
+    careNeed: 'very_high',
+    aggressionRisk: 'medium',
+    behaviourIssues: 'very_high',
+
+    bondingStyle: 'multiple_people',
+
+    requiresBirdPartner: false,
+
+    mentalStimulationNeed: 'very_high',
+
+    sleepNeed: 'high',
+    flightNeed: 'very_high',
+
+    dietComplexity: 'high',
+  });
+
 export const birdProfiles: Bird[] = [
   socialBeginnerFriendlyBird,
   highMaintenanceDemandingBird,
   lowMaintenanceIndependentBird,
+  loudSocialCockatoo,
+  balancedCompanionBird,
+  destructiveMacaw
 ];

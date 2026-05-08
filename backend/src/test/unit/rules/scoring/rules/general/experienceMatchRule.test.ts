@@ -10,35 +10,34 @@ describe('experienceMatchRule', () => {
   ///////////////////////////////
   // AnimalType behavior
   ///////////////////////////////
-  describe('animalType handling', () => {
 
-    it('uses pet.animalType instead of other experience', () => {
-      const result = experienceMatchRule({
-        adopter: createTestAdopter({
-          experienceYears: {
-            dog: 10,   // high experience
-            bird: 0,   // no experience
-          },
-        }),
-        pet: createTestBird({
-          animalType: 'bird',
-          experienceLevel: 'intermediate',
-        }),
-      });
-
-      // Should NOT use dog experience
-      expect(result.value).toBe(SCORE.LOW);
-      expect(result.rule.description).toContain('bird');
+  it('uses experience matching for the pet animalType only', () => {
+    const result = experienceMatchRule({
+      adopter: createTestAdopter({
+        experienceYears: {
+          dog: 10,
+          bird: 0,
+        },
+      }),
+      pet: createTestBird({
+        animalType: 'bird',
+        experienceLevel: 'intermediate',
+      }),
     });
 
+    // Should use bird experience, not dog experience
+    expect(result.value).toBe(SCORE.NEGATIVE);
+
+    expect(result.rule.description).toContain('bird');
   });
 
   ///////////////////////////////
-  // Scoring logic
+  // Scoring behavior
   ///////////////////////////////
+
   describe('scoring logic', () => {
 
-    it('returns CRITICAL when far underqualified', () => {
+    it('returns CRITICAL when adopter is far underqualified', () => {
       const result = experienceMatchRule({
         adopter: createTestAdopter({
           experienceYears: { bird: 0 },
@@ -51,7 +50,7 @@ describe('experienceMatchRule', () => {
       expect(result.value).toBe(SCORE.CRITICAL);
     });
 
-    it('returns NEGATIVE when slightly underqualified', () => {
+    it('returns NEGATIVE when adopter is slightly underqualified', () => {
       const result = experienceMatchRule({
         adopter: createTestAdopter({
           experienceYears: { bird: 2 }, // intermediate
@@ -61,10 +60,10 @@ describe('experienceMatchRule', () => {
         }),
       });
 
-      expect(result.value).toBe(SCORE.LOW);
+      expect(result.value).toBe(SCORE.NEGATIVE);
     });
 
-    it('returns MEDIUM when experience matches', () => {
+    it('returns MEDIUM when adopter experience matches pet requirement', () => {
       const result = experienceMatchRule({
         adopter: createTestAdopter({
           experienceYears: { bird: 5 }, // experienced
@@ -77,7 +76,33 @@ describe('experienceMatchRule', () => {
       expect(result.value).toBe(SCORE.MEDIUM);
     });
 
-    it('returns HIGH when adopter is overqualified', () => {
+    it('returns HIGH for ideal advanced-to-advanced match', () => {
+      const result = experienceMatchRule({
+        adopter: createTestAdopter({
+          experienceYears: { bird: 20 }, // advanced
+        }),
+        pet: createTestBird({
+          experienceLevel: 'advanced',
+        }),
+      });
+
+      expect(result.value).toBeGreaterThan(SCORE.HIGH);
+    });
+
+    it('returns HIGH when adopter is highly experienced for demanding bird', () => {
+      const result = experienceMatchRule({
+        adopter: createTestAdopter({
+          experienceYears: { bird: 10 }, // advanced
+        }),
+        pet: createTestBird({
+          experienceLevel: 'experienced',
+        }),
+      });
+
+      expect(result.value).toBe(SCORE.HIGH);
+    });
+
+    it('returns MEDIUM when adopter is overqualified for beginner bird', () => {
       const result = experienceMatchRule({
         adopter: createTestAdopter({
           experienceYears: { bird: 10 }, // advanced
@@ -87,7 +112,7 @@ describe('experienceMatchRule', () => {
         }),
       });
 
-      expect(result.value).toBe(SCORE.HIGH);
+      expect(result.value).toBe(SCORE.MEDIUM);
     });
 
   });
