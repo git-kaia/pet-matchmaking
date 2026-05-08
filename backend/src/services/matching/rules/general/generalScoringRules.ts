@@ -383,35 +383,72 @@ export const learningWillingnessRule: ScoringRule = (ctx) => {
   const petType = ctx.pet.animalType;
 
   const hasExperience = hasExperienceForPet(ctx);
+
   const { learningWillingness } = ctx.adopter;
+  const petExperienceLevel = ctx.pet.experienceLevel;
 
+  const demandingPet =
+    petExperienceLevel === 'experienced' ||
+    petExperienceLevel === 'advanced';
+
+  // High willingness
   if (isHigh(learningWillingness)) {
+
+    // Experienced adopter + high willingness
+    if (hasExperience) {
+      return createScore(
+        scoreType,
+        SCORE.HIGH,
+        ruleName,
+        `Experienced with ${petType} and highly motivated to improve`
+      );
+    }
+
+    // Beginner + demanding pet
+    if (demandingPet) {
+      return createScore(
+        scoreType,
+        SCORE.LOW,
+        ruleName,
+        `Motivated to learn, but lacks experience for demanding ${petType}`
+      );
+    }
+
+    // Beginner + beginner-friendly pet
     return createScore(
       scoreType,
-      hasExperience ? SCORE.MEDIUM : SCORE.HIGH,
+      SCORE.MEDIUM,
       ruleName,
-      hasExperience
-        ? `Experienced with ${petType}, high willingness to improve`
-        : `No ${petType} experience but high willingness to learn`
+      `Motivated to learn about ${petType}`
     );
   }
 
+  // Medium willingness
   if (learningWillingness === 'medium') {
+
+    if (hasExperience) {
+      return createScore(
+        scoreType,
+        SCORE.MEDIUM,
+        ruleName,
+        `Experienced with ${petType}, moderate willingness to improve`
+      );
+    }
+
     return createScore(
       scoreType,
-      hasExperience ? SCORE.LOW : SCORE.MEDIUM,
+      SCORE.LOW,
       ruleName,
-      hasExperience
-        ? `Experienced with ${petType}, moderate willingness`
-        : `Limited ${petType} experience, moderate willingness to learn`
+      `Limited ${petType} experience and moderate willingness`
     );
   }
 
+  // Low willingness
   return createScore(
     scoreType,
-    SCORE.LOW,
+    SCORE.NEGATIVE,
     ruleName,
-    'No learning bonus'
+    `Low willingness to learn about ${petType}`
   );
 };
 
