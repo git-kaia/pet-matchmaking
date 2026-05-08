@@ -2,8 +2,8 @@
 
 export function normalizeScore(score: number): number {
 
-  const theoreticalMin = -135;
-  const theoreticalMax = 150;
+  const theoreticalMin = -140;
+  const theoreticalMax = 160;
 
   const percentage =
     ((score - theoreticalMin) /

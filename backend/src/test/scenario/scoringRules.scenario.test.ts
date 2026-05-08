@@ -24,8 +24,23 @@
 
 import { matchAdopterWithPet } from '../../services/matching/matchingEngine';
 
-import { adopterProfiles } from '../helpers/profiles/adopterProfiles';
-import { birdProfiles } from '../helpers/profiles/birdProfiles';
+import {
+    motivatedBeginnerAdopter,
+    highlyExperiencedHighCommitmentAdopter,
+    preferenceMismatchAdopter,
+    lifestyleConflictAdopter,
+    familyHouseholdAdopter,
+    lowCommitmentLowToleranceAdopter
+} from '../helpers/profiles/adopterProfiles';
+
+import {
+    socialBeginnerFriendlyBird,
+    highMaintenanceDemandingBird,
+    lowMaintenanceIndependentBird,
+    loudSocialCockatoo,
+    balancedCompanionBird,
+    destructiveMacaw,
+} from '../helpers/profiles/birdProfiles';
 
 type ScenarioResult = {
     adopter: string;
@@ -48,20 +63,13 @@ test('SCORING RULES SCENARIO TEST', () => {
     // PROFILE COLLECTIONS
     /////////////////////////////
 
-    const adopters = adopterProfiles.filter(
-        adopter =>
-            adopter.id !== 'no_time_user' &&
-            adopter.id !== 'busy_cat_owner'
-    );
-
-    const birds = birdProfiles;
-
     const birdDisplayNames: Record<string, string> = {
         budgie: 'Social Beginner-Friendly Budgie',
         african_grey: 'High-Maintenance African Grey',
         canary: 'Low-Maintenance Canary',
         cockatoo: 'Loud Social Cockatoo',
         conure: 'Balanced Companion Conure',
+        macaw: 'Destructive Macaw'
     };
 
     /////////////////////////////
@@ -74,114 +82,203 @@ test('SCORING RULES SCENARIO TEST', () => {
     // MATCH LOOP
     /////////////////////////////
 
-    for (const adopter of adopters) {
+    const scenarios = [
+        {
+            adopter: preferenceMismatchAdopter,
+            bird: lowMaintenanceIndependentBird,
+            label: 'Excellent lifestyle compatibility',
+        },
 
-        for (const bird of birds) {
+        {
+            adopter: highlyExperiencedHighCommitmentAdopter,
+            bird: balancedCompanionBird,
+            label: 'Experienced adopter + balanced bird',
+        },
 
-            console.log('\n----------------------------------------');
-            console.log(`MATCH: ${adopter.id} ↔ ${birdDisplayNames[bird.speciesId]}`);
-            console.log('----------------------------------------');
+        {
+            adopter: highlyExperiencedHighCommitmentAdopter,
+            bird: highMaintenanceDemandingBird,
+            label: 'Elite specialist + advanced parrot',
+        },
 
-            const result = matchAdopterWithPet(adopter, bird);
+        {
+            adopter: motivatedBeginnerAdopter,
+            bird: socialBeginnerFriendlyBird,
+            label: 'Beginner + beginner-friendly bird',
+        },
 
-            /////////////////////////////////////
-            // Ignore rejected matches
-            /////////////////////////////////////
+        {
+            adopter: motivatedBeginnerAdopter,
+            bird: loudSocialCockatoo,
+            label: 'Beginner overwhelmed by demanding bird',
+        },
 
-            if (result.rejected) {
-                console.log('REJECTED');
-                console.log(`Reason: ${result.rejectionReason}`);
+        {
+            adopter: lifestyleConflictAdopter,
+            bird: destructiveMacaw,
+            label: 'Overwhelmed adopter with destructive macaw',
+        },
 
-                console.log('\nExcluded from scoring comparison.\n');
+        {
+            adopter: lifestyleConflictAdopter,
+            bird: loudSocialCockatoo,
+            label: 'Lifestyle conflict with demanding social bird',
+        },
 
-                continue;
-            }
+        ////////////////////////////////
+        // MODERATE MATCHES (65–80%)
+        ////////////////////////////////
 
-            /////////////////////////////////////
-            // Store result for ranking
-            /////////////////////////////////////
+        {
+            adopter: motivatedBeginnerAdopter,
+            bird: loudSocialCockatoo,
+            label: 'Beginner with demanding social bird',
+        },
 
-            rankingResults.push({
-                adopter: adopter.id,
-                bird: birdDisplayNames[bird.speciesId],
+        {
+            adopter: familyHouseholdAdopter,
+            bird: balancedCompanionBird,
+            label: 'Family household + moderate bird',
+        },
 
+        {
+            adopter: preferenceMismatchAdopter,
+            bird: loudSocialCockatoo,
+            label: 'Good welfare capacity but poor preferences',
+        },
+
+        ////////////////////////////////
+        // LOW MATCHES (50–70%)
+        ////////////////////////////////
+
+        {
+            adopter: lifestyleConflictAdopter,
+            bird: balancedCompanionBird,
+            label: 'Lifestyle conflict with companion bird',
+        },
+
+        {
+            adopter: lifestyleConflictAdopter,
+            bird: loudSocialCockatoo,
+            label: 'Overwhelmed adopter with demanding bird',
+        },
+
+        {
+            adopter: lowCommitmentLowToleranceAdopter,
+            bird: balancedCompanionBird,
+            label: 'Low tolerance adopter with moderate bird',
+        },
+
+    ];
+
+    for (const scenario of scenarios) {
+
+        const { adopter, bird, label } = scenario;
+
+        console.log('\n----------------------------------------');
+        console.log(`SCENARIO: ${label}`);
+        console.log('----------------------------------------');
+
+        const result = matchAdopterWithPet(adopter, bird);
+
+
+        /////////////////////////////////////
+        // Ignore rejected matches
+        /////////////////////////////////////
+
+        if (result.rejected) {
+            console.log('REJECTED');
+            console.log(`Reason: ${result.rejectionReason}`);
+
+            console.log('\nExcluded from scoring comparison.\n');
+
+            continue;
+        }
+
+        /////////////////////////////////////
+        // Store result for ranking
+        /////////////////////////////////////
+
+        rankingResults.push({
+            adopter: adopter.id,
+            bird: birdDisplayNames[bird.speciesId],
+
+            totalScore: result.score,
+            welfareScore: result.welfareScore,
+            humanScore: result.humanScore,
+
+            percentage: result.percentage,
+        });
+
+        /////////////////////////////////////
+        // MAIN RESULT OUTPUT
+        /////////////////////////////////////
+
+        console.log('\nMATCH RESULT');
+
+        console.table([
+            {
                 totalScore: result.score,
                 welfareScore: result.welfareScore,
                 humanScore: result.humanScore,
+                percentage: `${result.percentage}%`,
+            },
+        ]);
 
-                percentage: result.percentage,
-            });
+        /////////////////////////////////////
+        // POSITIVE FACTORS
+        /////////////////////////////////////
+        const scoringRules = result.rules.filter(
+            (rule): rule is any => 'value' in rule
+        );
 
-            /////////////////////////////////////
-            // MAIN RESULT OUTPUT
-            /////////////////////////////////////
+        const positives = scoringRules
+            .filter(rule => rule.value > 0)
+            .sort((a, b) => b.value - a.value)
+            .slice(0, 5);
 
-            console.log('\nMATCH RESULT');
+        console.log('\nTOP POSITIVE FACTORS');
 
-            console.table([
-                {
-                    totalScore: result.score,
-                    welfareScore: result.welfareScore,
-                    humanScore: result.humanScore,
-                    percentage: `${result.percentage}%`,
-                },
-            ]);
-
-            /////////////////////////////////////
-            // POSITIVE FACTORS
-            /////////////////////////////////////
-            const scoringRules = result.rules.filter(
-                (rule): rule is any => 'value' in rule
+        positives.forEach(rule => {
+            console.log(
+                `+ ${rule.ruleName} (${rule.value})`
             );
+        });
 
-            const positives = scoringRules
-                .filter(rule => rule.value > 0)
-                .sort((a, b) => b.value - a.value)
-                .slice(0, 5);
+        /////////////////////////////////////
+        // NEGATIVE FACTORS
+        /////////////////////////////////////
 
-            console.log('\nTOP POSITIVE FACTORS');
+        const negatives = scoringRules
+            .filter(rule => rule.value < 0)
+            .sort((a, b) => a.value - b.value)
+            .slice(0, 5);
 
-            positives.forEach(rule => {
+        console.log('\nTOP NEGATIVE FACTORS');
+
+        if (negatives.length === 0) {
+            console.log('No major negative factors');
+        } else {
+            negatives.forEach(rule => {
                 console.log(
-                    `+ ${rule.ruleName} (${rule.value})`
+                    `- ${rule.ruleName} (${rule.value})`
                 );
             });
-
-            /////////////////////////////////////
-            // NEGATIVE FACTORS
-            /////////////////////////////////////
-
-            const negatives = scoringRules
-                .filter(rule => rule.value < 0)
-                .sort((a, b) => a.value - b.value)
-                .slice(0, 5);
-
-            console.log('\nTOP NEGATIVE FACTORS');
-
-            if (negatives.length === 0) {
-                console.log('No major negative factors');
-            } else {
-                negatives.forEach(rule => {
-                    console.log(
-                        `- ${rule.ruleName} (${rule.value})`
-                    );
-                });
-            }
-
-            /////////////////////////////////////
-            // RULE BREAKDOWN
-            /////////////////////////////////////
-
-            console.log('\nRULE BREAKDOWN');
-
-            console.table(
-                scoringRules.map(rule => ({
-                    rule: rule.ruleName,
-                    type: rule.scoreType,
-                    score: rule.value,
-                }))
-            );
         }
+
+        /////////////////////////////////////
+        // RULE BREAKDOWN
+        /////////////////////////////////////
+
+        console.log('\nRULE BREAKDOWN');
+
+        console.table(
+            scoringRules.map(rule => ({
+                rule: rule.ruleName,
+                type: rule.scoreType,
+                score: rule.value,
+            }))
+        );
     }
 
     /////////////////////////////////////
@@ -214,114 +311,20 @@ test('SCORING RULES SCENARIO TEST', () => {
     // DOMAIN EXPECTATION ASSERTIONS
     /////////////////////////////////////
 
-    // Experience should matter
     const eliteGrey = ranked.find(
         r =>
-            r.adopter === 'elite_avian_specialist' &&
-            r.bird === 'african_grey'
-    );
-
-    const beginnerGrey = ranked.find(
-        r =>
-            r.adopter === 'motivated_beginner' &&
-            r.bird === 'african_grey'
-    );
-
-    const beginnerCanary = ranked.find(
-        r =>
-            r.adopter === 'motivated_beginner' &&
-            r.bird === 'canary'
-    );
-
-    if (beginnerCanary && beginnerGrey) {
-        expect(beginnerCanary.percentage)
-            .toBeGreaterThan(beginnerGrey.percentage);
-    }
-
-
-    const mismatchCockatoo = ranked.find(
-        r =>
-            r.adopter === 'preference_mismatch_user' &&
-            r.bird === 'cockatoo'
-    );
-
-    const mismatchCanary = ranked.find(
-        r =>
-            r.adopter === 'preference_mismatch_user' &&
-            r.bird === 'canary'
-    );
-
-    // See if welfare scores higher than preferences
-    if (mismatchCanary) {
-        expect(mismatchCanary.welfareScore)
-            .toBeGreaterThan(mismatchCanary.humanScore);
-    }
-
-    const eliteCockatoo = ranked.find(
-        r =>
-            r.adopter === 'elite_avian_specialist' &&
-            r.bird === 'cockatoo'
-    );
-
-    const overwhelmedCockatoo = ranked.find(
-        r =>
-            r.adopter === 'overwhelmed_apartment_user' &&
-            r.bird === 'cockatoo'
-    );
-
-    if (eliteCockatoo && overwhelmedCockatoo) {
-        expect(eliteCockatoo.percentage)
-            .toBeGreaterThan(overwhelmedCockatoo.percentage);
-    }
-
-    const expertCockatoo = ranked.find(
-        r =>
             r.adopter === 'experienced_bird_keeper' &&
-            r.bird === 'cockatoo'
+            r.bird === 'High-Maintenance African Grey'
     );
 
-    const beginnerCockatoo = ranked.find(
-        r =>
-            r.adopter === 'motivated_beginner' &&
-            r.bird === 'cockatoo'
-    );
-
-    if (expertCockatoo && beginnerCockatoo) {
-        expect(expertCockatoo.percentage)
-            .toBeGreaterThan(beginnerCockatoo.percentage);
-    }
-
-    const familyConure = ranked.find(
-        r =>
-            r.adopter === 'family_household_user' &&
-            r.bird === 'conure'
-    );
-
-    const lifestyleConure = ranked.find(
+    const macawDisaster = ranked.find(
         r =>
             r.adopter === 'lifestyle_conflict_user' &&
-            r.bird === 'conure'
+            r.bird === 'Destructive Macaw'
     );
 
-    // Lifestyle should affect compatibility
-    if (familyConure && lifestyleConure) {
-        expect(familyConure.percentage)
-            .toBeGreaterThan(lifestyleConure.percentage);
-    }
-
-    /////////////////////////////////////
-    // RELATIVE RANKING ASSERTIONS
-    /////////////////////////////////////
-
-    if (eliteGrey && beginnerGrey) {
-        expect(eliteGrey.percentage)
-            .toBeGreaterThan(beginnerGrey.percentage);
-    }
-
-    if (mismatchCanary && mismatchCockatoo) {
-        expect(mismatchCanary.percentage)
-            .toBeGreaterThan(mismatchCockatoo.percentage);
-    }
+    expect(eliteGrey?.percentage)
+        .toBeGreaterThan(macawDisaster?.percentage ?? 0);
 
     /////////////////////////////////////
     // SANITY CHECKS

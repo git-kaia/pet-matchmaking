@@ -177,10 +177,46 @@ export const balancedCompanionBird: Bird = createTestBird({
   dietComplexity: 'medium',
 });
 
+export const destructiveMacaw: Bird =
+  createTestBird({
+    id: 'destructive_macaw',
+    speciesId: 'macaw',
+
+    size: 'very_large',
+
+    noiseLevel: 'very_high',
+    socialNeed: 'very_high',
+    affectionLevel: 'high',
+
+    experienceLevel: 'advanced',
+    lifespanYears: 55,
+
+    timeRequired: 420,
+
+    messLevel: 'very_high',
+    financialBurden: 'high',
+
+    careNeed: 'very_high',
+    aggressionRisk: 'medium',
+    behaviourIssues: 'very_high',
+
+    bondingStyle: 'multiple_people',
+
+    requiresBirdPartner: false,
+
+    mentalStimulationNeed: 'very_high',
+
+    sleepNeed: 'high',
+    flightNeed: 'very_high',
+
+    dietComplexity: 'high',
+  });
+
 export const birdProfiles: Bird[] = [
   socialBeginnerFriendlyBird,
   highMaintenanceDemandingBird,
   lowMaintenanceIndependentBird,
   loudSocialCockatoo,
   balancedCompanionBird,
+  destructiveMacaw
 ];
