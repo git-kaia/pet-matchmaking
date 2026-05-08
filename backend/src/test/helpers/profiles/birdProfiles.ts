@@ -37,22 +37,37 @@ export const highMaintenanceDemandingBird: Bird = createTestBird({
 
   // ---- Pet base fields ----
   size: 'large',
-  noiseLevel: 'high',
+
+  noiseLevel: 'very_high',
+
   socialNeed: 'very_high',
+  affectionLevel: 'very_high',
+
   experienceLevel: 'advanced',
-  lifespanYears: 50,
-  timeRequired: 300,
+
+  lifespanYears: 40,
+
+  timeRequired: 480,
+
   messLevel: 'high',
   financialBurden: 'high',
+
   careNeed: 'very_high',
   aggressionRisk: 'high',
   behaviourIssues: 'high',
 
   // ---- Bird-specific fields ----
   bondingStyle: 'one_person',
+
+  requiresBirdPartner: false,
+
   mentalStimulationNeed: 'very_high',
+
   sleepNeed: 'high',
+
   flightNeed: 'high',
+
+  dietComplexity: 'high',
 });
 
 

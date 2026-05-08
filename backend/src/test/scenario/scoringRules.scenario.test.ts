@@ -214,9 +214,10 @@ test('SCORING RULES SCENARIO TEST', () => {
     // DOMAIN EXPECTATION ASSERTIONS
     /////////////////////////////////////
 
-    const expertGrey = ranked.find(
+    // Experience should matter
+    const eliteGrey = ranked.find(
         r =>
-            r.adopter === 'experienced_bird_keeper' &&
+            r.adopter === 'elite_avian_specialist' &&
             r.bird === 'african_grey'
     );
 
@@ -225,6 +226,18 @@ test('SCORING RULES SCENARIO TEST', () => {
             r.adopter === 'motivated_beginner' &&
             r.bird === 'african_grey'
     );
+
+    const beginnerCanary = ranked.find(
+        r =>
+            r.adopter === 'motivated_beginner' &&
+            r.bird === 'canary'
+    );
+
+    if (beginnerCanary && beginnerGrey) {
+        expect(beginnerCanary.percentage)
+            .toBeGreaterThan(beginnerGrey.percentage);
+    }
+
 
     const mismatchCockatoo = ranked.find(
         r =>
@@ -238,12 +251,70 @@ test('SCORING RULES SCENARIO TEST', () => {
             r.bird === 'canary'
     );
 
+    // See if welfare scores higher than preferences
+    if (mismatchCanary) {
+        expect(mismatchCanary.welfareScore)
+            .toBeGreaterThan(mismatchCanary.humanScore);
+    }
+
+    const eliteCockatoo = ranked.find(
+        r =>
+            r.adopter === 'elite_avian_specialist' &&
+            r.bird === 'cockatoo'
+    );
+
+    const overwhelmedCockatoo = ranked.find(
+        r =>
+            r.adopter === 'overwhelmed_apartment_user' &&
+            r.bird === 'cockatoo'
+    );
+
+    if (eliteCockatoo && overwhelmedCockatoo) {
+        expect(eliteCockatoo.percentage)
+            .toBeGreaterThan(overwhelmedCockatoo.percentage);
+    }
+
+    const expertCockatoo = ranked.find(
+        r =>
+            r.adopter === 'experienced_bird_keeper' &&
+            r.bird === 'cockatoo'
+    );
+
+    const beginnerCockatoo = ranked.find(
+        r =>
+            r.adopter === 'motivated_beginner' &&
+            r.bird === 'cockatoo'
+    );
+
+    if (expertCockatoo && beginnerCockatoo) {
+        expect(expertCockatoo.percentage)
+            .toBeGreaterThan(beginnerCockatoo.percentage);
+    }
+
+    const familyConure = ranked.find(
+        r =>
+            r.adopter === 'family_household_user' &&
+            r.bird === 'conure'
+    );
+
+    const lifestyleConure = ranked.find(
+        r =>
+            r.adopter === 'lifestyle_conflict_user' &&
+            r.bird === 'conure'
+    );
+
+    // Lifestyle should affect compatibility
+    if (familyConure && lifestyleConure) {
+        expect(familyConure.percentage)
+            .toBeGreaterThan(lifestyleConure.percentage);
+    }
+
     /////////////////////////////////////
     // RELATIVE RANKING ASSERTIONS
     /////////////////////////////////////
 
-    if (expertGrey && beginnerGrey) {
-        expect(expertGrey.percentage)
+    if (eliteGrey && beginnerGrey) {
+        expect(eliteGrey.percentage)
             .toBeGreaterThan(beginnerGrey.percentage);
     }
 

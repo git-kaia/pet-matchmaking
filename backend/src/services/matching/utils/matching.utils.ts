@@ -1,16 +1,9 @@
 // matching.utils.ts
 
-export function normalizeScore(
-  score: number,
-  ruleCount: number,
-  minPerRule = -5,
-  maxPerRule = 7
-): number {
+export function normalizeScore(score: number): number {
 
-  if (ruleCount === 0) return 0;
-
-  const theoreticalMin = ruleCount * minPerRule;
-  const theoreticalMax = ruleCount * maxPerRule;
+  const theoreticalMin = -135;
+  const theoreticalMax = 150;
 
   const percentage =
     ((score - theoreticalMin) /

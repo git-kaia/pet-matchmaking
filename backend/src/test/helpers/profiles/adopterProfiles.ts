@@ -337,6 +337,92 @@ export const lifestyleConflictAdopter: Adopter = createTestAdopter({
   dietComplexityTolerance: 'low',
 });
 
+export const overwhelmedApartmentAdopter: Adopter =
+  createTestAdopter({
+    id: 'overwhelmed_apartment_adopter',
+
+    householdWorkPattern: 'full_time',
+
+    dailyCareTime: 30,
+    aloneTimeHours: 'high',
+
+    cleaningTolerance: 'low',
+    noiseToleranceLevel: 'low',
+
+    lifeStability: 'low',
+    commitmentHorizonYears: 3,
+
+    financialPriority: 'low',
+
+    learningWillingness: 'low',
+
+    experienceYears: {},
+
+    desiredPetSociability: 'low',
+    desiredPetAffectionLevel: 'low',
+    desiredHumanInteraction: 'low',
+
+    problemBehaviorTolerance: 'low',
+
+    sleepEnvironmentCommitment: 'low',
+    freeFlightExpectation: 'low',
+
+    desiredBondingStyle: 'independent',
+
+    adoptionComplexityTolerance: 'low',
+
+    willingnessMultipleBirds: 'low',
+
+    enrichmentCommitment: 'low',
+    trainingInterest: 'low',
+
+    dietComplexityTolerance: 'low',
+  });
+
+  export const eliteAvianSpecialist: Adopter =
+  createTestAdopter({
+    id: 'elite_avian_specialist',
+
+    householdWorkPattern: 'part_time',
+
+    dailyCareTime: 480,
+    aloneTimeHours: 'low',
+
+    cleaningTolerance: 'high',
+    noiseToleranceLevel: 'very_high',
+
+    lifeStability: 'high',
+    commitmentHorizonYears: 40,
+
+    financialPriority: 'high',
+
+    learningWillingness: 'high',
+
+    experienceYears: {
+      bird: 20,
+    },
+
+    desiredPetSociability: 'very_high',
+    desiredPetAffectionLevel: 'very_high',
+    desiredHumanInteraction: 'high',
+
+    problemBehaviorTolerance: 'high',
+
+    sleepEnvironmentCommitment: 'high',
+    freeFlightExpectation: 'high',
+
+    desiredBondingStyle: 'one_person',
+
+    adoptionComplexityTolerance: 'high',
+
+    willingnessMultipleBirds: 'high',
+
+    enrichmentCommitment: 'high',
+    trainingInterest: 'high',
+
+    dietComplexityTolerance: 'high',
+  });
+
 export const adopterProfiles: Adopter[] = [
   lowCommitmentLowToleranceAdopter,
   highlyExperiencedHighCommitmentAdopter,
@@ -345,4 +431,6 @@ export const adopterProfiles: Adopter[] = [
   preferenceMismatchAdopter,
   familyHouseholdAdopter,
   lifestyleConflictAdopter,
+  overwhelmedApartmentAdopter,
+  eliteAvianSpecialist
 ];
