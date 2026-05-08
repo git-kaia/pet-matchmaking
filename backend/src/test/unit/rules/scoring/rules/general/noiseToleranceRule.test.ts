@@ -7,6 +7,19 @@ import { SCORE } from '../../../../../../services/matching/utils/scoring.utils';
 
 describe('noiseToleranceRule (directional)', () => {
 
+  it('returns HIGH when adopter tolerates very noisy pets well', () => {
+    const result = noiseToleranceRule({
+      adopter: createTestAdopter({
+        noiseToleranceLevel: 'high',
+      }),
+      pet: createTestBird({
+        noiseLevel: 'high',
+      }),
+    });
+
+    expect(result.value).toBe(SCORE.HIGH);
+  });
+
   it('returns MEDIUM when pet noise is below adopter tolerance', () => {
     const result = noiseToleranceRule({
       adopter: createTestAdopter({ noiseToleranceLevel: 'very_high' }),

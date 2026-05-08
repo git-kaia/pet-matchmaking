@@ -76,7 +76,20 @@ export const noiseToleranceRule: ScoringRule = (ctx) => {
   const adopterTolerance = levelMap[ctx.adopter.noiseToleranceLevel];
   const petNoise = levelMap[ctx.pet.noiseLevel];
 
-  // If adopter can tolerate equal or more → always fine
+  // If adopter tolerates high noise level and pet has high noise level - extra points
+  if (
+    isHigh(ctx.pet.noiseLevel) &&
+    adopterTolerance >= petNoise
+  ) {
+    return createScore(
+      scoreType,
+      SCORE.HIGH,
+      ruleName,
+      'Excellent tolerance for high-noise pet'
+    );
+  }
+
+  // If adopter can tolerate equal or more - always fine
   if (petNoise <= adopterTolerance) {
     return createScore(
       scoreType,

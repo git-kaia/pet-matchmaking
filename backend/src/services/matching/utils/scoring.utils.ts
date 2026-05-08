@@ -1,8 +1,5 @@
 // scoring.utils.ts
 
-import { Level, Level3 } from '../../../domain/types/common.types';
-import { distanceMixed } from './level.utils';
-
 /////////////////////////////
 // SCORE CONSTANTS         //
 /////////////////////////////
