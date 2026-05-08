@@ -1,6 +1,6 @@
 -- seed.sql
 -- ============================================================
--- RESET TABLES (FOR CLEAN RE-RUNS)
+-- RESET TABLES
 -- ============================================================
 
 TRUNCATE match_rule_results RESTART IDENTITY CASCADE;
@@ -14,115 +14,245 @@ TRUNCATE birds CASCADE;
 
 INSERT INTO birds VALUES
 
--- Easy social beginner bird
-('social_beginner_budgie','budgie','Pip','bird','small',
- 'low','high','medium',
- 'beginner',10,
- 60,'low','low',
- 'medium','low','low',
- 'flock',true,
- 'medium',
- 'medium','high',
- 'low'),
+-- ============================================================
+-- Social Beginner-Friendly Budgie
+-- ============================================================
 
--- Independent low-need bird
-('independent_low_need_canary','canary','Sunny','bird','small',
- 'low','low','low',
- 'beginner',10,
- 30,'low','low',
- 'low','low','low',
- 'independent',false,
- 'low',
- 'low','low',
- 'low'),
+(
+'social_beginner_budgie',
+'budgie',
+'Pip',
+'bird',
 
--- Friendly balanced bird
-('friendly_balanced_cockatiel','cockatiel','Koko','bird','medium',
- 'medium','high','high',
- 'beginner',20,
- 90,'medium','low',
- 'medium','low','low',
- 'pair',false,
- 'medium',
- 'medium','medium',
- 'medium'),
+'very_small',
 
--- High demand intelligent bird
-('high_needs_african_grey','african_grey','Athena','bird','large',
- 'high','very_high','medium',
- 'advanced',50,
- 180,'high','high',
- 'very_high','high','high',
- 'one_person',false,
- 'very_high',
- 'high','high',
- 'very_high'),
+'low',
+'high',
+'medium',
 
--- Very loud and social bird
-('very_loud_social_conure','sun_conure','Rio','bird','medium',
- 'very_high','very_high','medium',
- 'experienced',30,
- 150,'medium','medium',
- 'high','medium','medium',
- 'pair',true,
- 'high',
- 'medium','very_high',
- 'medium'),
+'beginner',
+10,
 
--- Behaviour risk case
-('low_stability_budgie','budgie','Ghost','bird','small',
- 'low','low','low',
- 'beginner',10,
- 45,'low','low',
- 'low','high','high',
- 'independent',false,
- 'low',
- 'low','low',
- 'low'),
+120,
 
--- Balanced moderate bird
-('moderate_balanced_cockatiel','cockatiel','Luna','bird','medium',
- 'medium','medium','medium',
- 'beginner',20,
- 90,'medium','medium',
- 'medium','low','medium',
- 'pair',false,
- 'medium',
- 'medium','medium',
- 'medium'),
+'low',
+'low',
 
--- Extreme intelligence + needs
-('extreme_intelligence_grey','african_grey','Einstein','bird','large',
- 'high','very_high','medium',
- 'advanced',50,
- 180,'high','high',
- 'very_high','high','high',
- 'one_person',false,
- 'very_high',
- 'high','high',
- 'very_high'),
+'medium',
+'low',
+'low',
 
--- Chaotic high-social bird
-('chaotic_high_social_conure','sun_conure','Chaos','bird','medium',
- 'very_high','very_high','high',
- 'experienced',30,
- 150,'medium','medium',
- 'high','high','high',
- 'flock',true,
- 'high',
- 'medium','very_high',
- 'medium'),
+'multiple_people',
 
--- Minimal care control case
-('minimal_care_canary','canary','Whisper','bird','small',
- 'low','low','low',
- 'beginner',10,
- 30,'low','low',
- 'low','low','low',
- 'independent',false,
- 'low',
- 'low','low',
- 'low');
+true,
+
+'medium',
+
+'medium',
+'high',
+
+'medium'
+),
+
+-- ============================================================
+-- High-Maintenance African Grey
+-- ============================================================
+
+(
+'high_maintenance_african_grey',
+'african_grey',
+'Athena',
+'bird',
+
+'large',
+
+'very_high',
+'very_high',
+'very_high',
+
+'advanced',
+40,
+
+480,
+
+'high',
+'high',
+
+'very_high',
+'high',
+'high',
+
+'one_person',
+
+false,
+
+'very_high',
+
+'high',
+'high',
+
+'high'
+),
+
+-- ============================================================
+-- Low-Maintenance Independent Canary
+-- ============================================================
+
+(
+'low_maintenance_independent_canary',
+'canary',
+'Sunny',
+'bird',
+
+'very_small',
+
+'low',
+'low',
+'low',
+
+'beginner',
+15,
+
+30,
+
+'low',
+'low',
+
+'low',
+'low',
+'low',
+
+'independent',
+
+false,
+
+'low',
+
+'low',
+'low',
+
+'low'
+),
+
+-- ============================================================
+-- Loud Social Cockatoo
+-- ============================================================
+
+(
+'loud_social_cockatoo',
+'cockatoo',
+'Rio',
+'bird',
+
+'large',
+
+'very_high',
+'very_high',
+'very_high',
+
+'advanced',
+60,
+
+360,
+
+'high',
+'high',
+
+'very_high',
+'high',
+'high',
+
+'one_person',
+
+false,
+
+'very_high',
+
+'high',
+'very_high',
+
+'high'
+),
+
+-- ============================================================
+-- Balanced Companion Conure
+-- ============================================================
+
+(
+'balanced_companion_conure',
+'conure',
+'Luna',
+'bird',
+
+'small',
+
+'high',
+'medium',
+'medium',
+
+'intermediate',
+20,
+
+90,
+
+'medium',
+'medium',
+
+'medium',
+'low',
+'medium',
+
+'multiple_people',
+
+false,
+
+'medium',
+
+'medium',
+'medium',
+
+'medium'
+),
+
+-- ============================================================
+-- Destructive Macaw
+-- ============================================================
+
+(
+'destructive_macaw',
+'macaw',
+'Chaos',
+'bird',
+
+'very_large',
+
+'very_high',
+'very_high',
+'high',
+
+'advanced',
+55,
+
+420,
+
+'very_high',
+'high',
+
+'very_high',
+'medium',
+'very_high',
+
+'multiple_people',
+
+false,
+
+'very_high',
+
+'high',
+'very_high',
+
+'high'
+);
 
 -- ============================================================
 -- ADOPTERS
@@ -130,102 +260,381 @@ INSERT INTO birds VALUES
 
 INSERT INTO adopters VALUES
 
--- High risk: cat + low tolerance
-('busy_cat_low_tolerance',
- 'none',
- true, ARRAY['cat'],
- 'full_time',
- 60,'high',
- 'low','low',
- 'none',
- 'low',5,
- 'low','low',
- '{}'::jsonb,
- 'low','low',
- 'low',
- 'low','low','low',
- 'independent','low',
- 'low',
- 'low','low',
- 'low',
- ARRAY[]::TEXT[]),
+-- ============================================================
+-- Busy Cat Owner
+-- ============================================================
 
--- Ideal high-resource adopter
-('ideal_experienced_bird_owner',
- 'none',
- false, ARRAY[]::TEXT[],
- 'part_time',
- 240,'low',
- 'high','high',
- 'none',
- 'high',30,
- 'high','high',
- '{"bird":10}'::jsonb,
- 'high','high',
- 'high',
- 'high','high','high',
- 'one_person','high',
- 'high',
- 'high','high',
- 'high',
- ARRAY[]::TEXT[]),
+(
+'busy_cat_owner',
 
--- No time (guaranteed rejection)
-('zero_time_unavailable',
- 'none',
- false, ARRAY[]::TEXT[],
- 'full_time',
- 0,'high',
- 'low','low',
- 'none',
- 'low',2,
- 'low','low',
- '{}'::jsonb,
- 'low','low',
- 'low',
- 'low','low','low',
- 'independent','low',
- 'low',
- 'low','low',
- 'low',
- ARRAY[]::TEXT[]),
+'none',
 
--- Noise-sensitive household
-('noise_sensitive_moderate_owner',
- 'none',
- false, ARRAY[]::TEXT[],
- 'part_time',
- 120,'medium',
- 'medium','low',
- 'none',
- 'medium',10,
- 'medium','medium',
- '{"bird":2}'::jsonb,
- 'medium','medium',
- 'medium',
- 'medium','medium','medium',
- 'independent','medium',
- 'medium',
- 'medium','medium',
- 'medium',
- ARRAY[]::TEXT[]),
+true,
+ARRAY['cat'],
 
--- Overconfident beginner
-('overconfident_low_tolerance_beginner',
- 'kids',
- false, ARRAY[]::TEXT[],
- 'part_time',
- 180,'low',
- 'low','low',
- 'none',
- 'medium',10,
- 'medium','low',
- '{}'::jsonb,
- 'low','medium',
- 'low',
- 'medium','low','low',
- 'independent','low',
- 'low',
- 'high','low',
- 'low',
- ARRAY[]::TEXT[]);
+'full_time',
+
+60,
+'high',
+
+'low',
+'low',
+
+'none',
+
+'low',
+10,
+
+'low',
+
+'low',
+
+'{"cat":5}'::jsonb,
+
+'low',
+'low',
+'low',
+
+'low',
+
+'low',
+'low',
+
+'independent',
+
+'low',
+
+'low',
+
+'low',
+'low',
+
+'low',
+
+ARRAY[]::TEXT[]
+),
+
+-- ============================================================
+-- Experienced Bird Keeper
+-- ============================================================
+
+(
+'experienced_bird_keeper',
+
+'none',
+
+false,
+ARRAY[]::TEXT[],
+
+'part_time',
+
+240,
+'low',
+
+'high',
+'very_high',
+
+'none',
+
+'high',
+30,
+
+'high',
+
+'high',
+
+'{"bird":20}'::jsonb,
+
+'high',
+'high',
+'high',
+
+'high',
+
+'high',
+'high',
+
+'one_person',
+
+'high',
+
+'high',
+
+'high',
+'high',
+
+'high',
+
+ARRAY[]::TEXT[]
+),
+
+-- ============================================================
+-- No Time User
+-- ============================================================
+
+(
+'no_time_user',
+
+'none',
+
+false,
+ARRAY[]::TEXT[],
+
+'full_time',
+
+0,
+'high',
+
+'low',
+'low',
+
+'none',
+
+'low',
+2,
+
+'low',
+
+'low',
+
+'{}'::jsonb,
+
+'low',
+'low',
+'low',
+
+'low',
+
+'low',
+'low',
+
+'independent',
+
+'low',
+
+'low',
+
+'low',
+'low',
+
+'low',
+
+ARRAY[]::TEXT[]
+),
+
+-- ============================================================
+-- Motivated Beginner
+-- ============================================================
+
+(
+'motivated_beginner',
+
+'none',
+
+false,
+ARRAY[]::TEXT[],
+
+'part_time',
+
+180,
+'medium',
+
+'medium',
+'medium',
+
+'none',
+
+'high',
+15,
+
+'medium',
+
+'high',
+
+'{"bird":1}'::jsonb,
+
+'high',
+'high',
+'high',
+
+'medium',
+
+'high',
+'high',
+
+'multiple_people',
+
+'medium',
+
+'high',
+
+'high',
+'high',
+
+'medium',
+
+ARRAY[]::TEXT[]
+),
+
+-- ============================================================
+-- Preference Mismatch User
+-- ============================================================
+
+(
+'preference_mismatch_user',
+
+'none',
+
+false,
+ARRAY[]::TEXT[],
+
+'flexible',
+
+180,
+'low',
+
+'low',
+'low',
+
+'none',
+
+'high',
+20,
+
+'high',
+
+'high',
+
+'{"bird":6}'::jsonb,
+
+'low',
+'low',
+'low',
+
+'low',
+
+'high',
+'high',
+
+'independent',
+
+'high',
+
+'medium',
+
+'high',
+'high',
+
+'high',
+
+ARRAY[]::TEXT[]
+),
+
+-- ============================================================
+-- Family Household User
+-- ============================================================
+
+(
+'family_household_user',
+
+'under_ten',
+
+false,
+ARRAY[]::TEXT[],
+
+'full_time',
+
+120,
+'medium',
+
+'medium',
+'medium',
+
+'none',
+
+'high',
+15,
+
+'medium',
+
+'medium',
+
+'{"bird":2}'::jsonb,
+
+'medium',
+'medium',
+'medium',
+
+'medium',
+
+'medium',
+'medium',
+
+'multiple_people',
+
+'medium',
+
+'medium',
+
+'medium',
+'medium',
+
+'medium',
+
+ARRAY[]::TEXT[]
+),
+
+-- ============================================================
+-- Lifestyle Conflict User
+-- ============================================================
+
+(
+'lifestyle_conflict_user',
+
+'none',
+
+false,
+ARRAY[]::TEXT[],
+
+'full_time',
+
+65,
+'high',
+
+'low',
+'low',
+
+'none',
+
+'low',
+30,
+
+'low',
+
+'low',
+
+'{}'::jsonb,
+
+'low',
+'low',
+
+'medium',
+
+'low',
+
+'medium',
+'medium',
+
+'independent',
+
+'low',
+
+'low',
+
+'low',
+'low',
+
+'low',
+
+ARRAY[]::TEXT[]
+);
