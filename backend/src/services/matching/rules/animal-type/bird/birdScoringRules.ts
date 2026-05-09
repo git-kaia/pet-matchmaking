@@ -20,7 +20,7 @@ import { Bird } from '../../../../../domain/entities/bird';
 import { ScoringRule } from '../../../types/scoring.types';
 
 // Utils
-import { levelMap, isHigh, isLow, distanceMixed } from '../../../utils/level.utils';
+import { levelMap} from '../../../utils/level.utils';
 import { SCORE, createScore } from '../../../utils/scoring.utils';
 
 ///////////////////////
