@@ -23,6 +23,7 @@ function t(val: string) {
     medium_size: "Medium",
     large: "Stor",
     very_large: "Svært stor",
+    intermediate: "Mellomnivå",
 
     beginner: "Nybegynner",
     experienced: "Erfaren",
@@ -236,7 +237,7 @@ export default function Page() {
 
               {/* MATCH FACTORS */}
               <Typography variant="h6">
-                Viktige matchfaktorer
+                Viktige matchfaktorer for {t(pet.id)}:
               </Typography>
 
               <Box

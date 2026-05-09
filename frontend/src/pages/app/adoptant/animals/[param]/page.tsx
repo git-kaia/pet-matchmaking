@@ -19,6 +19,7 @@ function t(val: any) {
     beginner: "Nybegynner",
     experienced: "Erfaren",
     advanced: "Avansert",
+    intermediate: "Mellomnivå",
 
     flock: "Flokk",
     pair: "Par",

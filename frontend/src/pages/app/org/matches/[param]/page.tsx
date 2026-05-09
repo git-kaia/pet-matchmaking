@@ -15,6 +15,7 @@ function t(val: string) {
     medium_size: "Medium",
     large: "Stor",
     very_large: "Svært stor",
+    intermediate: "Mellomnivå",
 
     beginner: "Nybegynner",
     experienced: "Erfaren",
@@ -26,12 +27,17 @@ function t(val: string) {
 
 // Remove adopter-facing language
 function cleanFeedback(text: string) {
-  return text
-    .replace(/\bdu\b/gi, "Adoptanten")
-    .replace(/\bdin\b/gi, "Adoptantens")
-    .replace(/\bdere\b/gi, "Adoptant og fugl")
-    .replace(/\bDeg\b/gi, "Adoptanten")
-    .replace(/\bDin\b/gi, "Adoptantens");
+  if (!text) return text;
+
+  const lower = text
+    .replace(/\bdu\b/gi, "adoptanten")
+    .replace(/\bdin\b/gi, "adoptantens")
+    .replace(/\bdere\b/gi, "adoptant og fugl")
+    .replace(/\bdeg\b/gi, "adoptanten");
+
+  return lower.replace(/(^\s*\w|[.!?]\s*\w)/g, (c) =>
+    c.toUpperCase()
+  );
 }
 
 const safe = (val: any) => (val === undefined || val === null ? "-" : val);
@@ -189,7 +195,9 @@ export default function Page() {
               <Divider />
 
               {/* MATCH FACTORS */}
-              <Typography variant="h6">Viktige matchfaktorer</Typography>
+              <Typography variant="h6">
+                 Viktige matchfaktorer for {t(pet.id)}:
+              </Typography>
 
               <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
                 <Chip label={`Støy: ${t(pet.noiseLevel)}`} />
