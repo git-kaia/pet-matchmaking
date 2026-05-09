@@ -1,7 +1,15 @@
-import { Adopter } from '../../../../domain/entities/adopter';
-import { Pet } from  '../../../../domain/entities/pet';
+// generalHardRules.ts
+/**
+ * General Hard Rules
+ *
+ * Contains rejection rules for all pets.
+ *
+ * Responsibilities:
+ * - Define conditions under which a match is invalid
+ * - Ensure basic welfare and feasibility constraints
+ */
+
 import { HardRule } from '../../types/rule.types';
-import { MatchingContext } from '../../types/matching.types';
 
 // 1. Allergy rule
 export const allergyRule: HardRule = (ctx) => {
@@ -80,73 +88,7 @@ export const noTimeRule: HardRule = (ctx) => {
   };
 };
 
-// 3. Commitment vs lifespan
-export const commitmentRule: HardRule = (ctx) => {
-  const { adopter, pet } = ctx;
-
-  const adopterCommitment = adopter.commitmentHorizonYears;
-  const petLifespan = pet.lifespanYears;
-  const requiredMinimum = petLifespan / 2;
-
-  if (petLifespan > adopterCommitment * 2) {
-    return {
-      rejected: true,
-      ruleName: 'commitmentRule',
-      reason: 'Commitment too short for pet lifespan',
-
-      adopterSnapshot: {
-        commitmentYears: adopterCommitment,
-      },
-
-      petSnapshot: {
-        lifespanYears: petLifespan,
-        requiredMinimum,
-        difference: adopterCommitment - requiredMinimum,
-      },
-    };
-  }
-
-  return {
-    rejected: false,
-    ruleName: 'commitmentRule',
-
-    adopterSnapshot: {
-      commitmentYears: adopterCommitment,
-    },
-
-    petSnapshot: {
-      lifespanYears: petLifespan,
-      requiredMinimum,
-    },
-  };
-};
-
-// 4. Work pattern rule
-export const workPatternRule: HardRule = (ctx) => {
-  const { adopter, pet } = ctx;
-
-  const workPattern = adopter.householdWorkPattern;
-  const careNeed = pet.careNeed;
-
-  if (workPattern === 'full_time' && careNeed === 'very_high') {
-    return {
-      rejected: true,
-      ruleName: 'workPatternRule',
-      reason: 'Full-time work incompatible with very high care needs',
-      adopterSnapshot: { workPattern },
-      petSnapshot: { careNeed },
-    };
-  }
-
-  return {
-    rejected: false,
-    ruleName: 'workPatternRule',
-    adopterSnapshot: { workPattern },
-    petSnapshot: { careNeed },
-  };
-};
-
-// 5. Predation rule
+// 3. Predation rule
 export const predationRule: HardRule = (ctx) => {
   const { adopter, pet } = ctx;
 
@@ -172,7 +114,7 @@ export const predationRule: HardRule = (ctx) => {
   };
 };
 
-// 6. Children safety rule
+// 4. Children safety rule
 export const childrenSafetyRule: HardRule = (ctx) => {
   const { adopter, pet } = ctx;
 
@@ -200,8 +142,6 @@ export const childrenSafetyRule: HardRule = (ctx) => {
 export const generalHardRules: HardRule[] = [
   allergyRule,
   noTimeRule,
-  commitmentRule,
-  workPatternRule,
   predationRule,
   childrenSafetyRule,
 ];
