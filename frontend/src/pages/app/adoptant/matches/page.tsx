@@ -3,18 +3,27 @@ import { Link } from "react-router-dom";
 import { Breadcrumbs, Card, CardContent, CardActionArea, Grid, Typography, Box, } from "@mui/material";
 
 export default function Page() {
-  const adopterId = "ideal_experienced_bird_owner";
+  const adopterId = "experienced_bird_keeper";
 
   const [matches, setMatches] = useState<any[]>([]);
   const [pets, setPets] = useState<Record<string, any>>({});
 
   useEffect(() => {
     async function fetchData() {
-      try {
-        const res = await fetch(
-          `http://localhost:3000/adopters/${adopterId}/matches`
-        );
-        const matchesData = await res.json();
+        try {
+          const res = await fetch(
+            `http://localhost:3000/adopters/${adopterId}/matches`
+          );
+
+          if (!res.ok) {
+            throw new Error("Failed to fetch matches");
+          }
+
+          const matchesData = await res.json();
+
+          if (!Array.isArray(matchesData)) {
+            throw new Error("Matches response is not an array");
+          }
 
         setMatches(matchesData);
 

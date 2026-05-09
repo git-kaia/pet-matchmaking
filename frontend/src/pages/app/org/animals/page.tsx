@@ -9,9 +9,11 @@ function t(val: string) {
     high: "Høy",
     very_high: "Svært høy",
 
+    very_small: "Svært liten",
     small: "Liten",
     medium_size: "Medium",
     large: "Stor",
+    very_large: "Svært stor",
 
     beginner: "Nybegynner",
     experienced: "Erfaren",
@@ -69,7 +71,7 @@ export default function Page() {
 
                   {/* NAME */}
                   <Typography variant="h6" mt={1}>
-                    {animal.name}
+                    {animal.id}
                   </Typography>
 
                   {/* SPECIES */}

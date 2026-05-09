@@ -6,7 +6,7 @@ import { Breadcrumbs, Button, Card,  CardContent, Grid, Typography, Avatar, Box,
 import { getAdopter } from "@/api/adopter";
 
 export default function Page() {
-  const adopterId = "ideal_experienced_bird_owner";
+  const adopterId = "experienced_bird_keeper";
   const [adopter, setAdopter] = useState<any>(null);
 
   useEffect(() => {

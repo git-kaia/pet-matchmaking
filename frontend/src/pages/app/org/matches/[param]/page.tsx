@@ -10,8 +10,11 @@ function t(val: string) {
     high: "Høy",
     very_high: "Svært høy",
 
+    very_small: "Svært liten",
     small: "Liten",
+    medium_size: "Medium",
     large: "Stor",
+    very_large: "Svært stor",
 
     beginner: "Nybegynner",
     experienced: "Erfaren",
@@ -135,7 +138,7 @@ export default function Page() {
                     <Typography variant="body2">
                       Erfaring: {adopter.experienceYears?.bird
                         ? `${adopter.experienceYears.bird} år`
-                        : "-"}
+                        : "Ingen"}
                     </Typography>
 
                     <Typography variant="body2">

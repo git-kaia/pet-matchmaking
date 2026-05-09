@@ -10,8 +10,11 @@ function t(val: any) {
     high: "Høy",
     very_high: "Svært høy",
 
+    very_small: "Svært liten",
     small: "Liten",
+    medium_size: "Medium",
     large: "Stor",
+    very_large: "Svært stor",
 
     beginner: "Nybegynner",
     experienced: "Erfaren",
@@ -68,7 +71,7 @@ export default function AnimalProfile() {
         </Typography>
 
         <Breadcrumbs>
-          <Link to="/org/animals">Dyreprofiler</Link>
+          <Link to="/adoptant/matches">Matcher</Link>
           <Typography>{animal.id}</Typography>
         </Breadcrumbs>
       </Grid>

@@ -11,11 +11,13 @@ export default function Page() {
   const [pets, setPets] = useState<Record<string, any>>({});
 
   const adopterIds = [
-    "ideal_experienced_bird_owner",
-    "busy_cat_low_tolerance",
-    "noise_sensitive_moderate_owner",
-    "overconfident_low_tolerance_beginner",
-    "zero_time_unavailable",
+    "busy_cat_owner",
+    "experienced_bird_keeper",
+    "no_time_user",
+    "motivated_beginner",
+    "preference_mismatch_user",
+    "family_household_user",
+    "lifestyle_conflict_user"
   ];
 
   useEffect(() => {

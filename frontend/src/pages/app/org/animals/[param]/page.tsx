@@ -10,8 +10,11 @@ function t(val: any) {
     high: "Høy",
     very_high: "Svært høy",
 
+    very_small: "Svært liten",
     small: "Liten",
+    medium_size: "Medium",
     large: "Stor",
+    very_large: "Svært stor",
 
     beginner: "Nybegynner",
     experienced: "Erfaren",
@@ -54,13 +57,15 @@ export default function AnimalProfile() {
       .catch(console.error);
 
     // 2. ALL MATCHES
-    const adopterIds = [
-      "ideal_experienced_bird_owner",
-      "busy_cat_low_tolerance",
-      "noise_sensitive_moderate_owner",
-      "overconfident_low_tolerance_beginner",
-      "zero_time_unavailable",
-    ];
+      const adopterIds = [
+        "busy_cat_owner",
+        "experienced_bird_keeper",
+        "no_time_user",
+        "motivated_beginner",
+        "preference_mismatch_user",
+        "family_household_user",
+        "lifestyle_conflict_user"
+      ];
 
     Promise.all(
       adopterIds.map((id) =>

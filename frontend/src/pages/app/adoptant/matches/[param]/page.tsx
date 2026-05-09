@@ -18,8 +18,11 @@ function t(val: string) {
     high: "Høy",
     very_high: "Svært høy",
 
+    very_small: "Svært liten",
     small: "Liten",
+    medium_size: "Medium",
     large: "Stor",
+    very_large: "Svært stor",
 
     beginner: "Nybegynner",
     experienced: "Erfaren",
@@ -34,7 +37,7 @@ const safe = (val: any) =>
 
 export default function Page() {
   const { matchid } = useParams();
-  const adopterId = "ideal_experienced_bird_owner";
+  const adopterId = "experienced_bird_keeper";
 
   const [match, setMatch] = useState<any>(null);
   const [pet, setPet] = useState<any>(null);
