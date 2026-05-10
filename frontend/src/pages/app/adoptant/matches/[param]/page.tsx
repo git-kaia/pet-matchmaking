@@ -28,6 +28,13 @@ function t(val: string) {
     beginner: "Nybegynner",
     experienced: "Erfaren",
     advanced: "Avansert",
+
+    budgie: "Undulat",
+    african_grey: "Grå jaco",
+    canary: "Kanari",
+    cockatoo: "Kakadue",
+    conure: "Kongeparakitt",
+    macaw: "Ara",
   };
 
   return map[val] ?? val ?? "-";
@@ -222,7 +229,7 @@ export default function Page() {
                       </Typography>
 
                       <Typography variant="body2">
-                        Art: {pet.speciesId}
+                        Art: {t(pet.speciesId)}
                       </Typography>
 
                       <Typography variant="body2">
@@ -249,9 +256,9 @@ export default function Page() {
               >
                 <Chip label={`Støy: ${t(pet.noiseLevel)}`} />
                 <Chip label={`Sosial: ${t(pet.socialNeed)}`} />
-                <Chip label={`Omsorg: ${t(pet.careNeed)}`} />
+                <Chip label={`Krav til omsorg: ${t(pet.careNeed)}`} />
                 <Chip
-                  label={`Erfaring: ${t(
+                  label={`Krav til erfaring: ${t(
                     pet.experienceLevel
                   )}`}
                 />

@@ -28,6 +28,13 @@ function t(val: any) {
 
     true: "Ja",
     false: "Nei",
+
+    budgie: "Undulat",
+    african_grey: "Grå jaco",
+    canary: "Kanari",
+    cockatoo: "Kakadue",
+    conure: "Kongeparakitt",
+    macaw: "Ara",
   };
 
   return map[val] ?? val ?? "-";
@@ -61,7 +68,7 @@ export default function AnimalProfile() {
       const adopterIds = [
         "busy_cat_owner",
         "experienced_bird_keeper",
-        "no_time_user",
+        "no_time_user", 
         "motivated_beginner",
         "preference_mismatch_user",
         "family_household_user",
@@ -135,10 +142,10 @@ export default function AnimalProfile() {
 
               {/* BASIC INFO */}
               <Box className="grid grid-cols-5 gap-4">
-                <Field label="Art" value={animal.speciesId} />
+                <Field label="Art" value={t(animal.speciesId)} />
                 <Field label="Størrelse" value={t(animal.size)} />
                 <Field label="Levetid" value={`${animal.lifespanYears ?? "-"} år`} />
-                <Field label="Erfaring" value={t(animal.experienceLevel)} />
+                <Field label="Krav til erfaring" value={t(animal.experienceLevel)} />
               </Box>
 
               <Divider />
@@ -147,18 +154,18 @@ export default function AnimalProfile() {
               <Box className="grid grid-cols-5 gap-4">
                 <Field label="Støynivå" value={t(animal.noiseLevel)} />
                 <Field label="Sosialt behov" value={t(animal.socialNeed)} />
-                <Field label="Kos" value={t(animal.affectionLevel)} />
-                <Field label="Aggresjon" value={t(animal.aggressionRisk)} />
+                <Field label="Nivå av kjærlighet" value={t(animal.affectionLevel)} />
+                <Field label="Nivå av aggresjon" value={t(animal.aggressionRisk)} />
               </Box>
 
               <Divider />
 
               {/* CARE */}
               <Box className="grid grid-cols-5 gap-4">
-                <Field label="Tid per dag" value={`${animal.timeRequired ?? "-"} min`} />
-                <Field label="Rotnivå" value={t(animal.messLevel)} />
-                <Field label="Kostnad" value={t(animal.financialBurden)} />
-                <Field label="Omsorg" value={t(animal.careNeed)} />
+                <Field label="Krav til omsorgstid per dag" value={`${animal.timeRequired ?? "-"} min`} />
+                <Field label="Nivå av kjæledyrrelatert rot" value={t(animal.messLevel)} />
+                <Field label="Nivå av omsorgskostnader" value={t(animal.financialBurden)} />
+                <Field label="Krav til omsorg" value={t(animal.careNeed)} />
               </Box>
 
             </CardContent>
