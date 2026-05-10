@@ -1,9 +1,10 @@
-# Backend Setup
+# Project Setup
 
-This is the backend for the bachelor broject developing an appøocation for pet matchmaking.  
-Built with **Node.js, Express, and TypeScript**.
+## Backend Setup
 
-## Installation
+The project backend is built with **Node.js, Express, and TypeScript**.
+
+### Installation
 
 1. Navigate to the backend folder (if not in it already):
 
@@ -16,7 +17,7 @@ Install dependencies:
 npm install
 ```
 
-## Running the backend
+### Running the backend
 
 1. Start development server:
 
@@ -26,7 +27,7 @@ npm run dev
 1. The server will run on:
 - http://localhost:3000
 
-## Local PostgreSQL database setup
+### Local PostgreSQL database setup
 
 1. Install PostgresSQL (https://www.postgresql.org/download/)
 2. Add path to system environment variables (for easier system access)
@@ -72,14 +73,14 @@ psql -U myadmin -d pet_matchmaking -f backend/db/sql/seed.sql
 Create a .env file:
 
 ```
-DB_USER=myadmin
+DB_USER=yourusername
 DB_PASSWORD=yourpassword
 DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=pet_matchmaking
 ```
 
-## Running the db connection test script
+### Running the db connection test script
 
 1. Run command
 ```bash
@@ -87,3 +88,6 @@ npx ts-node src/testDb.ts
 ```
 
 2. If connection is succesful content from the database table species will be logged.
+
+
+## Frontend Setup
