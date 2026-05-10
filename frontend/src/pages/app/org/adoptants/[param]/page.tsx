@@ -108,7 +108,7 @@ export default function AdoptantProfileOrgView() {
       {/* PROFILE CARD */}
       <Grid container size={12} spacing={3}>
         <Card>
-          <CardContent className="flex flex-col gap-6">
+          <CardContent className="flex flex-col gap-4">
 
             {/* TOP */}
             <Box className="flex items-center gap-4">
@@ -199,9 +199,12 @@ export default function AdoptantProfileOrgView() {
             <Divider />
 
             {/* PREFERENCES */}
+            <Grid className="flex flex-wrap justify-evenly gap-4 ">
+
+            <Card>
             <Typography variant="h6">Preferanser</Typography>
 
-            <Box className="grid grid-cols-3 gap-4">
+            <Box className="grid grid-cols-2 gap-4">
               <Field label="Ønsket nivå av sosialitet" value={mapValue(adopter.desiredPetSociability)} />
               <Field label="Ønsket nivå av kos" value={mapValue(adopter.desiredPetAffectionLevel)} />
               <Field label="Toleranse for problematferd" value={mapValue(adopter.problemBehaviorTolerance)} />
@@ -209,13 +212,15 @@ export default function AdoptantProfileOrgView() {
               <Field label="Ønsket tilknytningstype" value={mapValue(adopter.desiredBondingStyle)} />
               <Field label="Nivå av toleranse for flere fugler" value={mapValue(adopter.willingnessMultipleBirds)} />
             </Box>
+            </Card>
 
         <Divider />
 
             {/* CARE */}
+            <Card>
             <Typography variant="h6">Fuglehold</Typography>
 
-            <Box className="grid grid-cols-3 gap-4">
+            <Box className="grid grid-cols-2 gap-4">
               <Field label="Evne til å gi gode søvnforhold" value={mapValue(adopter.sleepEnvironmentCommitment)} />
               <Field label="Evne til å tilby friflyvning" value={mapValue(adopter.freeFlightExpectation)} />
               <Field label="Evne til å tilby miljøberikelse" value={mapValue(adopter.enrichmentCommitment)} />
@@ -223,6 +228,9 @@ export default function AdoptantProfileOrgView() {
               <Field label="Toleranse for kompleksitet av diett" value={mapValue(adopter.dietComplexityTolerance)} />
               <Field label="Toleranse for adoptasjonsutfordringer" value={mapValue(adopter.adoptionComplexityTolerance)} />
             </Box>
+            </Card>
+
+            </Grid>
 
             <Divider />
 
@@ -230,7 +238,7 @@ export default function AdoptantProfileOrgView() {
             {/* MATCH HISTORY */}
             <Typography variant="h5">Matchhistorikk</Typography>
 
-            <Box className="grid grid-cols-2 gap-4">
+            <Box className="grid grid-cols-3 gap-4">
               {matches.map((m) => {
                 const pet = pets[m.petId];
 

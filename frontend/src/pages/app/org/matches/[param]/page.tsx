@@ -36,13 +36,31 @@ function t(val: string) {
 function cleanFeedback(text: string) {
   if (!text) return text;
 
-  const lower = text
+  let cleaned = text
+
     .replace(/\bdu\b/gi, "adoptanten")
     .replace(/\bdin\b/gi, "adoptantens")
     .replace(/\bdere\b/gi, "adoptant og fugl")
     .replace(/\bdeg\b/gi, "adoptanten");
 
-  return lower.replace(/(^\s*\w|[.!?]\s*\w)/g, (c) =>
+  cleaned = cleaned
+
+    .replace(
+      /Økonomien adoptantens/gi,
+      "Adoptantens sin økonomi"
+    )
+
+    .replace(
+      /Livssituasjonen adoptantens/gi,
+      "Livssituasjonen til adoptanten"
+    )
+
+    .replace(
+      /Forpliktelsen adoptantens/gi,
+      "Forpliktelsen til adoptanten"
+    );
+
+  return cleaned.replace(/(^\s*\w|[.!?]\s*\w)/g, (c) =>
     c.toUpperCase()
   );
 }
