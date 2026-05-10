@@ -11,13 +11,21 @@ function t(val: string) {
 
     very_small: "Svært liten",
     small: "Liten",
-    medium_size: "Medium",
+    medium_size: "Medium", 
     large: "Stor",
     very_large: "Svært stor",
 
     beginner: "Nybegynner",
     experienced: "Erfaren",
     advanced: "Avansert",
+    intermediate: "Mellomnivå",
+
+    budgie: "Undulat",
+    african_grey: "Grå jaco",
+    canary: "Kanari",
+    cockatoo: "Kakadue",
+    conure: "Kongeparakitt",
+    macaw: "Ara",
   };
 
   return map[val] ?? val ?? "-";
@@ -76,7 +84,7 @@ export default function Page() {
 
                   {/* SPECIES */}
                   <Typography variant="body2">
-                    Art: {animal.speciesId ?? "-"}
+                    Art: {t(animal.speciesId ?? "-")}
                   </Typography>
 
                   {/* CORE INFO */}
@@ -93,7 +101,7 @@ export default function Page() {
                   </Typography>
 
                   <Typography variant="body2">
-                    Erfaring: {t(animal.experienceLevel)}
+                    Krav til erfaring: {t(animal.experienceLevel)}
                   </Typography>
 
                 </CardContent>

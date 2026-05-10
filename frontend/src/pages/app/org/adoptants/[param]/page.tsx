@@ -15,6 +15,9 @@ function mapValue(value: any) {
     full_time: "Fulltid",
 
     one_person: "Knytter seg til én person",
+    independent: "Uavhengig",
+    multiple_people: "Knytter seg til flere personer",
+
   };
 
   return map[value] ?? value ?? "-";
@@ -132,23 +135,65 @@ export default function AdoptantProfileOrgView() {
             {/* CORE DATA */}
             <Box className="grid grid-cols-4 gap-4">
               <Field label="Barn i husstanden" value={mapValue(adopter.kidsAge)} />
-              <Field label="Har andre dyr" value={adopter.hasCurrentPets ? "Ja" : "Nei"} />
-              <Field label="Arbeidssituasjon" value={mapValue(adopter.householdWorkPattern)} />
-              <Field label="Daglig omsorgstid" value={`${adopter.dailyCareTime ?? "-"} min`} />
-              <Field label="Alenetid" value={mapValue(adopter.aloneTimeHours)} />
-              <Field label="Støytoleranse" value={mapValue(adopter.noiseToleranceLevel)} />
-              <Field label="Rengjøringstoleranse" value={mapValue(adopter.cleaningTolerance)} />
-              <Field label="Livsstabilitet" value={mapValue(adopter.lifeStability)} />
-              <Field label="Forpliktelse" value={`${adopter.commitmentHorizonYears ?? "-"} år`} />
-              <Field
-                label="Erfaring"
-                value={
-                  adopter.experienceYears?.bird
-                    ? `${adopter.experienceYears.bird} år`
-                    : "Ingen"
-                }
-              />
-              <Field label="Læringsvilje" value={mapValue(adopter.learningWillingness)} />
+
+                    <Field
+                      label="Har andre dyr"
+                      value={adopter.hasCurrentPets ? "Ja" : "Nei"}
+                    />
+
+                    <Field
+                      label="Type dyr"
+                      value={adopter.typeOfPet?.length ? adopter.typeOfPet.join(", ") : "Ingen"}
+                    />
+
+                    <Field
+                      label="Arbeidshverdag"
+                      value={mapValue(adopter.householdWorkPattern)}
+                    />
+
+                    <Field
+                      label="Daglig omsorgstid for kjæledyr"
+                      value={`${adopter.dailyCareTime} min`}
+                    />
+
+                    <Field
+                      label="Nivå av alenetid for kjæledyr"
+                      value={mapValue(adopter.aloneTimeHours)}
+                    />
+
+                    <Field
+                      label="Støytoleranse"
+                      value={mapValue(adopter.noiseToleranceLevel)}
+                    />
+
+                    <Field
+                      label="Toleranse for renholdskrav"
+                      value={mapValue(adopter.cleaningTolerance)}
+                    />
+
+                    <Field
+                      label="Livsstabilitet"
+                      value={mapValue(adopter.lifeStability)}
+                    />
+
+                    <Field
+                      label="Forpliktelse"
+                      value={`${adopter.commitmentHorizonYears} år`}
+                    />
+
+                    <Field
+                      label="Erfaring med fugl"
+                      value={
+                        adopter.experienceYears?.bird
+                          ? `${adopter.experienceYears.bird} år`
+                          : "Ingen"
+                      }
+                    />
+
+                    <Field
+                      label="Læringsvilje"
+                      value={mapValue(adopter.learningWillingness)}
+                    />
             </Box>
 
             <Divider />
@@ -157,26 +202,26 @@ export default function AdoptantProfileOrgView() {
             <Typography variant="h6">Preferanser</Typography>
 
             <Box className="grid grid-cols-3 gap-4">
-              <Field label="Sosialitet" value={mapValue(adopter.desiredPetSociability)} />
-              <Field label="Kos" value={mapValue(adopter.desiredPetAffectionLevel)} />
-              <Field label="Atferdstoleranse" value={mapValue(adopter.problemBehaviorTolerance)} />
-              <Field label="Interaksjon" value={mapValue(adopter.desiredHumanInteraction)} />
-              <Field label="Bonding" value={mapValue(adopter.desiredBondingStyle)} />
-              <Field label="Flere dyr" value={mapValue(adopter.willingnessMultipleBirds)} />
+              <Field label="Ønsket nivå av sosialitet" value={mapValue(adopter.desiredPetSociability)} />
+              <Field label="Ønsket nivå av kos" value={mapValue(adopter.desiredPetAffectionLevel)} />
+              <Field label="Toleranse for problematferd" value={mapValue(adopter.problemBehaviorTolerance)} />
+              <Field label="Ønsket nivå av interaksjon" value={mapValue(adopter.desiredHumanInteraction)} />
+              <Field label="Ønsket tilknytningstype" value={mapValue(adopter.desiredBondingStyle)} />
+              <Field label="Nivå av toleranse for flere fugler" value={mapValue(adopter.willingnessMultipleBirds)} />
             </Box>
 
-            <Divider />
+        <Divider />
 
             {/* CARE */}
             <Typography variant="h6">Fuglehold</Typography>
 
             <Box className="grid grid-cols-3 gap-4">
-              <Field label="Søvnforhold" value={mapValue(adopter.sleepEnvironmentCommitment)} />
-              <Field label="Fri flyging" value={mapValue(adopter.freeFlightExpectation)} />
-              <Field label="Berikelse" value={mapValue(adopter.enrichmentCommitment)} />
-              <Field label="Trening" value={mapValue(adopter.trainingInterest)} />
-              <Field label="Diett" value={mapValue(adopter.dietComplexityTolerance)} />
-              <Field label="Adopsjonsnivå" value={mapValue(adopter.adoptionComplexityTolerance)} />
+              <Field label="Evne til å gi gode søvnforhold" value={mapValue(adopter.sleepEnvironmentCommitment)} />
+              <Field label="Evne til å tilby friflyvning" value={mapValue(adopter.freeFlightExpectation)} />
+              <Field label="Evne til å tilby miljøberikelse" value={mapValue(adopter.enrichmentCommitment)} />
+              <Field label="Nivå av treningsvillighet" value={mapValue(adopter.trainingInterest)} />
+              <Field label="Toleranse for kompleksitet av diett" value={mapValue(adopter.dietComplexityTolerance)} />
+              <Field label="Toleranse for adoptasjonsutfordringer" value={mapValue(adopter.adoptionComplexityTolerance)} />
             </Box>
 
             <Divider />
