@@ -4,7 +4,7 @@
 
 The backend is built with **Node.js, Express, TypeScript, and PostgreSQL**.
 
-## Backend Installation
+### Backend Installation
 
 1. Navigate to the backend folder:
 
@@ -19,7 +19,7 @@ npm install
 ```
 
 
-## Running the Backend
+### Running the Backend
 
 Start the development server:
 
@@ -33,11 +33,11 @@ The backend will run on:
 
 
 
-# PostgreSQL Database Setup
+## PostgreSQL Database Setup
 The project uses a local PostgreSQL database.
 
 
-## 1. Install PostgreSQL
+### 1. Install PostgreSQL
 
 Download and install PostgreSQL:
 
@@ -48,7 +48,7 @@ During installation:
 - Remember the password you create for the `postgres` user
 
 
-## 2. Open PostgreSQL
+### 2. Open PostgreSQL
 
 Open:
 - PowerShell (Windows)
@@ -62,7 +62,7 @@ psql -U postgres
 
 If prompted, enter your PostgreSQL password.
 
-## 3. Create Database User
+### 3. Create Database User
 
 Inside PostgreSQL:
 
@@ -70,7 +70,7 @@ Inside PostgreSQL:
 CREATE ROLE myadmin WITH LOGIN SUPERUSER PASSWORD 'yourpassword';
 ```
 
-## 4. Create Database
+### 4. Create Database
 
 ```sql
 CREATE DATABASE pet_matchmaking OWNER myadmin;
@@ -82,7 +82,7 @@ Exit PostgreSQL:
 \q
 ```
 
-# Database Schema and Seed
+### Database Schema and Seed
 
 The project includes:
 
@@ -96,7 +96,7 @@ backend/db/sql/
 ```
 
 
-## Running Schema and Seed Files
+### Running Schema and Seed Files
 
 Open PostgreSQL again and naviage to the project:
 
@@ -132,7 +132,7 @@ Important:
 - Paths will differ depending on where the project is stored on your computer
 
 
-# Environment Variables
+## Environment Variables
 
 Create a `.env` file inside the backend folder:
 
@@ -144,7 +144,7 @@ DB_PORT=5432
 DB_NAME=pet_matchmaking
 ```
 
-# Testing
+## Testing
 
 Testing is done from the backend, so navigate to the backend:
 ```bash
@@ -186,7 +186,7 @@ Unit test:
 npm run test:unit
 ```
 
-# Frontend Setup
+## Frontend Setup
 
 The frontend is built with:
 - React
@@ -194,7 +194,7 @@ The frontend is built with:
 - Vite
 
 
-## Frontend Installation
+### Frontend Installation
 
 1. Open a new terminal
 
@@ -211,7 +211,7 @@ npm install
 ```
 
 
-## Running the Frontend
+### Running the Frontend
 
 Start the frontend development server:
 
@@ -228,7 +228,7 @@ or
 - http://localhost:3001
 
 
-# Running the Full Application (in order)
+## Running the Full Application (in order)
 
 1. Start PostgreSQL (and seed database)
 2. Start backend server
