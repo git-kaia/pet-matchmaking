@@ -1,5 +1,5 @@
 // hardRules.scenario.test.ts
-// to run testing script: npx ts-node src/test/scenario/matching.integration.test.ts
+// to run testing script: npm run test:hardRules
 
 /**
  * Hard Rules Scenario Test

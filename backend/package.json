@@ -7,7 +7,9 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "test": "jest",
+    "test:unit": "jest src/test/unit",
     "test:integration": "jest src/test/integration",
+    "test:hardRules": "jest src/test/scenario/hardRules.scenario.test.ts",
     "test:scoringScenario": "jest src/test/scenario/scoringRules.scenario.test.ts",
     "test:scoringExplainability": "jest src/test/scenario/scoringExplainability.test.ts",
     "test:matchFeedbackNorwegian": "jest src/test/scenario/matchFeedback.norwegian.test.ts"
