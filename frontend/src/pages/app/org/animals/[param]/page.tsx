@@ -32,9 +32,9 @@ function t(val: any) {
     budgie: "Undulat",
     african_grey: "Grå jaco",
     canary: "Kanari",
-    cockatoo: "Kakadue",
-    conure: "Kongeparakitt",
-    macaw: "Ara",
+    cockatoo: "Gultoppkakadue",
+    conure: "Solparakitt",
+    macaw: "Blågulara",
   };
 
   return map[val] ?? val ?? "-";
