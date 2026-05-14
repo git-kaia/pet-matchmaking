@@ -5,6 +5,38 @@ We aim to keep the codebase clean, consistent, and easy to collaborate on.
 
 ---
 
+## Naming Conventions
+We use the following naming conventions in development to ensure consistency:
+
+### General
+- Directory names use `lower-case`
+
+### Frontent:
+  - React files use `lower-case` (e.g.`menu-items.tsx`)
+
+### Backend:
+
+#### File naming:
+  - Files use `camelCase` by default (e.g. `testDb.ts`, `hardRule.service.ts`)
+  - Files with a specific role use **dot notation**:
+    - Controllers: `*.controller.ts`
+    - Services: `*.service.ts`
+    - Models: `*.model.ts`
+    - Routes: `*.routes.ts`
+  
+  Examples:
+  - `adopter.controller.ts`
+  - `weightedScoring.service.ts`
+  - `bird.model.ts`
+
+    NB: Dot notation is used to describe the files responsibility, not as a general naming style
+
+#### Code conventions
+  - Types use `PascalCase` (e.g. `Bird`, `Adopter`)
+  - Database fields and backend propertiesWe use `snake_case` (e.g. `commitment_horizon_years`)
+
+---
+
 ## Branching Strategy
 
 We use a simple branching model:
@@ -38,6 +70,7 @@ feature/matching-algorithm
 fix/login-validation 
 docs/update-readme 
 refactor/api-structure
+chore/setup
 ```
 
 ---
