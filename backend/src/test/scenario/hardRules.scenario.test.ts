@@ -31,65 +31,70 @@ import { birdProfiles } from '../helpers/profiles/birdProfiles';
 import { adopterProfiles } from '../helpers/profiles/adopterProfiles';
 
 
+describe('Hard Rules Scenario Tests', () => {
 
-const runTest = async () => {
-  // Få fra hard codede profiler ....
+  test('should evaluate all adopter/pet scenarios without crashing', async () => {
+
     const pets = birdProfiles;
     const adopters = adopterProfiles;
 
-  for (const adopter of adopters) {
+    for (const adopter of adopters) {
 
-    console.log('\n - - - - - - - ');
-    console.log('ADOPTER:', adopter.id);
+      console.log('\n - - - - - - - ');
+      console.log('ADOPTER:', adopter.id);
 
-    for (const pet of pets) {
+      for (const pet of pets) {
 
-      if (pet.animalType !== 'bird') continue; // Trenger nok ikke alt dette lenger siden profiler er hard coded
-      const bird = pet;
+        if (pet.animalType !== 'bird') continue;
 
-      const rules = [
-        ...generalHardRules,
-        ...(bird.animalType === 'bird' ? birdHardRules : []),
-      ];
+        const rules = [
+          ...generalHardRules,
+          ...birdHardRules,
+        ];
 
-      const ctx = { adopter, pet: bird };
+        const ctx = {
+          adopter,
+          pet,
+        };
 
-      const result = evaluateHardRulesDetailed(ctx, rules);
+        const result = evaluateHardRulesDetailed(ctx, rules);
 
-      console.log('\n--------------------------------');
-      console.log(`MATCH: ${bird.id} & ${adopter.id}`);
-      console.log('--------------------------------');
+        console.log('\n--------------------------------');
+        console.log(`MATCH: ${pet.id} & ${adopter.id}`);
+        console.log('--------------------------------');
 
-      console.log('Adopter:', {
-        adopter: adopter.id,
-        dailyCareTime: adopter.dailyCareTime,
-        commitmentYears: adopter.commitmentHorizonYears,
-      });
+        console.log('Adopter:', {
+          adopter: adopter.id,
+          dailyCareTime: adopter.dailyCareTime,
+          commitmentYears: adopter.commitmentHorizonYears,
+        });
 
-      console.log('Bird:', {
-        bird: bird.id,
-        birdtype: pet.speciesId,
-        lifespan: pet.lifespanYears,
-      });
+        console.log('Bird:', {
+          bird: pet.id,
+          birdtype: pet.speciesId,
+          lifespan: pet.lifespanYears,
+        });
 
-      console.table(
-        result.rules.map(r => ({
-          rule: r.rule,
-          passed: r.passed,
-          reason: r.reason,
+        console.table(
+          result.rules.map(r => ({
+            rule: r.rule,
+            passed: r.passed,
+            reason: r.reason,
+            adopter: JSON.stringify(r.adopter),
+            pet: JSON.stringify(r.pet),
+          }))
+        );
 
-          adopter: JSON.stringify(r.adopter),
-          pet: JSON.stringify(r.pet),
-        }))
-      );
+        console.log('FINAL RESULT:', {
+          rejected: result.rejected,
+          reason: result.rejectionReason || 'All rules passed',
+        });
 
-      console.log('FINAL RESULT:', {
-        rejected: result.rejected,
-        reason: result.rejectionReason || 'All rules passed',
-      });
-
+        // Basic sanity assertion
+        expect(result).toBeDefined();
+      }
     }
-  }
-};
 
-runTest();
+  });
+
+});
