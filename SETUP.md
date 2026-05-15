@@ -4,7 +4,7 @@
 
 The backend is built with **Node.js, Express, TypeScript, and PostgreSQL**.
 
-## Backend Installation
+### Backend Installation
 
 1. Navigate to the backend folder:
 
@@ -19,7 +19,7 @@ npm install
 ```
 
 
-## Running the Backend
+### Running the Backend
 
 Start the development server:
 
@@ -33,108 +33,15 @@ The backend will run on:
 
 
 
-# PostgreSQL Database Setup
-The project uses a local PostgreSQL database.
+## PostgreSQL Setup
 
-
-## 1. Install PostgreSQL
-
-Download and install PostgreSQL:
-
-- https://www.postgresql.org/download/
-
-During installation:
-
-- Remember the password you create for the `postgres` user
-
-
-## 2. Open PostgreSQL
-
-Open:
-- PowerShell (Windows)
-- Terminal (Mac/Linux)
-
-Connect using the default postgres user:
-
-```bash
-psql -U postgres
-```
-
-If prompted, enter your PostgreSQL password.
-
-## 3. Create Database User
-
-Inside PostgreSQL:
-
-```sql
-CREATE ROLE myadmin WITH LOGIN SUPERUSER PASSWORD 'yourpassword';
-```
-
-## 4. Create Database
-
-```sql
-CREATE DATABASE pet_matchmaking OWNER myadmin;
-```
-
-Exit PostgreSQL:
-
-```sql
-\q
-```
-
-# Database Schema and Seed
-
-The project includes:
-
-- `schema.sql` → creates database tables
-- `seed.sql` → inserts mock data
-
-These files are located in:
+Create a local PostgreSQL database named:
 
 ```txt
-backend/db/sql/
+pet_matchmaking
 ```
 
-
-## Running Schema and Seed Files
-
-Open PostgreSQL again and naviage to the project:
-
-```bash
-psql -U postgres -h localhost -W
-```
-
-```bash
-\c pet_matchmaking
-```
-
-Inside PostgreSQL, run:
-
-```sql
-\i 'FULL_PATH_TO_PROJECT/backend/db/sql/schema.sql'
-```
-
-Then:
-
-```sql
-\i 'FULL_PATH_TO_PROJECT/backend/db/sql/seed.sql'
-```
-
-Example:
-
-```sql
-\i 'C:/path/to/project/backend/db/sql/schema.sql'
-```
-
-Important:
-- Use the full absolute file path
-- Use forward slashes (`/`) in the path
-- Paths will differ depending on where the project is stored on your computer
-
-
-# Environment Variables
-
-Create a `.env` file inside the backend folder:
+Then configure the backend environment variables in `backend/.env`:
 
 ```env
 DB_USER=yourusername
@@ -144,9 +51,22 @@ DB_PORT=5432
 DB_NAME=pet_matchmaking
 ```
 
-# Testing
+Run the schema and seed files located in:
 
-Testing is done from the backend, so navigate to the backend:
+```txt
+backend/db/sql/
+```
+
+Example:
+
+```bash
+psql -U postgres -d pet_matchmaking -f backend/db/sql/schema.sql
+psql -U postgres -d pet_matchmaking -f backend/db/sql/seed.sql
+```
+
+## Testing
+
+Run tests from the backend folder:
 ```bash
 cd backend
 ```
@@ -161,9 +81,14 @@ Matching integration test
 npm run test:integration
 ```
 
-Hard rules test:
+Hard rules scenario test:
 ```bash
 npm run test:hardRules
+```
+
+Scoring rules scenario test:
+```bash
+npm run test:scoringScenario
 ```
 
 Match feedback test:
@@ -176,17 +101,12 @@ Scoring explanability test:
 npm run test:scoringExplainability
 ```
 
-Scoring rules scenario test:
-```bash
-npm run test:scoringScenario
-```
-
-Unit test: 
+Unit tests: 
 ```bash
 npm run test:unit
 ```
 
-# Frontend Setup
+## Frontend Setup
 
 The frontend is built with:
 - React
@@ -194,7 +114,7 @@ The frontend is built with:
 - Vite
 
 
-## Frontend Installation
+### Frontend Installation
 
 1. Open a new terminal
 
@@ -211,7 +131,7 @@ npm install
 ```
 
 
-## Running the Frontend
+### Running the Frontend
 
 Start the frontend development server:
 
@@ -228,7 +148,7 @@ or
 - http://localhost:3001
 
 
-# Running the Full Application (in order)
+## Running the Full Application (in order)
 
 1. Start PostgreSQL (and seed database)
 2. Start backend server

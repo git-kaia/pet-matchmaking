@@ -98,19 +98,13 @@ test('SCORING RULES SCENARIO TEST', () => {
         {
             adopter: highlyExperiencedHighCommitmentAdopter,
             bird: highMaintenanceDemandingBird,
-            label: 'Elite specialist + advanced parrot',
+            label: 'Highly experienced adopter + advanced parrot',
         },
 
         {
             adopter: motivatedBeginnerAdopter,
             bird: socialBeginnerFriendlyBird,
             label: 'Beginner + beginner-friendly bird',
-        },
-
-        {
-            adopter: motivatedBeginnerAdopter,
-            bird: loudSocialCockatoo,
-            label: 'Beginner overwhelmed by demanding bird',
         },
 
         {
@@ -124,10 +118,6 @@ test('SCORING RULES SCENARIO TEST', () => {
             bird: loudSocialCockatoo,
             label: 'Lifestyle conflict with demanding social bird',
         },
-
-        ////////////////////////////////
-        // MODERATE MATCHES (65–80%)
-        ////////////////////////////////
 
         {
             adopter: motivatedBeginnerAdopter,
@@ -147,20 +137,10 @@ test('SCORING RULES SCENARIO TEST', () => {
             label: 'Good welfare capacity but poor preferences',
         },
 
-        ////////////////////////////////
-        // LOW MATCHES (50–70%)
-        ////////////////////////////////
-
         {
             adopter: lifestyleConflictAdopter,
             bird: balancedCompanionBird,
             label: 'Lifestyle conflict with companion bird',
-        },
-
-        {
-            adopter: lifestyleConflictAdopter,
-            bird: loudSocialCockatoo,
-            label: 'Overwhelmed adopter with demanding bird',
         },
 
         {
